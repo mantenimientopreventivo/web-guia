@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayuda Gestión Mantenimiento Preventivo</title>
     <style>
+        /* Estilos Generales y Fondo */
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: white; }
         body {
             background-image: url('movistar.png'); background-size: contain;
@@ -17,42 +18,79 @@
             text-transform: uppercase; margin-bottom: 40px;
             text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
         }
-        .columns-wrapper { display: flex; justify-content: center; gap: 25px; align-items: flex-start; }
-        .column { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        
+        /* --- INICIO DEL NUEVO DISEÑO EN GRILLA --- */
+
+        /* 1. El Contenedor de la Grilla */
+        .grid-container {
+            display: grid;
+            /* Crea 3 columnas de igual tamaño */
+            grid-template-columns: repeat(3, 1fr);
+            /* Espacio de 20px entre cada elemento de la grilla */
+            gap: 20px;
+        }
+
+        /* 2. Estilo de los Botones (casi sin cambios) */
         .topic-button {
-            display: block; width: 100%; padding: 20px 25px; text-decoration: none;
+            display: flex; /* Usamos flex para centrar el texto vertical y horizontalmente */
+            align-items: center;
+            justify-content: center;
+            padding: 25px; /* Un padding uniforme */
+            text-decoration: none;
             color: white; font-size: 1.1em; font-weight: 600; text-align: center;
             background-color: rgba(0, 55, 85, 0.8); border-radius: 10px;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.3s, transform 0.2s, opacity 0.3s;
             overflow: hidden; box-sizing: border-box;
+            min-height: 80px; /* Asegura una altura mínima para todos los botones */
         }
-        .topic-button:hover { background-color: rgba(0, 80, 125, 0.9); transform: translateY(-3px); }
+        
+        /* 3. Estilos de Botones Inactivos (grisados) */
+        .topic-button[href="#"] {
+            background-color: #4A5568; color: #A0AEC0;
+            cursor: not-allowed; opacity: 0.6;
+        }
+        
+        .topic-button[href="#"]:hover {
+            background-color: #4A5568; transform: none;
+        }
+        
+        /* 4. Efecto Hover para botones ACTIVOS */
+        .topic-button:not([href="#"]):hover {
+            background-color: rgba(0, 80, 125, 0.9);
+            transform: translateY(-3px);
+        }
+
+        /* 5. Adaptación para Móviles */
         @media (max-width: 768px) {
-            .columns-wrapper { flex-direction: column; }
+            .grid-container {
+                /* Cambiamos a 1 sola columna en pantallas pequeñas */
+                grid-template-columns: 1fr;
+            }
             .container { margin: 20px auto; }
+            h1 { font-size: 1.8em; }
         }
+        /* --- FIN DEL NUEVO DISEÑO EN GRILLA --- */
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Ayuda para Gestión de Mantenimiento Preventivo</h1>
-        <div class="columns-wrapper">
-            <div class="column">
-                <a href="#" class="topic-button">Apertura de Incidencias</a>
-                <a href="desmontes.html" class="topic-button">Desmontes</a>
-                <a href="motivos.html" class="topic-button">Motivos</a>
-                <!-- ENLACE CORREGIDO: Apunta al nuevo archivo y tiene el nuevo nombre -->
-                <a href="valorar-postes-riendas.html" class="topic-button">Valorar postes, riendas y varios</a>
-            </div>
-            <div class="column">
-                <a href="#" class="topic-button">Avales</a>
-                <a href="#" class="topic-button">Gestión de desvíos</a>
-            </div>
-            <div class="column">
-                <a href="centrales-cuyo.html" class="topic-button">Centrales de Cuyo</a>
-                <a href="#" class="topic-button">Guardias FTTH</a>
-                <a href="segurizacion-camaras.html" class="topic-button">Segurización de cámaras</a>
-            </div>
+        
+        <!-- ESTRUCTURA SIMPLIFICADA: Un solo contenedor para todos los botones -->
+        <div class="grid-container">
+            <!-- Los 9 botones, ahora como hijos directos del contenedor de la grilla -->
+            <a href="#" class="topic-button">Apertura de Incidencias</a>
+            <a href="#" class="topic-button">Avales</a>
+            <a href="centrales-cuyo.html" class="topic-button">Centrales de Cuyo</a>
+            
+            <a href="desmontes.html" class="topic-button">Desmontes</a>
+            <a href="#" class="topic-button">Gestión de desvíos</a>
+            <a href="#" class="topic-button">Guardias FTTH</a>
+            
+            <a href="motivos.html" class="topic-button">Motivos</a>
+            <a href="segurizacion-camaras.html" class="topic-button">Segurización de cámaras</a>
+            <a href="valorar-postes-riendas.html" class="topic-button">Valorar postes, riendas y varios</a>
         </div>
     </div>
 </body>
