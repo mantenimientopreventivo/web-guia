@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda Gestión Mantenimiento Preventivo</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: white; }
+        body {
+            background-image: url('movistar.png'); background-size: contain;
+            background-position: center; background-repeat: no-repeat;
+            background-color: #0099e4; background-attachment: fixed;
+        }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; text-align: center; }
+        h1 {
+            font-size: 2.2em; font-weight: bold; color: #ffffff;
+            text-transform: uppercase; margin-bottom: 40px;
+            text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
+        }
+        .columns-wrapper { display: flex; justify-content: center; gap: 25px; align-items: flex-start; }
+        .column { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .topic-button {
+            display: block; width: 100%; padding: 20px 25px; text-decoration: none;
+            color: white; font-size: 1.1em; font-weight: 600; text-align: center;
+            background-color: rgba(0, 55, 85, 0.8); border-radius: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+            overflow: hidden; box-sizing: border-box;
+        }
+        .topic-button:hover { background-color: rgba(0, 80, 125, 0.9); transform: translateY(-3px); }
+        @media (max-width: 768px) {
+            .columns-wrapper { flex-direction: column; }
+            .container { margin: 20px auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ayuda para Gestión de Mantenimiento Preventivo</h1>
+        <div class="columns-wrapper">
+            <div class="column">
+                <a href="#" class="topic-button">Apertura de Incidencias</a>
+                <a href="desmontes.html" class="topic-button">Desmontes</a>
+                <a href="motivos.html" class="topic-button">Motivos</a>
+                <!-- ENLACE CORREGIDO: Apunta al nuevo archivo y tiene el nuevo nombre -->
+                <a href="valorar-postes-riendas.html" class="topic-button">Valorar postes, riendas y varios</a>
+            </div>
+            <div class="column">
+                <a href="#" class="topic-button">Avales</a>
+                <a href="#" class="topic-button">Gestión de desvíos</a>
+            </div>
+            <div class="column">
+                <a href="centrales-cuyo.html" class="topic-button">Centrales de Cuyo</a>
+                <a href="#" class="topic-button">Guardias FTTH</a>
+                <a href="segurizacion-camaras.html" class="topic-button">Segurización de cámaras</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

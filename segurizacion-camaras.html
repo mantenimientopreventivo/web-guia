@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Cámaras y Suplementos - Guía</title>
+    <style>
+        /* --- AJUSTE GLOBAL: Reducimos el tamaño de fuente base --- */
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            font-size: 12px; /* AÚN MÁS PEQUEÑO */
+        }
+        body {
+            background-image: url('movistar.png'); background-size: contain;
+            background-position: center; background-repeat: no-repeat;
+            background-color: #0099e4; background-attachment: fixed;
+        }
+        
+        /* --- AJUSTES DE COMPACTACIÓN MÁXIMA --- */
+        .main-container {
+            max-width: 750px; 
+            margin: 5px auto; /* Mínimo margen */
+            padding: 10px; /* Mínimo padding */
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            color: white;
+        }
+        .back-button {
+            display: inline-block; padding: 3px 8px; margin-bottom: 8px;
+            font-size: 0.9em; border-radius: 5px;
+            background-color: #00A9E0; color: white; text-decoration: none;
+            font-weight: bold; transition: background-color 0.3s;
+        }
+        .back-button:hover { background-color: #0078a8; }
+        
+        .page-title {
+            text-align: center; color: #00A9E0;
+            margin: 5px 0 10px 0; /* Menos margen */
+            font-size: 1.3em; /* Título más pequeño */
+            text-transform: uppercase; font-weight: bold;
+        }
+
+        .info-container {
+            margin-bottom: 8px; border-radius: 5px;
+            overflow: hidden; border: 1px solid #555;
+        }
+        .info-header {
+            background-color: #87CEEB; color: black;
+            padding: 4px; font-weight: bold; text-align: center;
+            font-size: 0.9em;
+        }
+        .info-table {
+            width: 100%; border-collapse: collapse; color: black;
+            font-size: 0.9em;
+        }
+        .info-table th, .info-table td { border: 1px solid #ccc; padding: 3px; }
+        .info-table th { background-color: #e9e9e9; }
+        .info-table td { background-color: #ffffff; }
+        .info-table td.task-desc { color: #003366; font-weight: bold; }
+        .info-table td.center-align { text-align: center; }
+
+        .calculator-table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.8em; font-weight: bold;
+        }
+        .calculator-table th, .calculator-table td { border: 2px solid black; padding: 2px; text-align: center; }
+        .calculator-table th { background-color: #0078a8; color: white; }
+        .col-blue { background-color: #00bfff; color: black; }
+        .col-yellow { background-color: #ffff00; color: black; }
+        .calculator-table input[type="number"] {
+            width: 90%; padding: 2px; font-size: 1em; text-align: center;
+            border: 1px solid #333; border-radius: 3px;
+            background-color: #fff; color: black;
+        }
+        .calculator-table input::-webkit-outer-spin-button,
+        .calculator-table input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .calculator-table input[type=number] { -moz-appearance: textfield; }
+        .total-row { background-color: #333; color: white; font-weight: bold; }
+        
+        .simple-calculator {
+            display: flex; justify-content: space-around; align-items: center;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 8px; border-radius: 6px; margin-top: 8px;
+            border: 1px solid #555;
+        }
+        .calc-section label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 0.9em; }
+        .calc-section input[type="number"] {
+            width: 90px; padding: 4px; font-size: 1em;
+            text-align: center; border: 1px solid #ccc; border-radius: 4px;
+        }
+        .calc-result {
+            display: inline-block; background-color: #ffff00; color: black;
+            padding: 4px 12px; border-radius: 4px;
+            font-weight: bold; font-size: 1em; border: 1px solid black;
+        }
+        
+        .clear-button-container { text-align: right; margin-top: 6px; }
+        .clear-button {
+            background-color: #6c757d; color: white; border: none;
+            padding: 4px 12px; font-size: 0.9em; font-weight: bold;
+            border-radius: 4px; cursor: pointer; transition: background-color 0.3s;
+        }
+        .clear-button:hover { background-color: #5a6268; }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <a href="index.html" class="back-button">‹ Volver al Índice</a>
+        <h2 class="page-title">Calculadora de Segurización de Cámaras Arquetas</h2>
+        <div class="info-container">
+            <div class="info-header">Grupo: 74 - OBRA CIVIL - CÁMARAS - ARQUETAS</div>
+            <table class="info-table">
+                <thead><tr><th>Grupo</th><th>Tarea</th><th>Denominacion de la Tarea</th></tr></thead>
+                <tbody><tr><td class="center-align">74</td><td class="center-align">011</td><td class="task-desc">Soldado o desoldado de tapas de CR o Arquetas.</td></tr></tbody>
+            </table>
+        </div>
+        
+        <table class="calculator-table">
+            <thead><tr><th>CAMARAS</th><th>UNIDAD HB</th><th>ingrese cantidad</th><th>sub total</th><th>hs B</th></tr></thead>
+            <tbody>
+                <tr><td class="col-blue">arqueta (una tapa)</td><td class="col-blue" id="unidad-1">1</td><td class="col-yellow"><input type="number" id="cantidad-1" oninput="calculateRow(1)"></td><td class="col-yellow" id="subtotal-1">0.00</td><td class="col-yellow" id="hsb-1">0.00</td></tr>
+                <tr><td class="col-blue">con 2 tapas</td><td class="col-blue" id="unidad-2">2</td><td class="col-yellow"><input type="number" id="cantidad-2" oninput="calculateRow(2)"></td><td class="col-yellow" id="subtotal-2">0.00</td><td class="col-yellow" id="hsb-2">0.00</td></tr>
+                <tr><td class="col-blue">con 3 tapas</td><td class="col-blue" id="unidad-3">2.5</td><td class="col-yellow"><input type="number" id="cantidad-3" oninput="calculateRow(3)"></td><td class="col-yellow" id="subtotal-3">0.00</td><td class="col-yellow" id="hsb-3">0.00</td></tr>
+                <tr><td class="col-blue">con 4 tapas</td><td class="col-blue" id="unidad-4">3</td><td class="col-yellow"><input type="number" id="cantidad-4" oninput="calculateRow(4)"></td><td class="col-yellow" id="subtotal-4">0.00</td><td class="col-yellow" id="hsb-4">0.00</td></tr>
+                <tr><td class="col-blue">con 5 tapas</td><td class="col-blue" id="unidad-5">4</td><td class="col-yellow"><input type="number" id="cantidad-5" oninput="calculateRow(5)"></td><td class="col-yellow" id="subtotal-5">0.00</td><td class="col-yellow" id="hsb-5">0.00</td></tr>
+                <tr><td class="col-blue">con 6 tapas</td><td class="col-blue" id="unidad-6">5</td><td class="col-yellow"><input type="number" id="cantidad-6" oninput="calculateRow(6)"></td><td class="col-yellow" id="subtotal-6">0.00</td><td class="col-yellow" id="hsb-6">0.00</td></tr>
+            </tbody>
+            <tfoot><tr class="total-row"><td colspan="2">TOTALES</td><td id="total-cantidad">0</td><td id="total-subtotal">0.00</td><td id="total-hsb">0.00</td></tr></tfoot>
+        </table>
+        
+        <div class="clear-button-container">
+            <button class="clear-button" onclick="clearFirstCalculator()">Limpiar</button>
+        </div>
+        
+        <h2 class="page-title">CAMARAS SEGURIZADAS CON VARILLA</h2>
+        <div class="info-container">
+            <div class="info-header">Grupo: 79 - SUPLEMENTOS</div>
+            <table class="info-table">
+                <thead><tr><th>Grupo</th><th>Tarea</th><th>Denominacion de la Tarea</th><th>Unidad</th><th>Baremo</th><th>Coef</th><th>M.O.</th><th>Cant.</th><th>H.B.</th></tr></thead>
+                <tbody><tr><td class="center-align">79</td><td class="center-align">101</td><td class="task-desc">Unidad singular de MO tipo Celador L</td><td class="center-align">UNA</td><td class="center-align">1,00</td><td class="center-align"></td><td class="center-align">L</td><td class="center-align">7,00</td><td class="center-align">7,00</td></tr></tbody>
+            </table>
+        </div>
+        <div class="simple-calculator">
+            <div class="calc-section">
+                <label for="cantidad_camaras_varilla">Cantidad de Cámaras</label>
+                <input type="number" id="cantidad_camaras_varilla" oninput="calculateVarilla()">
+            </div>
+            <div class="calc-section">
+                <label>HB</label>
+                <span id="resultado_hb_varilla" class="calc-result">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function calculateRow(rowNum){const unidadHB=parseFloat(document.getElementById(`unidad-${rowNum}`).innerText);const cantidad=parseFloat(document.getElementById(`cantidad-${rowNum}`).value)||0;const subtotal=cantidad*unidadHB;const hsB=subtotal*1.1;document.getElementById(`subtotal-${rowNum}`).innerText=subtotal.toFixed(2);document.getElementById(`hsb-${rowNum}`).innerText=hsB.toFixed(2);updateTotals()}
+    function updateTotals(){let totalCantidad=0,totalSubtotal=0,totalHsB=0;for(let i=1;i<=6;i++){totalCantidad+=parseFloat(document.getElementById(`cantidad-${i}`).value)||0;totalSubtotal+=parseFloat(document.getElementById(`subtotal-${i}`).innerText)||0;totalHsB+=parseFloat(document.getElementById(`hsb-${i}`).innerText)||0}document.getElementById('total-cantidad').innerText=totalCantidad;document.getElementById('total-subtotal').innerText=totalSubtotal.toFixed(2);document.getElementById('total-hsb').innerText=totalHsB.toFixed(2)}
+    function calculateVarilla(){const cantidad=parseFloat(document.getElementById('cantidad_camaras_varilla').value)||0;const resultadoHB=cantidad*7;document.getElementById('resultado_hb_varilla').innerText=resultadoHB.toFixed(2)}
+    function clearFirstCalculator(){for(let i=1;i<=6;i++){document.getElementById(`cantidad-${i}`).value='';document.getElementById(`subtotal-${i}`).innerText='0.00';document.getElementById(`hsb-${i}`).innerText='0.00'}updateTotals()}
+    </script>
+</body>
+</html>

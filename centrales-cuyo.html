@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centrales de Cuyo - Guía de Mantenimiento</title>
+    <style>
+        /* --- Estilos Generales y Fondo (Igual que en la página principal) --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        body {
+            background-image: url('movistar.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #0099e4;
+            background-attachment: fixed;
+        }
+
+        /* --- Contenedor Principal para el contenido de esta página --- */
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- Título y Párrafos --- */
+        h1 {
+            text-align: center;
+            color: #00A9E0;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        
+        /* --- Botón para Volver al Índice --- */
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 25px;
+            background-color: #00A9E0;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #0078a8;
+        }
+
+        /* --- Caja de Búsqueda --- */
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: 2px solid #555;
+            background-color: #333;
+            color: white;
+            box-sizing: border-box; /* Importante para que el padding no afecte el ancho */
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: #00A9E0;
+        }
+
+        /* --- Estilos de la Tabla --- */
+        .table-container {
+            max-height: 500px; /* Altura máxima, si la tabla es más alta, aparece scroll */
+            overflow-y: auto; /* Scroll vertical */
+        }
+
+        #centralesTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #centralesTable th, #centralesTable td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        #centralesTable th {
+            background-color: #003755;
+            color: white;
+            position: sticky; /* Encabezado fijo al hacer scroll */
+            top: 0;
+        }
+        
+        /* Colores alternos para las filas para mejorar legibilidad */
+        #centralesTable tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        #centralesTable tr:hover {
+            background-color: rgba(0, 169, 224, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <a href="index.html" class="back-button">‹ Volver al Índice</a>
+        <h1>Centrales de Cuyo</h1>
+        <p>Utiliza la barra de búsqueda para filtrar la tabla por nombre de central.</p>
+        
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar por nombre de central...">
+
+        <div class="table-container">
+            <table id="centralesTable">
+                <thead>
+                    <tr>
+                        <th>Provincia</th>
+                        <th>Central</th>
+                        <th>Código</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Mendoza -->
+                    <tr><td>MZ</td><td>AEROPARQUE</td><td>470</td></tr>
+                    <tr><td>MZ</td><td>AGRELO</td><td>896</td></tr>
+                    <tr><td>MZ</td><td>BARRANCAS - MZA</td><td>1974</td></tr>
+                    <tr><td>MZ</td><td>BERMEJO</td><td>638</td></tr>
+                    <tr><td>MZ</td><td>BLANCO ENCALADA</td><td>1039</td></tr>
+                    <tr><td>MZ</td><td>CACHEUTA</td><td>1052</td></tr>
+                    <tr><td>MZ</td><td>CHACRAS DE CORIA</td><td>84</td></tr>
+                    <tr><td>MZ</td><td>CHAPANAY</td><td>1814</td></tr>
+                    <tr><td>MZ</td><td>COLONIA LAS ROSAS</td><td>1690</td></tr>
+                    <tr><td>MZ</td><td>CORDON DEL PLATA</td><td>887</td></tr>
+                    <tr><td>MZ</td><td>COSTA DE ARAUJO</td><td>513</td></tr>
+                    <tr><td>MZ</td><td>CRUZ DE PIEDRA</td><td>491</td></tr>
+                    <tr><td>MZ</td><td>DESAGUADERO</td><td>1036</td></tr>
+                    <tr><td>MZ</td><td>DORREGO I</td><td>271</td></tr>
+                    <tr><td>MZ</td><td>EUGENIO BUSTOS I</td><td>131</td></tr>
+                    <tr><td>MZ</td><td>FRAY LUIS BELTRAN</td><td>138</td></tr>
+                    <tr><td>MZ</td><td>GENERAL PAZ II</td><td>272</td></tr>
+                    <tr><td>MZ</td><td>GODOY CRUZ I</td><td>273</td></tr>
+                    <tr><td>MZ</td><td>GUAYMALLEN I</td><td>493</td></tr>
+                    <tr><td>MZ</td><td>JOCOLI</td><td>1038</td></tr>
+                    <tr><td>MZ</td><td>JUAN JUFRE I</td><td>465</td></tr>
+                    <tr><td>MZ</td><td>JUNIN I - MZA</td><td>201</td></tr>
+                    <tr><td>MZ</td><td>LA CARRODILLA</td><td>716</td></tr>
+                    <tr><td>MZ</td><td>LA CONSULTA</td><td>205</td></tr>
+                    <tr><td>MZ</td><td>LA DORMIDA</td><td>514</td></tr>
+                    <tr><td>MZ</td><td>LA PAZ</td><td>208</td></tr>
+                    <tr><td>MZ</td><td>LA PEGA</td><td>1975</td></tr>
+                    <tr><td>MZ</td><td>LAS CARDITAS</td><td>874</td></tr>
+                    <tr><td>MZ</td><td>LAS CATITAS</td><td>515</td></tr>
+                    <tr><td>MZ</td><td>LAS HERAS I</td><td>275</td></tr>
+                    <tr><td>MZ</td><td>LAS VEGAS</td><td>894</td></tr>
+                    <tr><td>MZ</td><td>LAVALLE</td><td>231</td></tr>
+                    <tr><td>MZ</td><td>LORIA I - MZA</td><td>276</td></tr>
+                    <tr><td>MZ</td><td>LOS ANDES I</td><td>270</td></tr>
+                    <tr><td>MZ</td><td>LOS CAMPAMENTOS</td><td>1535</td></tr>
+                    <tr><td>MZ</td><td>LOS CORRALITOS</td><td>704</td></tr>
+                    <tr><td>MZ</td><td>LOS SAUCES - TUNUYAN</td><td>1559</td></tr>
+                    <tr><td>MZ</td><td>LUJAN DE CUYO</td><td>251</td></tr>
+                    <tr><td>MZ</td><td>LUZURIAGA</td><td>471</td></tr>
+                    <tr><td>MZ</td><td>MAIPU I - MZA</td><td>255</td></tr>
+                    <tr><td>MZ</td><td>MEDRANO</td><td>481</td></tr>
+                    <tr><td>MZ</td><td>MONTE CASEROS</td><td>881</td></tr>
+                    <tr><td>MZ</td><td>PALMIRA</td><td>303</td></tr>
+                    <tr><td>MZ</td><td>PANQUEHUA I</td><td>472</td></tr>
+                    <tr><td>MZ</td><td>PAREDITAS</td><td>1536</td></tr>
+                    <tr><td>MZ</td><td>PERDRIEL</td><td>754</td></tr>
+                    <tr><td>MZ</td><td>PHILIPPS</td><td>1815</td></tr>
+                    <tr><td>MZ</td><td>PLANTA VILLAVICENCIO</td><td>1804</td></tr>
+                    <tr><td>MZ</td><td>POTRERILLOS</td><td>516</td></tr>
+                    <tr><td>MZ</td><td>REDUCCION</td><td>1551</td></tr>
+                    <tr><td>MZ</td><td>RIVADAVIA - MZA</td><td>355</td></tr>
+                    <tr><td>MZ</td><td>RODEO DE LA CRUZ</td><td>359</td></tr>
+                    <tr><td>MZ</td><td>RODEO DEL MEDIO</td><td>360</td></tr>
+                    <tr><td>MZ</td><td>RODRIGUEZ PEÑA</td><td>1049</td></tr>
+                    <tr><td>MZ</td><td>SAN MARTIN I - MZA</td><td>382</td></tr>
+                    <tr><td>MZ</td><td>SANTA ROSA - MZA</td><td>389</td></tr>
+                    <tr><td>MZ</td><td>TRES DE MAYO</td><td>1695</td></tr>
+                    <tr><td>MZ</td><td>TRES PORTEÑAS</td><td>1544</td></tr>
+                    <tr><td>MZ</td><td>TUNUYAN</td><td>427</td></tr>
+                    <tr><td>MZ</td><td>TUPUNGATO</td><td>428</td></tr>
+                    <tr><td>MZ</td><td>UGARTECHE</td><td>1849</td></tr>
+                    <tr><td>MZ</td><td>USPALLATA</td><td>433</td></tr>
+                    <tr><td>MZ</td><td>VILLA HIPODROMO I</td><td>274</td></tr>
+                    <tr><td>MZ</td><td>VILLA NUEVA I</td><td>277</td></tr>
+                    <tr><td>MZ</td><td>VISTA FLORES</td><td>1050</td></tr>
+                    <!-- San Rafael -->
+                    <tr><td>SR</td><td>ATUEL NORTE</td><td>1062</td></tr>
+                    <tr><td>SR</td><td>BOWEN</td><td>51</td></tr>
+                    <tr><td>SR</td><td>CAÑADA SECA</td><td>473</td></tr>
+                    <tr><td>SR</td><td>CARMENSA</td><td>1539</td></tr>
+                    <tr><td>SR</td><td>CUADRO NACIONAL</td><td>742</td></tr>
+                    <tr><td>SR</td><td>EL NIHUIL</td><td>1071</td></tr>
+                    <tr><td>SR</td><td>GENERAL ALVEAR - MZA</td><td>147</td></tr>
+                    <tr><td>SR</td><td>GOUDGE</td><td>880</td></tr>
+                    <tr><td>SR</td><td>JAIME PRATS</td><td>1558</td></tr>
+                    <tr><td>SR</td><td>LA LLAVE</td><td>879</td></tr>
+                    <tr><td>SR</td><td>LAS MALVINAS</td><td>1538</td></tr>
+                    <tr><td>SR</td><td>MALARGUE</td><td>256</td></tr>
+                    <tr><td>SR</td><td>MONTE COMAN</td><td>474</td></tr>
+                    <tr><td>SR</td><td>RAMA CAIDA</td><td>869</td></tr>
+                    <tr><td>SR</td><td>REAL DEL PADRE</td><td>346</td></tr>
+                    <tr><td>SR</td><td>SAN RAFAEL I</td><td>385</td></tr>
+                    <tr><td>SR</td><td>VILLA 25 DE MAYO</td><td>878</td></tr>
+                    <tr><td>SR</td><td>VILLA ATUEL</td><td>442</td></tr>
+                    <!-- San Juan -->
+                    <tr><td>SJ</td><td>ALBARDON</td><td>5</td></tr>
+                    <tr><td>SJ</td><td>ANGACO</td><td>467</td></tr>
+                    <tr><td>SJ</td><td>ASTICA</td><td>872</td></tr>
+                    <tr><td>SJ</td><td>BARREAL</td><td>42</td></tr>
+                    <tr><td>SJ</td><td>CALINGASTA</td><td>61</td></tr>
+                    <tr><td>SJ</td><td>CAÑADA HONDA</td><td>1556</td></tr>
+                    <tr><td>SJ</td><td>CARPINTERIA - SJ</td><td>1948</td></tr>
+                    <tr><td>SJ</td><td>CAUCETE</td><td>78</td></tr>
+                    <tr><td>SJ</td><td>CHIMBAS</td><td>629</td></tr>
+                    <tr><td>SJ</td><td>DESAMPARADOS I</td><td>398</td></tr>
+                    <tr><td>SJ</td><td>DIVISADERO</td><td>918</td></tr>
+                    <tr><td>SJ</td><td>EL MOGOTE</td><td>903</td></tr>
+                    <tr><td>SJ</td><td>FERNANDO FADER</td><td>713</td></tr>
+                    <tr><td>SJ</td><td>GREGORIO TORRES</td><td>714</td></tr>
+                    <tr><td>SJ</td><td>HUACO</td><td>1838</td></tr>
+                    <tr><td>SJ</td><td>IGLESIA</td><td>182</td></tr>
+                    <tr><td>SJ</td><td>JACHAL</td><td>194</td></tr>
+                    <tr><td>SJ</td><td>LAS CASUARINAS</td><td>518</td></tr>
+                    <tr><td>SJ</td><td>LAS FLORES - SJ</td><td>228</td></tr>
+                    <tr><td>SJ</td><td>LOS BERROS</td><td>468</td></tr>
+                    <tr><td>SJ</td><td>MEDIA AGUA</td><td>269</td></tr>
+                    <tr><td>SJ</td><td>NIQUIVIL</td><td>1565</td></tr>
+                    <tr><td>SJ</td><td>NUEVE DE JULIO - SJ</td><td>519</td></tr>
+                    <tr><td>SJ</td><td>POCITO</td><td>327</td></tr>
+                    <tr><td>SJ</td><td>PUNTA DEL MEDANO</td><td>5111</td></tr>
+                    <tr><td>SJ</td><td>QUINTO CUARTEL</td><td>1976</td></tr>
+                    <tr><td>SJ</td><td>RAWSON I - SJ</td><td>399</td></tr>
+                    <tr><td>SJ</td><td>RODEO</td><td>358</td></tr>
+                    <tr><td>SJ</td><td>SA DEL VALLE FERTI</td><td>609</td></tr>
+                    <tr><td>SJ</td><td>SAN JUAN I</td><td>400</td></tr>
+                    <tr><td>SJ</td><td>SAN MARTIN - SJ</td><td>466</td></tr>
+                    <tr><td>SJ</td><td>SANTA LUCIA</td><td>401</td></tr>
+                    <tr><td>SJ</td><td>TAMBERIA - JACHAL</td><td>5126</td></tr>
+                    <tr><td>SJ</td><td>TAMBERIAS</td><td>1545</td></tr>
+                    <tr><td>SJ</td><td>TUDCUM</td><td>426</td></tr>
+                    <tr><td>SJ</td><td>ULLUM - V IBAÑEZ</td><td>517</td></tr>
+                    <tr><td>SJ</td><td>VILLA MERCEDES - S</td><td>877</td></tr>
+                    <tr><td>SJ</td><td>VILLA SANTA ROSA</td><td>889</td></tr>
+                    <tr><td>SJ</td><td>ZONDA - B NIEVAS</td><td>520</td></tr>
+                    <!-- San Luis -->
+                    <tr><td>SL</td><td>ANCHORENA</td><td>475</td></tr>
+                    <tr><td>SL</td><td>ARIZONA</td><td>511</td></tr>
+                    <tr><td>SL</td><td>BAGUAL</td><td>562</td></tr>
+                    <tr><td>SL</td><td>BALDE</td><td>1506</td></tr>
+                    <tr><td>SL</td><td>BATAVIA</td><td>1513</td></tr>
+                    <tr><td>SL</td><td>BEAZLEY</td><td>1514</td></tr>
+                    <tr><td>SL</td><td>BUENA ESPERANZA</td><td>54</td></tr>
+                    <tr><td>SL</td><td>CANDELARIA</td><td>615</td></tr>
+                    <tr><td>SL</td><td>CAROLINA</td><td>1498</td></tr>
+                    <tr><td>SL</td><td>CARPINTERIA</td><td>1505</td></tr>
+                    <tr><td>SL</td><td>CORTADERAS</td><td>1515</td></tr>
+                    <tr><td>SL</td><td>EL CHORRILLO I</td><td>1504</td></tr>
+                    <tr><td>SL</td><td>EL DURAZNO - SL</td><td>940</td></tr>
+                    <tr><td>SL</td><td>EL HORNERO I</td><td>705</td></tr>
+                    <tr><td>SL</td><td>EL VOLCAN</td><td>732</td></tr>
+                    <tr><td>SL</td><td>FORTIN EL PATRIA</td><td>564</td></tr>
+                    <tr><td>SL</td><td>FORTUNA</td><td>774</td></tr>
+                    <tr><td>SL</td><td>FRAGA</td><td>1703</td></tr>
+                    <tr><td>SL</td><td>JUAN JORBA</td><td>566</td></tr>
+                    <tr><td>SL</td><td>JUAN LLERENA</td><td>1704</td></tr>
+                    <tr><td>SL</td><td>JUSTO DARACT</td><td>203</td></tr>
+                    <tr><td>SL</td><td>LA CALERA</td><td>1494</td></tr>
+                    <tr><td>SL</td><td>LA PUNILLA</td><td>1491</td></tr>
+                    <tr><td>SL</td><td>LOS CAJONES</td><td>1564</td></tr>
+                    <tr><td>SL</td><td>LOS MOLLES - SL</td><td>926</td></tr>
+                    <tr><td>SL</td><td>LUJAN - SL</td><td>802</td></tr>
+                    <tr><td>SL</td><td>NASCHEL</td><td>816</td></tr>
+                    <tr><td>SL</td><td>NOGOLI</td><td>1493</td></tr>
+                    <tr><td>SL</td><td>NUEVA GALIA</td><td>817</td></tr>
+                    <tr><td>SL</td><td>PASO GRANDE</td><td>1519</td></tr>
+                    <tr><td>SL</td><td>POTRERO DE LOS FUNES</td><td>832</td></tr>
+                    <tr><td>SL</td><td>SALINAS DEL BEBEDERO</td><td>1555</td></tr>
+                    <tr><td>SL</td><td>SAN LUIS I</td><td>381</td></tr>
+                    <tr><td>SL</td><td>SAN MARTIN - SL</td><td>846</td></tr>
+                    <tr><td>SL</td><td>SAN ROQUE</td><td>849</td></tr>
+                    <tr><td>SL</td><td>TRAPICHE</td><td>731</td></tr>
+                    <tr><td>SL</td><td>UNION</td><td>859</td></tr>
+                    <tr><td>SL</td><td>VILLA DE LA QUEBRADA</td><td>1495</td></tr>
+                    <tr><td>SL</td><td>VILLA DE PRAGA</td><td>1502</td></tr>
+                    <tr><td>SL</td><td>VILLA DEL CARMEN</td><td>1522</td></tr>
+                    <tr><td>SL</td><td>VILLA LARCA</td><td>1523</td></tr>
+                    <tr><td>SL</td><td>VILLA MERCEDES I</td><td>453</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+    // --- FUNCIÓN DE BÚSQUEDA ---
+    function searchTable() {
+        // Declarar variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("centralesTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Recorrer todas las filas de la tabla y ocultar las que no coinciden
+        for (i = 1; i < tr.length; i++) { // Empezar en 1 para no ocultar el encabezado
+            // Buscar en la columna "Central" (la segunda, índice 1)
+            td = tr[i].getElementsByTagName("td")[1]; 
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivos de Intervención - Guía de Mantenimiento</title>
+    <style>
+        /* --- Estilos Generales y Fondo (Igual que en las otras páginas) --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        body {
+            background-image: url('movistar.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #0099e4;
+            background-attachment: fixed;
+        }
+
+        /* --- Contenedor Principal --- */
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- Título y Párrafos --- */
+        h1 {
+            text-align: center;
+            color: #00A9E0;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        
+        /* --- Botón para Volver al Índice --- */
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 25px;
+            background-color: #00A9E0;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #0078a8;
+        }
+
+        /* --- Caja de Búsqueda --- */
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: 2px solid #555;
+            background-color: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: #00A9E0;
+        }
+
+        /* --- Estilos de la Tabla --- */
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        #motivosTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #motivosTable th, #motivosTable td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        #motivosTable th {
+            background-color: #003755;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        
+        #motivosTable tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        #motivosTable tr:hover {
+            background-color: rgba(0, 169, 224, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <a href="index.html" class="back-button">‹ Volver al Índice</a>
+        <h1>Motivos de Intervención</h1>
+        <p>Utiliza la barra de búsqueda para filtrar la tabla por código o descripción del motivo.</p>
+        
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Buscar por código o descripción...">
+
+        <div class="table-container">
+            <table id="motivosTable">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Código</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>CAMBIO SECCION CU</td></tr>
+                    <tr><td>2</td><td>ROBO</td></tr>
+                    <tr><td>3</td><td>DAÑO</td></tr>
+                    <tr><td>4</td><td>TODO LO QUE SEA SOLAMENTE BAJADAS</td></tr>
+                    <tr><td>7</td><td>DESVIOS A CARGO DE TASA</td></tr>
+                    <tr><td>9</td><td>FALTA NEUMATICA</td></tr>
+                    <tr><td>11</td><td>OBRAS DE PRESURIZACION</td></tr>
+                    <tr><td>13</td><td>DESVIOS A CARGO DEL CLIENTE</td></tr>
+                    <tr><td>14</td><td>POSTE DE RAMAL</td></tr>
+                    <tr><td>16</td><td>FIBRA OPTICA</td></tr>
+                    <tr><td>19</td><td>AUTOR IDENTIFICADO</td></tr>
+                    <tr><td>20</td><td>GARANTIA - CARGO A LA CTTA</td></tr>
+                    <tr><td>21</td><td>PLAN DE ESTABILIDAD</td></tr>
+                    <tr><td>25</td><td>PLAN DE SANEAMIENTO</td></tr>
+                    <tr><td>24</td><td>OBRAS COMO CAMBIO DE CAJA, LEVANTAR BODOQUE, REHACER EMPALME</td></tr>
+                    <tr><td>24 nd</td><td>segurizaciones</td></tr>
+                    <tr><td>27</td><td>PLANES DE ESTABILIDAD</td></tr>
+                    <tr><td>40</td><td>DESMONTE EXPRESS</td></tr>
+                    <tr><td>TRD</td><td>POSTE DE APOYO</td></tr>
+                    <tr><td>50</td><td>desmonte de infraestructura de red (poste acero, armario)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+    // --- FUNCIÓN DE BÚSQUEDA MEJORADA (BUSCA EN AMBAS COLUMNAS) ---
+    function searchTable() {
+        var input, filter, table, tr, tdCode, tdDesc, i, txtValueCode, txtValueDesc;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("motivosTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) { // Empezar en 1 para no ocultar el encabezado
+            tdCode = tr[i].getElementsByTagName("td")[0]; // Columna del Código
+            tdDesc = tr[i].getElementsByTagName("td")[1]; // Columna de la Descripción
+            
+            if (tdCode || tdDesc) {
+                txtValueCode = tdCode.textContent || tdCode.innerText;
+                txtValueDesc = tdDesc.textContent || tdDesc.innerText;
+
+                // Si el texto de búsqueda está en el código O en la descripción, muestra la fila
+                if (txtValueCode.toUpperCase().indexOf(filter) > -1 || txtValueDesc.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    </script>
+
+</body>
+</html>
