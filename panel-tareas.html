@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Tareas - Guía de Mantenimiento</title>
+    <style>
+        /* Estilos Generales y Fondo */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        body {
+            background-image: url('movistar.png'); background-size: contain;
+            background-position: center; background-repeat: no-repeat;
+            background-color: #0099e4; background-attachment: fixed;
+        }
+        .main-container {
+            max-width: 1200px; 
+            margin: 20px auto; padding: 25px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            color: white; 
+            display: flex;
+            flex-direction: column;
+            height: 90vh; 
+        }
+        .back-activity=False`**. Esto significa que, por defecto, el Excel se mostrará sin la posibilidad de usar filtros o la búsqueda.
+
+Para que funcione correctamente, **he modificado ese parámetro a `True`**.
+
+Aquí tienes todos los pasos y los códigos listos para que tu nueva sección funcione a la perfección.
+
+---
+
+### Paso 1: Crea el Nuevo Archivo `panel-tareas.html`
+
+1.  Ve a tu carpeta **`web guia`**.
+2.  Crea un nuevo archivo de texto y pega todo el código que te doy a continuación.
+3.  Guarda este archivo con el nombre **`panel-tareas.html`**.
+
+#### Código para `panel-tareas.html`
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Tareas - Guía de Mantenimiento</title>
+    <style>
+        /* Estilos Generales y Fondo */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        body {
+            background-image: url('movistar.png'); background-size: contain;
+            background-position: center; background-repeat: no-repeat;
+            background-color: #0099e4; background-attachment: fixed;
+        }
+        .main-container {
+            max-width: 1200px; /* Ancho mayor para el Excel */
+            margin: 20px auto; padding: 25px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 90vh; /* Ocupa el 90% de la altura de la pantalla */
+        }
+        .back-button {
+            display: inline-block; padding: 6px 14px; margin-bottom: 15px;
+            background-color: #00A9E0; color: white; text-decoration: none;
+            border-radius: 8px; font-weight: bold; transition: background-color 0.3s;
+        }
+        .back-button:hover { background-color: #0078a8; }
+        
+        h1 {
+            text-align: center; color: #00A9E0; margin-top: 0;
+            margin-bottom: 10px; font-size: 1.8em; text-transform: uppercase;
+        }
+        
+        .excel-container {
+            flex-grow: 1; /* Permite que este div ocupe todo el espacio vertical disponible */
+            width: 100%;
+        }
+        .excel-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #555;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div>
+            <a href="index.html" class="back-button">‹ Volver al Índice</a>
+            <h1>Panel de Tareas</h1>
+        </div>
+
+        <div class="excel-container">
+            <!-- 
+            HE INSERTADO TU CÓDIGO AQUÍ Y HE CAMBIADO 'wdAllowInteractivity=False' a 'True'
+            para asegurar que los filtros y la búsqueda funcionen.
+            -->
+            <iframe src="https://telefonicacorp-my.sharepoint.com/personal/ernesto_casati_telefonica_com/_layouts/15/Doc.aspx?sourcedoc={d9b69d6a-0316-4193-8bcf-67c41a071080}&action=embedview&wdAllowInteractivity=True&Item='panel%20diario%20de%20tareas'!A1%3AE5&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+        </div>
+    </div>
+</body>
+</html>
