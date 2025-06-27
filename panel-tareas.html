@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Tareas - Guía de Mantenimiento</title>
+    <style>
+        /* Estilos Generales y Fondo */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        body {
+            background-image: url('movistar.png'); background-size: contain;
+            background-position: center; background-repeat: no-repeat;
+            background-color: #0099e4; background-attachment: fixed;
+        }
+        .main-container {
+            max-width: 1200px; 
+            margin: 20px auto; padding: 25px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            color: white; 
+            display: flex;
+            flex-direction: column;
+            height: 90vh; 
+        }
+        .back-button {
+            display: inline-block; padding: 6px 14px; margin-bottom: 15px;
+            background-color: #00A9E0; color: white; text-decoration: none;
+            border-radius: 8px; font-weight: bold; transition: background-color 0.3s;
+        }
+        .back-button:hover { background-color: #0078a8; }
+        
+        h1 {
+            text-align: center; color: #00A9E0; margin-top: 0;
+            margin-bottom: 10px; font-size: 1.8em; text-transform: uppercase;
+        }
+        
+        /* Estilos para el registro */
+        .login-record {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 8px 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .login-record strong {
+            color: #ffff00; /* Amarillo para destacar */
+        }
+        .login-record .user-name {
+            color: #87CEEB; /* Azul claro para el nombre */
+        }
+
+        .excel-container {
+            flex-grow: 1; 
+            width: 100%;
+        }
+        .excel-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #555;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div>
+            <a href="index.html" class="back-button">‹ Volver al Índice</a>
+            <h1>Panel de Tareas</h1>
+        </div>
+
+        <div class="login-record">
+            <span id="loginMessage">Cargando registro...</span>
+        </div>
+
+        <div class="excel-container">
+            <iframe src="https://telefonicacorp-my.sharepoint.com/personal/ernesto_casati_telefonica_com/_layouts/15/Doc.aspx?sourcedoc={d9b69d6a-0316-4193-8bcf-67c41a071080}&action=embedview&wdAllowInteractivity=True&Item='panel%20diario%20de%20tareas'!A1%3AE5&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+        </div>
+    </div>
+
+    <!-- ========= SCRIPT DE JAVASCRIPT ACTUALIZADO ========= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hoy = new Date().toISOString().slice(0, 10);
+            const registroGuardado = localStorage.getItem('primerIngresoDiarioConNombre');
+            let registro = registroGuardado ? JSON.parse(registroGuardado) : null;
+
+            // Función para mostrar el mensaje
+            function mostrarMensaje(usuario, hora) {
+                document.getElementById('loginMessage').innerHTML = `Primer ingreso de <strong class="user-name">${usuario}</strong> registrado hoy a las: <strong>${hora}</strong>`;
+            }
+
+            // Comprobar si no hay registro o si es de un día anterior
+            if (!registro || registro.fecha !== hoy) {
+                // Pedir el nombre al usuario
+                const nombreUsuario = prompt("Por favor, ingrese su nombre para registrar el primer acceso del día:", "");
+
+                // Si el usuario ingresa un nombre y no cancela
+                if (nombreUsuario && nombreUsuario.trim() !== "") {
+                    const ahora = new Date();
+                    const horaActual = ahora.toLocaleTimeString('es-ES');
+                    
+                    registro = {
+                        fecha: hoy,
+                        hora: horaActual,
+                        usuario: nombreUsuario.trim()
+                    };
+
+                    // Guardar el nuevo registro completo
+                    localStorage.setItem('primerIngresoDiarioConNombre', JSON.stringify(registro));
+                    
+                    // Mostrar el nuevo registro
+                    mostrarMensaje(registro.usuario, registro.hora);
+                } else {
+                    // Si el usuario cancela o no pone nada, se muestra un mensaje genérico
+                    document.getElementById('loginMessage').innerHTML = "No se ha registrado el ingreso. Por favor, recargue la página e ingrese su nombre.";
+                }
+            } else {
+                // Si ya había un registro para hoy, simplemente lo mostramos
+                mostrarMensaje(registro.usuario, registro.hora);
+            }
+        });
+    </script>
+</body>
+</html>
