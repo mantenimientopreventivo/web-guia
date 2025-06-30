@@ -6,47 +6,72 @@
     <title>Gestión de Stock de Tapas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #1e2a38; color: #e1e1e1; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #1e2a38; color: #e1e1e1; margin: 0; padding: 0; }
         
         #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 42, 56, 0.95);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #1e2a38;
             display: flex; justify-content: center; align-items: center; z-index: 1000;
         }
         .login-box {
-            background-color: #2a3949; padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            text-align: center; width: 90%; max-width: 350px;
+            background-color: #2a3949; padding: 30px 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            text-align: center; width: 90%; max-width: 400px;
         }
-        .login-box h2 { color: #61dafb; margin-top: 0; }
+        .login-box h2 { color: #61dafb; margin-top: 0; border-bottom: 1px solid #61dafb; padding-bottom: 15px; }
+        
+        #login-form {
+            display: flex; gap: 10px; margin-top: 25px;
+        }
         .login-box input {
-            width: 100%; padding: 12px; margin: 20px 0; background-color: #1e2a38; border: 1px solid #4a5a6a;
+            flex-grow: 1; padding: 12px; background-color: #1e2a38; border: 1px solid #4a5a6a;
             border-radius: 4px; color: #e1e1e1; box-sizing: border-box; text-align: center; font-size: 1.2em;
         }
-        .login-box button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        
-        .container {
-            display: none; /* Oculto hasta que se ingrese la clave */
-            max-width: 1200px; margin: 0 auto; background-color: #2a3949; padding: 25px; border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative;
+        .login-box button {
+            padding: 12px 20px; background-color: #007bff; color: white; border: none;
+            border-radius: 4px; font-weight: bold; cursor: pointer; flex-shrink: 0;
         }
+
+        .container {
+            display: none; max-width: 1200px; margin: 0 auto; background-color: #2a3949;
+            padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative;
+        }
+        
         h1, h2 { text-align: center; color: #61dafb; border-bottom: 2px solid #61dafb; padding-bottom: 10px; }
         h1 { font-size: 2.2em; margin-top: 40px; }
         h2 { font-size: 1.5em; }
         hr { border: 1px solid #3a4959; margin: 30px 0; }
         .boton-volver { position: absolute; top: 25px; left: 25px; background-color: #4a5a6a; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        .boton-volver:hover { background-color: #5a6a7a; }
         
         #form-registro { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; align-items: end; }
         #form-registro div { display: flex; flex-direction: column; }
         #form-registro label { margin-bottom: 5px; font-weight: bold; font-size: 0.9em; white-space: nowrap; }
-        #form-registro input, #form-registro select { width: 100%; padding: 8px; background-color: #1e2a38; border: 1px solid #4a5a6a; border-radius: 4px; color: #e1e1e1; box-sizing: border-box; height #61dafb; font-weight: bold; }
+        #form-registro input, #form-registro select { width: 100%; padding: 8px; background-color: #1e2a38; border: 1px solid #4a5a6a; border-radius: 4px; color: #e1e1e1; box-sizing: border-box; height: 37px; }
+        input[type="date"] { color-scheme: dark; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        
+        .actions-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+        .boton { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; text-align: center; height: 37px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .boton-anadir { background-color: #28a745; color: white; }
+        .boton-copiar { background-color: #ffc107; color: black; }
+        .boton-informe { background-color: #6f42c1; color: white; }
+        .boton-borrar { background-color: #dc3545; color: white; }
+        
+        #stock-total-container { text-align: center; margin: -10px 0 20px 0; }
+        #stock-total { font-size: 1.8em; font-weight: bold; color: #ffffff; background-color: #3a4959; padding: 10px 20px; border-radius: 8px; display: inline-block; }
+        .tabla-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #4a5a6a; }
+        th { background-color: #3a4959; color: #61dafb; }
+        .fila-ingreso { background-color: rgba(40, 167, 69, 0.2); }
+        .fila-consumo { background-color: rgba(220, 53, 69, 0.2); }
+        .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
         .stock-positivo { color: #90ee90; font-weight: bold; }
 
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .container { padding: 15px; }
+            body { padding: 0; }
+            .container { padding: 15px; border-radius: 0; }
+            #login-form { flex-direction: column; }
             h1 { font-size: 1.8em; margin-top: 50px; }
             h2 { font-size: 1.3em; }
-            #stock-total { font-size: 1.5em; }
             .boton-volver { top: 15px; left: 15px; }
             #form-registro, .actions-container { flex-direction: column; gap: 15px; }
             .boton { width: 100%; }
@@ -57,8 +82,10 @@
     <div id="login-screen">
         <div class="login-box">
             <h2>Acceso de Administrador</h2>
-            <input type="password" id="password-input" placeholder="Ingrese la clave" onkeyup="if(event.key==='Enter') checkPassword()">
-            <button onclick="checkPassword()">Ingresar</button>
+            <form id="login-form">
+                <input type="password" id="password-input" placeholder="••••">
+                <button type="submit">Ingresar</button>
+            </form>
         </div>
     </div>
 
@@ -82,170 +109,12 @@
             <button type="button" onclick="generarInformeConsumo()" class="boton boton-informe"><i class="fa-solid fa-file-alt"></i>Informe</button>
             <button type="button" onclick="borrarHistorial()" class="boton boton-borrar"><i class="fa-solid fa-trash-can"></i>Borrar Historial</button>
         </div>
-
         <hr>
         <h2>Resumen de Stock</h2>
         <div id="stock-total-container"><span id="stock-total">Calculando...</span></div>
         <div class="tabla-container">
             <table id="tabla-stock-detallado">
                 <thead><tr><th>Material</th><th>Medida (Ancho x Alto)</th><th>Stock Disponible</th></tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <hr>
-        <h2>Historial de Movimientos</h2>
-        <div class="tabla-container">
-            <table id="tabla-historial">
-                <thead><tr><th>Tipo</th><th>Fecha</th><th>Cantidad</th><th>Ancho: 37px; }
-        input[type="date"] { color-scheme: dark; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        
-        .actions-container {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 25px;
-        }
-        .boton { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; text-align: center; height: 37px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .boton-anadir { background-color: #28a745; color: white; }
-        .boton-copiar { background-color: #ffc107; color: black; }
-        .boton-informe { background-color: #6f42c1; color: white; }
-        .boton-borrar { background-color: #dc3545; color: white; }
-        
-        #stock-total-container { text-align: center; margin: -10px 0 20px 0; }
-        #stock-total { font-size: 1.8em; font-weight: bold; color: #ffffff; background-color: #3a4959; padding: 10px 20px; border-radius: 8px; display: inline-block; }
-        .tabla-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #4a5a6a; }
-        th { background-color: #3a4959; color: #61dafb; }
-        .fila-ingreso { background-color: rgba(40, 167, 69, 0.2); }
-        .fila-consumo { background-color: rgba(220, 53, 69, 0.2); }
-        .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
-        .stock-positivo { color: #90ee90; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .container { padding: 15px; }
-            h1 { font-size: 1.8em; margin-top: 50px; }
-            h2 { font-size: 1.3em; }
-            #stock-total { font-size: 1.5em; }
-            .boton-volver { top: 15px; left: 15px; }
-            #form-registro { grid-template-columns: 1fr; gap: 20px; }
-            .actions-container { flex-direction: column; gap: 15px; }
-            .boton { width: 100%; }
-        }
-    </style>
-</head>
-<body>
-    <div id="login-screen">
-        <div class="login-box">
-            <h2>Acceso de Administrador</h2>
-            <input type="password" id="password-input" placeholder="Ingrese la clave" onkeyup="if(event.key==='Enter') checkPassword()">
-            <button onclick="checkPassword()">Ingresar</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <a href="index.html" class="boton-volver"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
-        <h1>Gestión y Registro de Stock</h1>
-        <form id="form-registro" onsubmit="anadirRegistro(event)">
-            <div><label for="fecha">Fecha</label><input type="date" id="fecha" required></div>
-            <div><label for="tipoMovimiento">Tipo</label><select id="tipoMovimiento" required><option value="" disabled selected>Seleccione...</option><option value="Ingreso">Ingreso</option><option value</th><th>Alto</th><th>Material</th><th>Sigest</th><th>Detalle</th></tr></thead>
-                <tbody id="historial-body"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        let registrosCompletos = [];
-        let stockPorItem = {};
-        const urlStockJson = 'stock.json';
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("password-input").focus();
-        });
-
-        function checkPassword() {
-            if (document.getElementById('password-input').value === '1598') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.querySelector('.container').style.display = 'block';
-                cargarStockInicial();
-            } else {
-                alert('Clave incorrecta.');
-                document.getElementById('password-input').value = '';
-            }
-        }
-        
-        function cargarStockInicial() {
-            fetch(`${urlStockJson}?v=${new Date().getTime()}`)
-                .then(response => {
-                    if (!response.ok) throw new Error("Archivo stock.json no encontrado. Se creará uno nuevo.");
-                    return response.json();
-                })
-                .then(data => {
-                    registrosCompletos = (data && Array.isArray(data.registros)) ? data.registros : [];
-                    actualizarCalculosYRenderizar();
-                })
-                .catch(error => {
-                    console.error('Error al cargar stock inicial:', error);
-                    document.querySelector("#historial-body").innerHTML = `<tr><td colspan="8" style="text-align:center;">No hay registros cargados.</td></tr>`;
-                    actualizarCalculosYRenderizar();
-                });
-        }
-
-        function actualizarCalculosYRenderizar() {
-            calcularStockPorItem();
-            renderizarStockTotal();
-            renderizarStockDetallado();
-            renderizarTabla();
-        }
-
-        function calcularStockPorItem() {
-            stockPorItem = {};
-            registrosCompletos.forEach(reg => {
-                const itemKey = `${reg.material || "N/A"}-${reg.ancho || 0}x${reg.alto || 0}`;
-                ="Consumo">Consumo</option></select></div>
-            <div><label for="cantidad">Cantidad</label><input type="number" id="cantidad" placeholder="Ej: 10" required></div>
-            <div><label for="ancho">Ancho (cm)</label><input type="number" id="ancho" placeholder="Ej: 40"></div>
-            <div><label for="alto">Alto (cm)</label><input type="number" id="alto" placeholder="Ej: 110"></div>
-            <div><label for="material">Material</label><select id="material"><option value="Concreto">Concreto</option><option value="Hierro">Hierro</option><option value="Plastico">Plástico</option><option value="Otro">Otro</option></select></div>
-            <div><label for="sigest">Sigest</label><input type="text" id="sigest" placeholder="Ej: S-12345"></div>
-            <div><label for="origen">Detalle</label><input type="text" id="origen" placeholder="Ej: Retesar" required></div>
-        </form>
-
-        <div class="actions-container">
-            <button type="submit" form="form-registro" class="boton boton-anadir"><i class="fa-solid fa-plus"></i>Añadir Registro</button>
-            <button type="button" onclick="copiarJSONAlPortapapeles()" class="boton boton-copiar"><i class="fa-solid fa-copy"></i>Copiar JSON</button>
-            <button type="button" onclick="generarInformeConsumo()" class="boton boton-informe"><i class="fa-solid fa-file-alt"></i>Informe</button>
-            <button type="button" onclick="borrarHistorial()" class="boton boton-borrar"><i class="fa-solid fa-trash-can"></i>Borrar Historial</button>
-        </div>
-
-        <hr>
-        <h2>Resumen de Stock</h2>
-        <div id="stock-total-container"><span id="stock-total">Calculando...</span></div>
-        <div class="tabla-container">
-            <table id="tabla-stock-detallado">
-                <thead><tr><th>Material</th><th>stockPorItem[itemKey] = stockPorItem[itemKey] || 0;
-                if (reg.tipoMovimiento === "Ingreso") {
-                    stockPorItem[itemKey] += reg.cantidad;
-                } else if (reg.tipoMovimiento === "Consumo") {
-                    stockPorItem[itemKey] -= reg.cantidad;
-                }
-            });
-        }
-
-        function renderizarStockTotal() {
-            const total = Object.values(stockPorItem).reduce((sum, current) => sum + current, 0);
-            document.getElementById("stock-total").textContent = `Stock Total: ${total} unidades`;
-        }
-        
-        function renderizarStockDetallado() {
-            const tbody = document.querySelector("#tabla-stock-detallado tbody");
-            tbody.innerHTML = "";
-            const stockArray = Object.entries(stockPorItem);
-            stockArray.sort((a, b) => {
-                const materialA = a[0].split("-")[0];
-                const materialB = b[0].split("-")[0];
-                if (materialA < materialB) return -1;
-                if (materialA > materialB) return 1;
-                Medida (Ancho x Alto)</th><th>Stock Disponible</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -264,36 +133,36 @@
         let stockPorItem = {};
         const urlStockJson = 'stock.json';
 
+        // --- Lógica de la Contraseña (CORREGIDA) ---
         document.addEventListener('DOMContentLoaded', () => {
-             document.getElementById('password-input').focus();
+            const loginForm = document.getElementById('login-form');
+            const passwordInput = document.getElementById('password-input');
+            passwordInput.focus();
+
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Evita que la página se recargue
+                checkPassword();
+            });
         });
 
         function checkPassword() {
-            if (document.getElementById('password-input').value === '1598') {
+            const pass = document.getElementById('password-input').value;
+            if (pass === '1598') {
                 document.getElementById('login-screen').style.display = 'none';
+                document.querySelector('body').style.padding = '20px'; // Restaura el padding del body
                 document.querySelector('.container').style.display = 'block';
                 cargarStockInicial();
             } else {
                 alert('Clave incorrecta.');
                 document.getElementById('password-input').value = '';
+                document.getElementById('password-input').focus();
             }
         }
         
+        // --- Lógica de la Aplicación (sin cambios) ---
         function cargarStockInicial() {
             fetch(`${urlStockJson}?v=${new Date().getTime()}`)
-                .then(response => response.ok ? response.json() :return b[1] - a[1];
-            });
-
-            if (stockArray.length === 0 || stockArray.every(item => item[1] <= 0)) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>`;
-                return;
-            }
-
-            stockArray.forEach(([key, cantidad]) => {
-                if (cantidad <= 0) return;
-                const [material, medida] = key.split("-");
-                const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${material}</td><td>${medida.replace("x", " x Promise.reject("Archivo no encontrado"))
+                .then(response => response.ok ? response.json() : Promise.reject("Archivo no encontrado"))
                 .then(data => {
                     registrosCompletos = (data && Array.isArray(data.registros)) ? data.registros : [];
                     actualizarCalculosYRenderizar();
@@ -306,16 +175,7 @@
         }
         
         function actualizarCalculosYRenderizar() {
-            calcularStock ")} cm</td><td class="stock-positivo">${cantidad}</td>`;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderizarTabla() {
-            const tbody = document.getElementById("historial-body");
-            tbody.innerHTML = "";
-            const registrosOrdenados = registrosCompletos.slice().sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-            registrosOrdenados.PorItem();
+            calcularStockPorItem();
             renderizarStockTotal();
             renderizarStockDetallado();
             renderizarTabla();
@@ -325,210 +185,147 @@
             stockPorItem = {};
             registrosCompletos.forEach(reg => {
                 const itemKey = `${reg.material || "N/A"}-${reg.ancho || 0}x${reg.alto || 0}`;
-                stockPorItem[forEach(reg => {
-                const tr = document.createElement("tr");
-                if (reg.tipoMovimiento === "Ingreso") tr.classList.add("fila-ingreso");
-                if (reg.tipoitemKey] = stockPorItem[itemKey] || 0;
-                if (reg.tipoMovimiento === "Ingreso") {
-                    stockPorItem[itemKey] += reg.cantidad;
-                } else if (Movimiento === "Consumo") tr.classList.add("fila-consumo");
-                if (reg.esNuevo) tr.classList.add("nuevo-registro");
-                tr.innerHTML = `<td>${reg.reg.tipoMovimiento === "Consumo") {
-                    stockPorItem[itemKey] -= reg.cantidadtipoMovimiento || "N/A"}</td><td>${reg.fecha}</td><td>${reg.cantidad}</td>;
-                }
+                stockPorItem[itemKey] = stockPorItem[itemKey] || 0;
+                if (reg.tipoMovimiento === "Ingreso") stockPorItem[itemKey] += reg.cantidad;
+                else if (reg.tipoMovimiento === "Consumo") stockPorItem[itemKey] -= reg.cantidad;
             });
         }
         
         function renderizarStockTotal() {
-            const totalGeneral = Object.values(stockPorItem).reduce((sum, current) => sum + current, 0);
-<td>${reg.ancho || "-"}</td><td>${reg.alto || "-"}</td><td>${reg.material            document.getElementById("stock-total").textContent = `Stock Total: ${totalGeneral} unidades`;
-        }}</td><td>${reg.sigest || "-"}</td><td>${reg.origen}</td>`;
-                tbody
+            const total = Object.values(stockPorItem).reduce((sum, current) => sum + current, 0);
+            document.getElementById("stock-total").textContent = `Stock Total: ${total} unidades`;
+        }
         
         function renderizarStockDetallado() {
-            const tbody = document.querySelector("#tabla-stock.appendChild(tr);
-            });
-        }
-
-        function anadirRegistro(event) {
-            event-detallado tbody");
+            const tbody = document.querySelector("#tabla-stock-detallado tbody");
             tbody.innerHTML = "";
-            const stockArray = Object.entries(stock.preventDefault();
-            const nuevoRegistro = {
-                id: Date.now(),
-                fecha: document.getElementById("PorItem).sort((a, b) => {
+            const stockArray = Object.entries(stockPorItem).sort((a, b) => {
                 const materialA = a[0].split("-")[0];
-fecha").value,
-                tipoMovimiento: document.getElementById("tipoMovimiento").value,
-                cantidad:                const materialB = b[0].split("-")[0];
-                if (materialA < materialB) parseInt(document.getElementById("cantidad").value),
-                ancho: parseInt(document.getElementById("ancho"). return -1;
+                const materialB = b[0].split("-")[0];
+                if (materialA < materialB) return -1;
                 if (materialA > materialB) return 1;
-                return b[1value) || 0,
-                alto: parseInt(document.getElementById("alto").value) || 0,] - a[1];
+                return b[1] - a[1];
             });
 
-            if (stockArray.length === 0 || stockArray.
-                material: document.getElementById("material").value,
-                sigest: document.getElementById("sigest").every(item => item[1] <= 0)) {
-                tbody.innerHTML = `<tr><td colspanvalue,
-                origen: document.getElementById("origen").value,
-                esNuevo: true
-            ="3" style="text-align:center;">No hay stock disponible.</td></tr>`;
+            if (stockArray.length === 0 || stockArray.every(item => item[1] <= 0)) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>`;
                 return;
-};
-            if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen ||             }
+            }
 
             stockArray.forEach(([key, cantidad]) => {
-                if (cantidad <= 0)!nuevoRegistro.tipoMovimiento) {
-                return alert("Por favor, completa todos los campos obligatorios.");
-            }
- return;
+                if (cantidad <= 0) return;
                 const [material, medida] = key.split("-");
-                const tr = document.createElement            if (nuevoRegistro.tipoMovimiento === "Consumo") {
-                const itemKey = `${nuevoRegistro("tr");
-                tr.innerHTML = `<td>${material}</td><td>${medida.replace("x", " x.material}-${nuevoRegistro.ancho}x${nuevoRegistro.alto}`;
-                const stockActual = stockPor ")} cm</td><td class="stock-positivo">${cantidad}</td>`;
-                tbody.appendChild(tr);Item[itemKey] || 0;
-                if (stockActual < nuevoRegistro.cantidad) {
-                    return alert
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${material}</td><td>${medida.replace("x", " x ")} cm</td><td class="stock-positivo">${cantidad}</td>`;
+                tbody.appendChild(tr);
             });
         }
 
         function renderizarTabla() {
             const tbody = document.getElementById("historial-body");
             tbody.innerHTML = "";
-            const registrosOrdenados = registrosCompletos.slice().sort(((`Error: No se puede consumir ${nuevoRegistro.cantidad} unidades.\nStock actual de "${nuevoRegistro.material} ${nuevoRegistro.ancho}x${nuevoRegistro.alto}": ${stockActual} unidades.`);
-                }a, b) => new Date(b.fecha) - new Date(a.fecha));
-            registrosOrdenados.
-            }
-            registrosCompletos.push(nuevoRegistro);
-            actualizarCalculosYRenderforEach(reg => {
+            const registrosOrdenados = registrosCompletos.slice().sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            registrosOrdenados.forEach(reg => {
                 const tr = document.createElement("tr");
-                if (reg.tipoMovizar();
-            document.getElementById("form-registro").reset();
-        }
-
-        function generarInformeConsumoimiento === "Ingreso") tr.classList.add("fila-ingreso");
-                if (reg.tipo() {
-            const consumos = registrosCompletos.filter(r => r.tipoMovimiento === "Movimiento === "Consumo") tr.classList.add("fila-consumo");
-                if (reg.Consumo");
-            if (consumos.length === 0) return alert("No hay registros de consumo paraesNuevo) tr.classList.add("nuevo-registro");
-                tr.innerHTML = `<td>${reg. generar un informe.");
-
-            const agrupado = {};
-            consumos.forEach(c => {
-                consttipoMovimiento||"N/A"}</td><td>${reg.fecha}</td><td>${reg.cantidad}</td> mes = c.fecha.substring(0, 7);
-                const medida = `${c.ancho ||<td>${reg.ancho||"-"}</td><td>${reg.alto||"-"}</td><td>${reg.material 0}x${c.alto || 0} cm`;
-                const material = c.material;
-}</td><td>${reg.sigest||"-"}</td><td>${reg.origen}</td>`;
-                tbody                if (!agrupado[mes]) agrupado[mes] = {};
-                if (!agrupado[.appendChild(tr);
+                if (reg.tipoMovimiento === "Ingreso") tr.classList.add("fila-ingreso");
+                if (reg.tipoMovimiento === "Consumo") tr.classList.add("fila-consumo");
+                if (reg.esNuevo) tr.classList.add("nuevo-registro");
+                tr.innerHTML = `<td>${reg.tipoMovimiento||"N/A"}</td><td>${reg.fecha}</td><td>${reg.cantidad}</td><td>${reg.ancho||"-"}</td><td>${reg.alto||"-"}</td><td>${reg.material}</td><td>${reg.sigest||"-"}</td><td>${reg.origen}</td>`;
+                tbody.appendChild(tr);
             });
         }
 
         function anadirRegistro(event) {
-            eventmes][medida]) agrupado[mes][medida] = {};
-                if (!agrupado[mes.preventDefault();
+            event.preventDefault();
             const nuevoRegistro = {
                 id: Date.now(),
-                fecha: document.getElementById("][medida][material]) agrupado[mes][medida][material] = 0;
-                agrupado[mes][medida][material] += c.cantidad;
-            });
-
-            let informeTexto = "Informefecha").value,
+                fecha: document.getElementById("fecha").value,
                 tipoMovimiento: document.getElementById("tipoMovimiento").value,
                 cantidad: parseInt(document.getElementById("cantidad").value),
-                ancho: parseInt(document.getElementById("ancho"). de Consumos\n=====================\n\n";
-            Object.keys(agrupado).sort().forEach(mesvalue) || 0,
-                alto: parseInt(document.getElementById("alto").value) || 0, => {
-                informeTexto += `-- MES: ${mes} --\n`;
-                Object.keys(ag
+                ancho: parseInt(document.getElementById("ancho").value) || 0,
+                alto: parseInt(document.getElementById("alto").value) || 0,
                 material: document.getElementById("material").value,
-                sigest: document.getElementById("sigest").rupado[mes]).sort().forEach(medida => {
-                    informeTexto += `  Medida:value,
+                sigest: document.getElementById("sigest").value,
                 origen: document.getElementById("origen").value,
                 esNuevo: true
-             ${medida}\n`;
-                    Object.keys(agrupado[mes][medida]).sort().forEach};
-            if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen || (material => {
-                        informeTexto += `    - Material: ${material}, Consumido: ${agrupado!nuevoRegistro.tipoMovimiento) {
+            };
+            if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen || !nuevoRegistro.tipoMovimiento) {
                 return alert("Por favor, completa todos los campos obligatorios.");
             }
-[mes][medida][material]}\n`;
-                    });
-                });
-                informeTexto += "\n            if (nuevoRegistro.tipoMovimiento === "Consumo") {
-                const itemKey = `${nuevoRegistro.material}-${";
-            });
-            descargarArchivoDeTexto(informeTexto, 'informe_consumo.txt');
-nuevoRegistro.ancho}x${nuevoRegistro.alto}`;
-                const stockActualDelItem = stockPorItem        }
-
-        function copiarJSONAlPortapapeles() {
-            if (registrosCompletos.[itemKey] || 0;
-                if (stockActualDelItem < nuevoRegistro.cantidad) {
-length === 0) return alert("No hay registros para copiar.");
-            const jsonString = prepararJSONParaGuardar();
-                    return alert(`Error: No se puede consumir ${nuevoRegistro.cantidad} unidades.\nStock actual de "${nuevoRegistro.material} ${nuevoRegistro.ancho}x${nuevoRegistro.alto}": ${stockActualDelItem            navigator.clipboard.writeText(jsonString).then(() => {
-                alert("¡JSON copiado al} unidades.`);
+            if (nuevoRegistro.tipoMovimiento === "Consumo") {
+                const itemKey = `${nuevoRegistro.material}-${nuevoRegistro.ancho}x${nuevoRegistro.alto}`;
+                const stockActual = stockPorItem[itemKey] || 0;
+                if (stockActual < nuevoRegistro.cantidad) {
+                    return alert(`Error: No se puede consumir ${nuevoRegistro.cantidad} unidades.\nStock actual de "${nuevoRegistro.material} ${nuevoRegistro.ancho}x${nuevoRegistro.alto}": ${stockActual} unidades.`);
                 }
             }
             registrosCompletos.push(nuevoRegistro);
-             portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json.");actualizarCalculosYRenderizar();
+            actualizarCalculosYRenderizar();
             document.getElementById("form-registro").reset();
         }
 
+        function generarInformeConsumo() {
+            const consumos = registrosCompletos.filter(r => r.tipoMovimiento === "Consumo");
+            if (consumos.length === 0) return alert("No hay registros de consumo para generar un informe.");
 
+            const agrupado = {};
+            consumos.forEach(c => {
+                const mes = c.fecha.substring(0, 7);
+                const medida = `${c.ancho || 0}x${c.alto || 0} cm`;
+                const material = c.material;
+                agrupado[mes] = agrupado[mes] || {};
+                agrupado[mes][medida] = agrupado[mes][medida] || {};
+                agrupado[mes][medida][material] = (agrupado[mes][medida][material] || 0) + c.cantidad;
+            });
+
+            let informeTexto = "Informe de Consumos\n=====================\n\n";
+            Object.keys(agrupado).sort().forEach(mes => {
+                informeTexto += `-- MES: ${mes} --\n`;
+                Object.keys(agrupado[mes]).sort().forEach(medida => {
+                    informeTexto += `  Medida: ${medida}\n`;
+                    Object.keys(agrupado[mes][medida]).sort().forEach(material => {
+                        informeTexto += `    - Material: ${material}, Consumido: ${agrupado[mes][medida][material]}\n`;
+                    });
+                });
+                informeTexto += "\n";
+            });
+            descargarArchivoDeTexto(informeTexto, 'informe_consumo.txt');
+        }
+
+        function copiarJSONAlPortapapeles() {
+            if (registrosCompletos.length === 0) return alert("No hay registros para copiar.");
+            const jsonString = prepararJSONParaGuardar();
+            navigator.clipboard.writeText(jsonString).then(() => {
+                alert("¡JSON copiado al portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json.");
             }, (err) => {
                 console.error("Error al copiar: ", err);
-                alert        function generarInformeConsumo() {
-            const consumos = registrosCompletos.filter(reg => reg("No se pudo copiar el texto.");
+                alert("No se pudo copiar el texto.");
             });
         }
         
-        function borrarHistorial() {.tipoMovimiento === "Consumo");
-            if (consumos.length === 0) return alert("No hay
-            if (!confirm("ADVERTENCIA:\n\n¿Estás seguro de que quieres borrar TODO el historial?\n\ registros de consumo para generar un informe.");
-            const agrupado = {};
-            consumos.forEach(c => {
-                nEsta acción no se puede deshacer.")) return;
+        function borrarHistorial() {
+            if (!confirm("ADVERTENCIA:\n\n¿Estás seguro de que quieres borrar TODO el historial?\n\nEsta acción no se puede deshacer.")) return;
             registrosCompletos = [];
-            actualizarCalculosconst mes = c.fecha.substring(0, 7);
-                const medida = `${c.ancho || YRenderizar();
-            alert("Historial borrado de la sesión.\n\nIMPORTANTE: Ahora debes 'Cop0}x${c.alto || 0} cm`;
-                const material = c.material;
-                iar JSON' (que estará vacío) y actualizar el archivo en GitHub para que el cambio sea permanente.");
+            actualizarCalculosYRenderizar();
+            alert("Historial borrado de la sesión.\n\nIMPORTANTE: Ahora debes 'Copiar JSON' (ahora estará vacío) y actualizar el archivo en GitHub para que el cambio sea permanente.");
         }
-        agrupado[mes] = agrupado[mes] || {};
-                agrupado[mes][medida] = agrup
+        
         function prepararJSONParaGuardar() {
-            const registrosParaGuardar = registrosCompletos.mapado[mes][medida] || {};
-                agrupado[mes][medida][material] = ((({ esNuevo, ...reg }) => reg);
-            return JSON.stringify({ registros: registrosParaGuardar }, nullagrupado[mes][medida][material] || 0) + c.cantidad;
-            });
-            let informeTexto = "Informe de Consumos\n=====================\n\n";
-            Object.keys, 2);
+            const registrosParaGuardar = registrosCompletos.map(({ esNuevo, ...reg }) => reg);
+            return JSON.stringify({ registros: registrosParaGuardar }, null, 2);
         }
 
         function descargarArchivoDeTexto(texto, nombreArchivo) {
-            const blob =(agrupado).sort().forEach(mes => {
-                informeTexto += `-- MES: ${mes} --\n new Blob([texto], { type: 'text/plain' });
-            const url = URL.createObjectURL(`;
-                Object.keys(agrupado[mes]).sort().forEach(medida => {
-                    informblob);
+            const blob = new Blob([texto], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            aeTexto += `  Medida: ${medida}\n`;
-                    Object.keys(agrupado[.download = nombreArchivo;
+            a.download = nombreArchivo;
             document.body.appendChild(a);
             a.click();
-            mes][medida]).sort().forEach(material => {
-                        informeTexto += `    - Material: ${materialdocument.body.removeChild(a);
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
-    </script}, Consumido: ${agrupado[mes][medida][material]}\n`;
-                    });
-                });>
+    </script>
 </body>
 </html>
