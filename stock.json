@@ -21,6 +21,28 @@
       "material": "Concreto",
       "sigest": "65",
       "origen": "mop"
+    },
+    {
+      "id": 1751310219351,
+      "fecha": "2025-06-23",
+      "tipoMovimiento": "Ingreso",
+      "cantidad": 200,
+      "ancho": 50,
+      "alto": 50,
+      "material": "Hierro",
+      "sigest": "65",
+      "origen": "retesar"
+    },
+    {
+      "id": 1751310251687,
+      "fecha": "2025-06-30",
+      "tipoMovimiento": "Consumo",
+      "cantidad": 10,
+      "ancho": 50,
+      "alto": 50,
+      "material": "Hierro",
+      "sigest": "1",
+      "origen": "mop"
     }
   ]
 }
