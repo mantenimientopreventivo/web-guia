@@ -3,335 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Stock de Tapas - Guía</title>
+    <title>Gestión de Stock de Tapas</title>
     <style>
-        /* Estilos Generales */
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
         body {
-            background-image: url('movistar.png'); background-size: contain;
-            background-position: center; background-repeat: no-repeat;
-            background-color: #0099e4; background-attachment: fixed;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #1e2a38;
+            color: #e1e1e1;
+            margin: 0;
+            padding: 20px;
         }
-        
-        /* Contenedor principal y de login */
-        #login-modal {
-            display: flex; position: fixed;
-            z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            align-items: center; justify-content: center;
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #2a3949;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-        .login-box {
-            background-color: #1a1a1a; padding: 30px 40px; border-radius: 15px;
-            text-align: center; color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            border: 1px solid #00A9E0;
+        h1, h2 {
+            text-align: center;
+            color: #61dafb;
+            border-bottom: 2px solid #61dafb;
+            padding-bottom: 10px;
         }
-        .login-box h2 { color: #00A9E0; text-transform: uppercase; }
-        .login-box input {
-            padding: 10px; font-size: 1.2em; text-align: center;
-            border-radius: 5px; border: 1px solid #555; margin: 15px 0;
-        }
-        .login-box button {
-            background-color: #00A9E0; color: white; border: none;
-            padding: 10px 25px; font-size: 1.1em; font-weight: bold;
-            border-radius: 5px; cursor: pointer; transition: background-color 0.3s;
-        }
-        .login-box button:hover { background-color: #0078a8; }
-        
-        .main-container {
-            max-width: 1200px; margin: 20px auto; padding: 20px;
-            background-color: rgba(0, 0, 0, 0.85);
-            border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); color: white;
-        }
-        .back-button {
-            display: inline-block; padding: 6px 14px; margin-bottom: 15px;
-            background-color: #00A9E0; color: white; text-decoration: none;
-            border-radius: 8px; font-weight: bold; transition: background-color 0.3s;
-        }
-        .back-button:hover { background-color: #0078a8; }
-        h1, h2 { text-align: center; color: #00A9E0; text-transform: uppercase; }
-        h1 { font-size: 1.8em; margin-top: 0; }
-        h2 { font-size: 1.4em; border-bottom: 1px solid #00A9E0; padding-bottom: 5px; margin-top: 25px; }
-        
-        /* Formulario y Botones */
-        .form-grid-container {
-            background-color: transparent; padding: 0;
-            margin-bottom: 20px; border: 2px solid #00a9e0; border-radius: 8px; overflow: hidden;
-        }
-        .form-grid { width: 100%; border-collapse: collapse; color: black; }
-        .form-grid th, .form-grid td { border: 1px solid #000; padding: 5px; text-align: center; }
-        .form-grid th { background-color: #f2f2f2; font-weight: bold; }
-        .form-grid td { background-color: #92d050; }
-        .form-grid input, .form-grid select {
-            width: 95%; padding: 6px; box-sizing: border-box;
-            border: 1px solid #000; border-radius: 4px;
-        }
-        .actions-panel {
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 10px; margin-top: 20px;
-        }
-        .button-group button {
-            color: white; border: 2px solid #fff; padding: 10px 20px; font-size: 1em;
-            font-weight: bold; border-radius: 8px; cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .add-ingreso { background-color: #28a745; }
-        .add-consumo { background-color: #ffc107; color: black; }
-        .generate-report { background-color: #6f42c1; }
-        .clear-all { background-color: #dc3545; }
 
-        /* Stock Existente y Tablas */
-        #stock-existente-panel {
-            background-color: rgba(0, 0, 0, 0.4); padding: 15px;
-            border-radius: 8px; border: 1px solid #00A9E0;
+        /* Formulario */
+        #form-registro {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: end;
         }
-        #stock-existente-panel ul {
-            list-style: none; padding: 0; margin: 0;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;
+        #form-registro div {
+            display: flex;
+            flex-direction: column;
         }
-        #stock-existente-panel li {
-            background-color: #ffff00; color: black; padding: 8px;
-            border-radius: 5px; font-weight: bold; text-align: center;
+        #form-registro label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
         }
-        .table-container { max-height: 200px; overflow-y: auto; }
-        .data-table {
-            width: 100%; border-collapse: collapse; background-color: white;
-            color: black; border-radius: 8px; overflow: hidden; font-size: 0.9em;
+        #form-registro input,
+        #form-registro select {
+            width: 100%;
+            padding: 8px;
+            background-color: #1e2a38;
+            border: 1px solid #4a5a6a;
+            border-radius: 4px;
+            color: #e1e1e1;
+            box-sizing: border-box;
         }
-        .data-table th, .data-table td { border: 1px solid #ccc; padding: 6px; text-align: center; vertical-align: middle;}
-        .data-table thead { color: white; }
-        #stockTable thead { background-color: #0078a8; }
-        #consumptionTable thead { background-color: #9b7100; }
-        .data-table tbody tr:nth-child(even) { background-color: #f2f2f2; }
-        .delete-btn {
-            background: none; border: none; cursor: pointer; font-size: 1.2em; color: #dc3545;
+        .boton {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            text-align: center;
         }
-        
-        .modal {
-            display: none; position: fixed; z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            overflow: auto; background-color: rgba(0,0,0,0.7);
+        .boton-anadir {
+            background-color: #28a745;
+            color: white;
         }
-        .modal-content {
-            background-color: #fefefe; margin: 5% auto; padding: 20px;
-            border: 1px solid #888; width: 80%; max-width: 900px;
-            border-radius: 10px; color: black;
+        .boton-anadir:hover {
+            background-color: #218838;
         }
-        .close-button {
-            color: #aaa; float: right; font-size: 28px; font-weight: bold;
+        .boton-descargar {
+            background-color: #007bff;
+            color: white;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.1em;
         }
-        .close-button:hover, .close-button:focus {
-            color: black; text-decoration: none; cursor: pointer;
+        .boton-descargar:hover {
+            background-color: #0069d9;
         }
-        #report-content table {
-            width: 100%; border-collapse: collapse; margin-top: 20px;
+
+        /* Tabla de Stock */
+        .tabla-container {
+            overflow-x: auto;
         }
-        #report-content th, #report-content td { border: 1px solid #ddd; padding: 8px; }
-        #report-content th { background-color: #f2f2f2; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #4a5a6a;
+        }
+        th {
+            background-color: #3a4959;
+            color: #61dafb;
+        }
+        tr:nth-child(even) {
+            background-color: #2f3e4e;
+        }
+        /* Estilo para los nuevos registros añadidos en la sesión */
+        .nuevo-registro {
+            background-color: #2c662e !important; /* Verde oscuro para resaltar */
+            font-weight: bold;
+        }
+        .nuevo-registro td {
+             border-top: 2px solid #56f05b;
+        }
     </style>
 </head>
 <body>
-    <div id="login-modal" class="login-modal">
-        <div class="login-box">
-            <h2>Acceso a Gestión de Stock</h2>
-            <p>Por favor, ingrese la clave:</p>
-            <input type="password" id="password-input" autofocus>
-            <br>
-            <button onclick="checkLogin()">Ingresar</button>
-            <p style="margin-top: 20px;"><a href="index.html" style="color: #ccc; font-size: 0.9em;">Volver al Índice</a></p>
-        </div>
-    </div>
 
-    <div class="main-container">
-        <a href="index.html" class="back-button">‹ Volver al Índice</a>
-        <h1>Gestión de Stock de Tapas</h1>
-        <h2>FORMULARIO DE DATOS</h2>
-        <div class="form-grid-container">
-            <table class="form-grid">
-                <thead><tr><th>Fecha</th><th>Cantidad</th><th>Ancho</th><th>Alto</th><th>Material</th><th>Sigest</th><th>Fabricó / Consumió</th></tr></thead>
-                <tbody><tr>
-                    <td><input type="date" id="fecha"></td>
-                    <td><input type="number" id="cantidad"></td>
-                    <td><input type="number" id="ancho" placeholder="Ej: 40"></td>
-                    <td><input type="number" id="alto" placeholder="Ej: 110"></td>
-                    <td><select id="material"><option value="concreto">Concreto</option><option value="hierro">Hierro</option><option value="otro">Otro</option></select></td>
-                    <td><input type="text" id="sigest"></td>
-                    <td><input type="text" id="responsable" placeholder="Ej: Retesar o MOP"></td>
-                </tr></tbody>
+    <div class="container">
+        <h1>Gestión y Registro de Stock</h1>
+
+        <h2>Añadir Nuevo Registro</h2>
+        <form id="form-registro" onsubmit="anadirRegistro(event)">
+            <div>
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" required>
+            </div>
+            <div>
+                <label for="cantidad">Cantidad</label>
+                <input type="number" id="cantidad" placeholder="Ej: 10" required>
+            </div>
+            <div>
+                <label for="ancho">Ancho (cm)</label>
+                <input type="number" id="ancho" placeholder="Ej: 40">
+            </div>
+            <div>
+                <label for="alto">Alto (cm)</label>
+                <input type="number" id="alto" placeholder="Ej: 110">
+            </div>
+            <div>
+                <label for="material">Material</label>
+                <select id="material">
+                    <option value="Concreto">Concreto</option>
+                    <option value="Polietileno">Polietileno</option>
+                    <option value="Hierro Fundido">Hierro Fundido</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div>
+                <label for="sigest">Sigest</label>
+                <input type="text" id="sigest" placeholder="Ej: S-12345">
+            </div>
+            <div>
+                <label for="origen">Fabricó / Consumió</label>
+                <input type="text" id="origen" placeholder="Ej: Retesar o MOP" required>
+            </div>
+            <div>
+                 <button type="submit" class="boton boton-anadir">Añadir Registro</button>
+            </div>
+        </form>
+
+        <hr>
+
+        <h2>Stock Actual Registrado</h2>
+        <div class="tabla-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cantidad</th>
+                        <th>Ancho</th>
+                        <th>Alto</th>
+                        <th>Material</th>
+                        <th>Sigest</th>
+                        <th>Origen</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-stock-body">
+                    <!-- Las filas se insertarán aquí con JavaScript -->
+                </tbody>
             </table>
         </div>
-        <div class="actions-panel">
-            <div class="button-group"><button class="add-ingreso" onclick="agregarIngreso()">+ Agregar Ingreso</button><button class="add-consumo" onclick="agregarConsumo()">- Agregar Consumo</button></div>
-            <div class="button-group"><button class="generate-report" onclick="generarInforme()">Generar Informe</button><button class="clear-all" onclick="limpiarTodoElStock()">Limpiar Todo el Stock</button></div>
-        </div>
-        <h2>STOCK EXISTENTE</h2>
-        <div id="stock-existente-panel"><ul id="stock-list"></ul></div>
-        <h2>HISTORIAL DE INGRESOS</h2>
-        <div class="table-container"><table id="stockTable" class="data-table"><thead><tr><th>Fecha</th><th>Cant.</th><th>Ancho</th><th>Alto</th><th>Material</th><th>Sigest</th><th>Fabricó</th><th></th></tr></thead><tbody id="stockTableBody"></tbody></table></div>
-        <h2>HISTORIAL DE CONSUMOS</h2>
-        <div class="table-container"><table id="consumptionTable" class="data-table"><thead><tr><th>Fecha</th><th>Cant.</th><th>Ancho</th><th>Alto</th><th>Material</th><th>Sigest</th><th>Consumió</th><th></th></tr></thead><tbody id="consumptionTableBody"></tbody></table></div>
-    </div>
-
-    <div id="reportModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeReport()">×</span>
-            <h2>Informe de Consumo Mensual</h2>
-            <div id="report-content"></div>
-        </div>
+        
+        <button onclick="generarYDescargarJSON()" class="boton boton-descargar">
+            Generar y Descargar JSON Actualizado
+        </button>
     </div>
 
     <script>
-        const CLAVE_SEGURIDAD = "1598";
+        // Array global para mantener todos los registros (cargados y nuevos)
+        let registrosCompletos = [];
+        const urlStockJson = 'stock.json';
 
-        // --- LÓGICA DE LOGIN ---
-        document.addEventListener('DOMContentLoaded', () => { document.getElementById('password-input').focus(); });
-        function checkLogin() {
-            if (document.getElementById('password-input').value === CLAVE_SEGURIDAD) {
-                document.getElementById('login-modal').style.display = 'none';
-                updateAllDisplays();
-            } else { alert("Clave incorrecta."); }
-        }
-        document.getElementById('password-input').addEventListener('keyup', (e) => e.key === 'Enter' && checkLogin());
-        
-        // --- MANEJO DE DATOS ---
-        const getIngresos = () => JSON.parse(localStorage.getItem('stockIngresos')) || [];
-        const saveIngresos = data => localStorage.setItem('stockIngresos', JSON.stringify(data));
-        const getConsumos = () => JSON.parse(localStorage.getItem('stockConsumos')) || [];
-        const saveConsumos = data => localStorage.setItem('stockConsumos', JSON.stringify(data));
+        // 1. Al cargar la página, intentar cargar el JSON existente
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarStockInicial();
+        });
 
-        // --- LÓGICA PRINCIPAL ---
-        function agregarIngreso() {
-            if (!validateForm()) return;
-            const newItem = createItemFromForm(); newItem.id = Date.now();
-            const ingresos = getIngresos(); ingresos.push(newItem); saveIngresos(ingresos);
-            updateAllDisplays(); limpiarCampos();
-        }
-        
-        // --- FUNCIÓN DE CONSUMO ACTUALIZADA CON VALIDACIÓN DE STOCK ---
-        function agregarConsumo() {
-            if (!validateForm()) return;
-
-            const cantidadConsumo = parseInt(document.getElementById('cantidad').value);
-            const ancho = document.getElementById('ancho').value;
-            const alto = document.getElementById('alto').value;
-            const material = document.getElementById('material').value;
-
-            // Calcular el stock actual para este item específico
-            const stockActual = getCurrentStockForItem(ancho, alto, material);
-
-            // Validar si hay suficiente stock
-            if (cantidadConsumo > stockActual) {
-                alert(`No hay suficiente stock para "${ancho}x${alto} ${material}".\nStock actual: ${stockActual} unidades.\nCantidad a consumir: ${cantidadConsumo} unidades.`);
-                return; // Detiene la ejecución si no hay stock
-            }
-            
-            const newItem = createItemFromForm(); newItem.id = Date.now();
-            const consumos = getConsumos(); consumos.push(newItem); saveConsumos(consumos);
-            updateAllDisplays(); limpiarCampos();
+        function cargarStockInicial() {
+            fetch(urlStockJson)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("El archivo stock.json no se encontró o no se pudo cargar. Asegúrate de que exista en el repositorio.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Verificamos que 'registros' sea un array
+                    if (data && Array.isArray(data.registros)) {
+                        registrosCompletos = data.registros;
+                    }
+                    renderizarTabla();
+                })
+                .catch(error => {
+                    console.error('Error al cargar el stock inicial:', error);
+                    alert("ADVERTENCIA: No se pudo cargar el archivo stock.json. Si es la primera vez que usas esta página, ignora este mensaje. Los registros que añadas se guardarán en un archivo nuevo.");
+                    document.querySelector("#tabla-stock-body").innerHTML = `<tr><td colspan="7" style="text-align:center;">No hay registros cargados.</td></tr>`;
+                });
         }
 
-        function createItemFromForm() {
-            const fechaObj = new Date(document.getElementById('fecha').value + 'T00:00:00');
-            return {
-                fecha: fechaObj.toLocaleDateString('es-ES'), mes: fechaObj.getMonth() + 1,
+        // 2. Función para renderizar (dibujar) la tabla con los datos actuales
+        function renderizarTabla() {
+            const tbody = document.getElementById('tabla-stock-body');
+            tbody.innerHTML = ''; // Limpiar la tabla antes de volver a dibujarla
+
+            registrosCompletos.forEach(reg => {
+                const tr = document.createElement('tr');
+                // Si el registro tiene la marca 'esNuevo', le añadimos una clase CSS
+                if (reg.esNuevo) {
+                    tr.classList.add('nuevo-registro');
+                }
+                tr.innerHTML = `
+                    <td>${reg.fecha}</td>
+                    <td>${reg.cantidad}</td>
+                    <td>${reg.ancho || '-'}</td>
+                    <td>${reg.alto || '-'}</td>
+                    <td>${reg.material}</td>
+                    <td>${reg.sigest || '-'}</td>
+                    <td>${reg.origen}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 3. Función para el botón "Añadir Registro"
+        function anadirRegistro(event) {
+            event.preventDefault(); // Evitar que el formulario recargue la página
+
+            // Crear un objeto con los datos del formulario
+            const nuevoRegistro = {
+                id: Date.now(), // ID único basado en la fecha y hora actual
+                fecha: document.getElementById('fecha').value,
                 cantidad: parseInt(document.getElementById('cantidad').value),
-                ancho: document.getElementById('ancho').value, alto: document.getElementById('alto').value,
-                material: document.getElementById('material').value, sigest: document.getElementById('sigest').value,
-                responsable: document.getElementById('responsable').value
+                ancho: parseInt(document.getElementById('ancho').value) || null,
+                alto: parseInt(document.getElementById('alto').value) || null,
+                material: document.getElementById('material').value,
+                sigest: document.getElementById('sigest').value,
+                origen: document.getElementById('origen').value,
+                esNuevo: true // Marca para saber que este registro es de la sesión actual
             };
-        }
-        function validateForm() {
-            if (!document.getElementById('fecha').value || !document.getElementById('cantidad').value) {
-                alert('La Fecha y la Cantidad son obligatorias.'); return false;
-            } return true;
-        }
 
-        // --- FUNCIONES DE BORRADO ---
-        function deleteIngreso(id) {
-            if (confirm("¿Seguro que quieres eliminar este ingreso?")) { saveIngresos(getIngresos().filter(item => item.id !== id)); updateAllDisplays(); }
-        }
-        function deleteConsumo(id) {
-            if (confirm("¿Seguro que quieres eliminar este consumo?")) { saveConsumos(getConsumos().filter(item => item.id !== id)); updateAllDisplays(); }
-        }
-        function limpiarTodoElStock() {
-            const claveIngresada = prompt("Esta acción borrará TODOS los datos. Ingrese la clave de seguridad:");
-            if (claveIngresada === CLAVE_SEGURIDAD) {
-                if (confirm("CONFIRMACIÓN FINAL: ¿Borrar todos los datos de ingresos y consumos?")) {
-                    localStorage.removeItem('stockIngresos'); localStorage.removeItem('stockConsumos');
-                    updateAllDisplays(); alert("Todos los datos han sido borrados.");
-                }
-            } else if (claveIngresada !== null) { alert("Clave incorrecta."); }
-        }
-        function limpiarCampos() { document.querySelector('.form-grid-container').querySelectorAll('input, select').forEach(el => el.value = ''); }
-
-        // --- FUNCIONES DE VISUALIZACIÓN Y REPORTES ---
-        function updateAllDisplays() { renderIngresosTable(); renderConsumosTable(); renderStockExistente(); }
-        function renderIngresosTable() {
-            const tableBody = document.getElementById('stockTableBody'); tableBody.innerHTML = '';
-            getIngresos().forEach(item => { tableBody.innerHTML += `<tr><td>${item.fecha}</td><td>${item.cantidad}</td><td>${item.ancho}</td><td>${item.alto}</td><td>${item.material}</td><td>${item.sigest}</td><td>${item.responsable}</td><td><button class="delete-btn" onclick="deleteIngreso(${item.id})">🗑️</button></td></tr>`; });
-        }
-        function renderConsumosTable() {
-            const tableBody = document.getElementById('consumptionTableBody'); tableBody.innerHTML = '';
-            getConsumos().forEach(item => { tableBody.innerHTML += `<tr><td>${item.fecha}</td><td>${item.cantidad}</td><td>${item.ancho}</td><td>${item.alto}</td><td>${item.material}</td><td>${item.sigest}</td><td>${item.responsable}</td><td><button class="delete-btn" onclick="deleteConsumo(${item.id})">🗑️</button></td></tr>`; });
-        }
-        
-        // --- FUNCIÓN AUXILIAR PARA CALCULAR STOCK DE UN ITEM ---
-        function getCurrentStockForItem(ancho, alto, material) {
-            const key = `${ancho}x${alto} ${material}`;
-            const ingresos = getIngresos().filter(item => `${item.ancho}x${item.alto} ${item.material}` === key).reduce((sum, item) => sum + item.cantidad, 0);
-            const consumos = getConsumos().filter(item => `${item.ancho}x${item.alto} ${item.material}` === key).reduce((sum, item) => sum + item.cantidad, 0);
-            return ingresos - consumos;
-        }
-
-        function renderStockExistente() {
-            const stockAgrupado = {};
-            getIngresos().forEach(item => {
-                const key = `${item.ancho}x${item.alto} ${item.material}`;
-                if (!stockAgrupado[key]) stockAgrupado[key] = 0;
-                stockAgrupado[key] += item.cantidad;
-            });
-            getConsumos().forEach(item => {
-                const key = `${item.ancho}x${item.alto} ${item.material}`;
-                if (!stockAgrupado[key]) stockAgrupado[key] = 0;
-                stockAgrupado[key] -= item.cantidad;
-            });
-            const stockList = document.getElementById('stock-list'); stockList.innerHTML = '';
-            if (Object.keys(stockAgrupado).length === 0 || Object.values(stockAgrupado).every(v => v === 0)) {
-                stockList.innerHTML = '<li>No hay stock registrado.</li>'; return;
+            // Validar campos obligatorios
+            if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen) {
+                alert("Por favor, completa los campos obligatorios: Fecha, Cantidad y Origen.");
+                return;
             }
-            for (const key in stockAgrupado) {
-                if (stockAgrupado[key] !== 0) { stockList.innerHTML += `<li>${key}: ${stockAgrupado[key]} unidades</li>`; }
-            }
+
+            // Añadir el nuevo registro al array global
+            registrosCompletos.push(nuevoRegistro);
+
+            // Volver a dibujar la tabla para que se vea el nuevo registro
+            renderizarTabla();
+
+            // Limpiar el formulario para la siguiente entrada
+            document.getElementById('form-registro').reset();
         }
-        
-        function generarInforme() {
-            const consumos = getConsumos();
-            if (consumos.length === 0) { alert("No hay consumos registrados para generar un informe."); return; }
-            const informe = {};
-            const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+        // 4. Función para el botón "Generar y Descargar JSON"
+        function generarYDescargarJSON() {
+            if (registrosCompletos.length === 0) {
+                alert("No hay registros para generar el archivo.");
+                return;
+            }
+
+            // Antes de guardar, creamos una copia limpia sin la marca 'esNuevo'
+            const registrosParaGuardar = registrosCompletos.map(reg => {
+                const { esNuevo, ...restoDelRegistro } = reg; // Copia el objeto sin la propiedad 'esNuevo'
+                return restoDelRegistro;
+            });
+
+            // Creamos el objeto final que se guardará en el archivo
+            const datosFinales = {
+                registros: registrosParaGuardar
+            };
+
+            // Convertimos el objeto a un string JSON formateado
+            const jsonString = JSON.stringify(datosFinales, null, 2);
+
+            // Creamos un Blob (archivo en memoria)
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            // Creamos un enlace invisible para iniciar la descarga
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'stock.json'; // Nombre del archivo a descargar
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
             
-            consumos.forEach(c => {
-                const mesNum = c.mes;
-                const claveProducto = `${c.ancho}x${c.alto} ${c.material}`;
-                if (!informe[claveProducto]) informe[claveProducto] = {};
-                if (!informe[claveProducto][mesNum]) informe[claveProducto][mesNum] = 0;
-                informe[claveProducto][mesNum] += c.cantidad;
-            });
-
-            let htmlReporte = '<table><thead><tr><th>Producto</th><th>Mes</th><th>Cantidad Consumida</th></tr></thead><tbody>';
-            const productosOrdenados = Object.keys(informe).sort();
-            for (const producto of productosOrdenados) {
-                const mesesOrdenados = Object.keys(informe[producto]).sort((a, b) => a - b);
-                for (const mesNum of mesesOrdenados) {
-                    const nombreMes = nombresMeses[parseInt(mesNum) - 1];
-                    htmlReporte += `<tr><td>${producto}</td><td>${nombreMes}</td><td>${informe[producto][mesNum]}</td></tr>`;
-                }
-            }
-            htmlReporte += '</tbody></table>';
-
-            document.getElementById('report-content').innerHTML = htmlReporte;
-            document.getElementById('reportModal').style.display = 'block';
+            alert("¡Archivo stock.json generado! Súbelo a GitHub para actualizar el stock.");
         }
-        function closeReport() { document.getElementById('reportModal').style.display = 'none'; }
+
     </script>
 </body>
 </html>
