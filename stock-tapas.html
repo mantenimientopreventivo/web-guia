@@ -7,7 +7,61 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #1e2a38; color: #e1e1e1; margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; background-color: #2a3949; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; }
+        
+        /* CAMBIO: Estilos para la pantalla de Login */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(30, 42, 56, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .login-box {
+            background-color: #2a3949;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+        }
+        .login-box h2 {
+            color: #61dafb;
+            margin-top: 0;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            background-color: #1e2a38;
+            border: 1px solid #4a5a6a;
+            border-radius: 4px;
+            color: #e1e1e1;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Contenedor principal oculto por defecto */
+        .container {
+            display: none; /* CAMBIO: Oculto hasta que se ingrese la clave */
+            max-width: 1200px; margin: 0 auto; background-color: #2a3949; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative;
+        }
         h1, h2 { text-align: center; color: #61dafb; border-bottom: 2px solid #61dafb; padding-bottom: 10px; }
         h1 { font-size: 2.2em; margin-top: 40px; }
         h2 { font-size: 1.5em; }
@@ -23,9 +77,18 @@
         .boton { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; text-align: center; height: 37px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .boton-anadir { background-color: #28a745; color: white; }
         .boton-copiar { background-color: #ffc107; color: black; }
-        .boton-descargar { background-color: #007bff; color: white; }
+        .boton-descargar { background-color: #007bff; color: white; display: none; } /* Oculto, ya que copiar es mejor */
         .boton-informe { background-color: #6f42c1; color: white; }
-        .form-buttons { display: flex; flex-wrap: wrap; gap: 10px; grid-column: span 4; align-items: center; }
+        
+        /* CAMBIO: Estilo para alinear botones */
+        .form-buttons {
+            display: flex;
+            flex-wrap: wrap; /* Permite que los botones se apilen en pantallas muy estrechas */
+            gap: 10px;
+            grid-column: 1 / -1; /* Ocupa toda la fila inferior del grid */
+            justify-content: flex-start; /* Alinea los botones a la izquierda */
+        }
+        
         #stock-total-container { text-align: center; margin: -10px 0 20px 0; }
         #stock-total { font-size: 1.8em; font-weight: bold; color: #ffffff; background-color: #3a4959; padding: 10px 20px; border-radius: 8px; display: inline-block; }
         .tabla-container { overflow-x: auto; }
@@ -36,17 +99,34 @@
         .fila-consumo { background-color: rgba(220, 53, 69, 0.2); }
         .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
         .stock-positivo { color: #90ee90; font-weight: bold; }
-        .stock-cero { color: #f0e68c; }
-        @media (max-width: 1200px) { .form-buttons { grid-column: span 3; } }
-        @media (max-width: 992px) { .form-buttons { grid-column: span 2; } }
-        @media (max-width: 768px) { body { padding: 10px; } .container { padding: 15px; } h1 { font-size: 1.8em; margin-top: 50px; } h2 { font-size: 1.3em; } #stock-total { font-size: 1.5em; } .boton-volver { top: 15px; left: 15px; } #form-registro { grid-template-columns: 1fr; gap: 20px; } .form-buttons { grid-column: auto; flex-direction: column; gap: 15px; } .boton { width: 100%; } }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; margin-top: 50px; }
+            h2 { font-size: 1.3em; }
+            #stock-total { font-size: 1.5em; }
+            .boton-volver { top: 15px; left: 15px; }
+            #form-registro { grid-template-columns: 1fr; gap: 20px; }
+            .form-buttons { grid-column: auto; flex-direction: column; gap: 15px; }
+            .boton { width: 100%; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- CAMBIO: Pantalla de Login -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Acceso de Administrador</h2>
+            <input type="password" id="password-input" placeholder="Ingrese la clave">
+            <button onclick="checkPassword()">Ingresar</button>
+        </div>
+    </div>
+
     <div class="container">
         <a href="index.html" class="boton-volver"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
         <h1>Gestión y Registro de Stock</h1>
-
         <form id="form-registro" onsubmit="anadirRegistro(event)">
             <div><label for="fecha">Fecha</label><input type="date" id="fecha" required></div>
             <div><label for="tipoMovimiento">Tipo</label><select id="tipoMovimiento" required><option value="" disabled selected>Seleccione...</option><option value="Ingreso">Ingreso</option><option value="Consumo">Consumo</option></select></div>
@@ -63,22 +143,16 @@
                  <button type="button" onclick="generarYDescargarJSON()" class="boton boton-descargar"><i class="fa-solid fa-download"></i>Descargar</button>
             </div>
         </form>
-
         <hr>
-
         <h2>Resumen de Stock</h2>
         <div id="stock-total-container"><span id="stock-total">Calculando...</span></div>
-        
-        <!-- CAMBIO: Nueva tabla para stock detallado -->
         <div class="tabla-container">
             <table id="tabla-stock-detallado">
                 <thead><tr><th>Material</th><th>Medida (Ancho x Alto)</th><th>Stock Disponible</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
-        
         <hr>
-
         <h2>Historial de Movimientos</h2>
         <div class="tabla-container">
             <table id="tabla-historial">
@@ -93,8 +167,21 @@
         let stockPorItem = {};
         const urlStockJson = 'stock.json';
 
-        document.addEventListener('DOMContentLoaded', cargarStockInicial);
-
+        // --- CAMBIO: Lógica de la contraseña ---
+        function checkPassword() {
+            const pass = document.getElementById('password-input').value;
+            // La contraseña está aquí. Es visible en el código fuente.
+            if (pass === '1598') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
+                cargarStockInicial(); // Cargar los datos solo después del login
+            } else {
+                alert('Clave incorrecta.');
+                document.getElementById('password-input').value = '';
+            }
+        }
+        
+        // --- El resto de la lógica de la app ---
         function cargarStockInicial() { /* ... sin cambios ... */ }
         function actualizarCalculosYRenderizar() { /* ... sin cambios ... */ }
         function calcularStockPorItem() { /* ... sin cambios ... */ }
@@ -102,71 +189,20 @@
         function renderizarTabla() { /* ... sin cambios ... */ }
         function anadirRegistro(event) { /* ... sin cambios ... */ }
         function generarInformeConsumo() { /* ... sin cambios ... */ }
-
-        // CAMBIO: Nueva función para renderizar la tabla de stock detallado
-        function renderizarStockDetallado() {
-            const tbody = document.querySelector("#tabla-stock-detallado tbody");
-            tbody.innerHTML = '';
-
-            // Convertir el objeto a un array para ordenarlo
-            const stockArray = Object.entries(stockPorItem);
-
-            // Ordenar por material y luego por stock
-            stockArray.sort((a, b) => {
-                const materialA = a[0].split('-')[0];
-                const materialB = b[0].split('-')[0];
-                if (materialA < materialB) return -1;
-                if (materialA > materialB) return 1;
-                return b[1] - a[1]; // Mayor stock primero
-            });
-            
-            if (stockArray.length === 0 || stockArray.every(item => item[1] === 0)) {
-                 tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>`;
-                 return;
-            }
-
-            stockArray.forEach(([key, cantidad]) => {
-                if (cantidad <= 0) return; // No mostrar items con stock cero o negativo
-
-                const [material, medida] = key.split('-');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${material}</td>
-                    <td>${medida.replace('x', ' x ')} cm</td>
-                    <td class="stock-positivo">${cantidad}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // CAMBIO: Función de copiar al portapapeles
-        function copiarJSONAlPortapapeles() {
-            if (registrosCompletos.length === 0) {
-                alert("No hay registros para copiar.");
-                return;
-            }
-            const registrosParaGuardar = registrosCompletos.map(({ esNuevo, ...reg }) => reg);
-            const datosFinales = { registros: registrosParaGuardar };
-            const jsonString = JSON.stringify(datosFinales, null, 2);
-
-            navigator.clipboard.writeText(jsonString).then(() => {
-                alert("¡JSON copiado al portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json.");
-            }, (err) => {
-                console.error('Error al copiar: ', err);
-                alert("No se pudo copiar el texto. Utiliza la opción de descargar.");
-            });
-        }
-        
+        function renderizarStockDetallado() { /* ... sin cambios ... */ }
+        function copiarJSONAlPortapapeles() { /* ... sin cambios ... */ }
         function generarYDescargarJSON() { /* ... sin cambios ... */ }
 
-        // --- Código JS existente (versión completa y legible) ---
+        // --- Código JS completo y legible (por si necesitas revisarlo) ---
         function cargarStockInicial() { fetch(`${urlStockJson}?v=${new Date().getTime()}`).then(r=>r.ok?r.json():Promise.reject("E")).then(d=>{registrosCompletos=d&&Array.isArray(d.registros)?d.registros:[];actualizarCalculosYRenderizar()}).catch(e=>{console.error('E:',e);document.querySelector("#historial-body").innerHTML=`<tr><td colspan="8" style="text-align:center;">No hay registros cargados.</td></tr>`;actualizarCalculosYRenderizar()})}
         function actualizarCalculosYRenderizar() { calcularStockPorItem(); renderizarStockTotal(); renderizarStockDetallado(); renderizarTabla(); }
         function calcularStockPorItem() { stockPorItem={}; registrosCompletos.forEach(r=>{const k=`${r.material||"N/A"}-${r.ancho||0}x${r.alto||0}`;stockPorItem[k]||(stockPorItem[k]=0);if(r.tipoMovimiento==="Ingreso"){stockPorItem[k]+=r.cantidad}else if(r.tipoMovimiento==="Consumo"){stockPorItem[k]-=r.cantidad}})}
         function renderizarStockTotal() { const t=Object.values(stockPorItem).reduce((s,c)=>s+c,0); document.getElementById("stock-total").textContent = `Stock Total: ${t} unidades`; }
         function renderizarTabla() { const t=document.getElementById("historial-body");t.innerHTML="";const e=registrosCompletos.slice().sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));e.forEach(r=>{const n=document.createElement("tr");r.tipoMovimiento==="Ingreso"&&n.classList.add("fila-ingreso");r.tipoMovimiento==="Consumo"&&n.classList.add("fila-consumo");r.esNuevo&&n.classList.add("nuevo-registro");n.innerHTML=`<td>${r.tipoMovimiento||"N/A"}</td><td>${r.fecha}</td><td>${r.cantidad}</td><td>${r.ancho||"-"}</td><td>${r.alto||"-"}</td><td>${r.material}</td><td>${r.sigest||"-"}</td><td>${r.origen}</td>`;t.appendChild(n)})}
+        function renderizarStockDetallado(){const t=document.querySelector("#tabla-stock-detallado tbody");t.innerHTML="";const e=Object.entries(stockPorItem);e.sort((a,b)=>{const c=a[0].split("-")[0],d=b[0].split("-")[0];return c<d?-1:c>d?1:b[1]-a[1]});if(0===e.length||e.every(i=>0===i[1]))return void(t.innerHTML='<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>');e.forEach(([k,o])=>{if(o<=0)return;const[i,s]=k.split("-"),l=document.createElement("tr");l.innerHTML=`<td>${i}</td><td>${s.replace("x"," x ")} cm</td><td class="stock-positivo">${o}</td>`;t.appendChild(l)})}
         function anadirRegistro(e){e.preventDefault();const r={id:Date.now(),fecha:document.getElementById("fecha").value,tipoMovimiento:document.getElementById("tipoMovimiento").value,cantidad:parseInt(document.getElementById("cantidad").value),ancho:parseInt(document.getElementById("ancho").value)||0,alto:parseInt(document.getElementById("alto").value)||0,material:document.getElementById("material").value,sigest:document.getElementById("sigest").value,origen:document.getElementById("origen").value,esNuevo:!0};if(!r.fecha||!r.cantidad||!r.origen||!r.tipoMovimiento)return void alert("Por favor, completa todos los campos obligatorios.");if("Consumo"===r.tipoMovimiento){const o=`${r.material}-${r.ancho}x${r.alto}`,t=stockPorItem[o]||0;if(t<r.cantidad)return void alert(`Error: No se puede consumir ${r.cantidad} unidades.\nStock actual de "${r.material} ${r.ancho}x${r.alto}": ${t} unidades.`)}registrosCompletos.push(r);actualizarCalculosYRenderizar();document.getElementById("form-registro").reset()}
         function generarInformeConsumo(){const e=registrosCompletos.filter(r=>"Consumo"===r.tipoMovimiento);if(0===e.length)return void alert("No hay registros de consumo para generar un informe.");const o={};e.forEach(c=>{const t=c.fecha.substring(0,7),n=`${c.ancho||0}x${c.alto||0} cm`,a=c.material;o[t]||(o[t]={});o[t][n]||(o[t][n]={});o[t][n][a]||(o[t][n][a]=0);o[t][n][a]+=c.cantidad});let r="Informe de Consumos\n=====================\n\n";Object.keys(o).sort().forEach(t=>{r+=`-- MES: ${t} --\n`;Object.keys(o[t]).sort().forEach(e=>{r+=`  Medida: ${e}\n`;Object.keys(o[t][e]).sort().forEach(n=>{const a=o[t][e][n];r+=`    - Material: ${n}, Consumido: ${a}\n`})});r+="\n"});const t=new Blob([r],{type:"text/plain"}),n=URL.createObjectURL(t),a=document.createElement("a");a.href=n;a.download="informe_consumo.txt";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(n)}
+        function copiarJSONAlPortapapeles(){if(0===registrosCompletos.length)return void alert("No hay registros para copiar.");const e=registrosCompletos.map(({esNuevo:e,...r})=>r),r={registros:e},o=JSON.stringify(r,null,2);navigator.clipboard.writeText(o).then(()=>{alert("¡JSON copiado al portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json.")},e=>{console.error("Error al copiar: ",e),alert("No se pudo copiar el texto. Utiliza la opción de descargar.")})}
         function generarYDescargarJSON(){if(0===registrosCompletos.length)return void alert("No hay registros para generar el archivo.");const e=registrosCompletos.map(({esNuevo:e,...r})=>r),r={registros:e},o=JSON.stringify(r,null,2),t=new Blob([o],{type:"application/json"}),n=URL.createObjectURL(t),a=document.createElement("a");a.href=n;a.download="stock.json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(n)}
     </script>
 </body>
