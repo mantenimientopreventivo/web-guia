@@ -13,7 +13,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1000px;
+            max-width: 1100px; /* Un poco más ancho para la nueva columna */
             margin: 0 auto;
             background-color: #2a3949;
             padding: 25px;
@@ -30,7 +30,7 @@
         /* Formulario */
         #form-registro {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
             align-items: end;
@@ -66,6 +66,7 @@
         .boton-anadir {
             background-color: #28a745;
             color: white;
+            height: 37px; /* Alinear altura con inputs */
         }
         .boton-anadir:hover {
             background-color: #218838;
@@ -100,17 +101,18 @@
             background-color: #3a4959;
             color: #61dafb;
         }
-        tr:nth-child(even) {
-            background-color: #2f3e4e;
+        /* CAMBIO: Estilos para colorear filas */
+        .fila-ingreso {
+            background-color: rgba(40, 167, 69, 0.2); /* Verde translúcido */
         }
-        /* Estilo para los nuevos registros añadidos en la sesión */
-        .nuevo-registro {
-            background-color: #2c662e !important; /* Verde oscuro para resaltar */
-            font-weight: bold;
+        .fila-consumo {
+            background-color: rgba(220, 53, 69, 0.2); /* Rojo translúcido */
         }
         .nuevo-registro td {
-             border-top: 2px solid #56f05b;
+             border-top: 2px solid #61dafb;
+             font-weight: bold;
         }
+
     </style>
 </head>
 <body>
@@ -123,6 +125,14 @@
             <div>
                 <label for="fecha">Fecha</label>
                 <input type="date" id="fecha" required>
+            </div>
+            <!-- CAMBIO: Añadido campo Tipo de Movimiento -->
+            <div>
+                <label for="tipoMovimiento">Tipo de Movimiento</label>
+                <select id="tipoMovimiento" required>
+                    <option value="Ingreso">Ingreso (Fabricación)</option>
+                    <option value="Consumo">Consumo (Uso)</option>
+                </select>
             </div>
             <div>
                 <label for="cantidad">Cantidad</label>
@@ -150,7 +160,7 @@
                 <input type="text" id="sigest" placeholder="Ej: S-12345">
             </div>
             <div>
-                <label for="origen">Fabricó / Consumió</label>
+                <label for="origen">Detalle (Retesar/MOP)</label>
                 <input type="text" id="origen" placeholder="Ej: Retesar o MOP" required>
             </div>
             <div>
@@ -165,13 +175,15 @@
             <table>
                 <thead>
                     <tr>
+                        <!-- CAMBIO: Añadida columna "Tipo" -->
+                        <th>Tipo</th>
                         <th>Fecha</th>
                         <th>Cantidad</th>
                         <th>Ancho</th>
                         <th>Alto</th>
                         <th>Material</th>
                         <th>Sigest</th>
-                        <th>Origen</th>
+                        <th>Detalle</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-stock-body">
@@ -186,49 +198,57 @@
     </div>
 
     <script>
-        // Array global para mantener todos los registros (cargados y nuevos)
         let registrosCompletos = [];
         const urlStockJson = 'stock.json';
 
-        // 1. Al cargar la página, intentar cargar el JSON existente
         document.addEventListener('DOMContentLoaded', () => {
             cargarStockInicial();
         });
 
         function cargarStockInicial() {
-            fetch(urlStockJson)
+            // Se añade un timestamp a la URL para evitar problemas de caché del navegador
+            fetch(`${urlStockJson}?v=${new Date().getTime()}`)
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error("El archivo stock.json no se encontró o no se pudo cargar. Asegúrate de que exista en el repositorio.");
-                    }
+                    if (!response.ok) throw new Error("Archivo stock.json no encontrado.");
                     return response.json();
                 })
                 .then(data => {
-                    // Verificamos que 'registros' sea un array
                     if (data && Array.isArray(data.registros)) {
                         registrosCompletos = data.registros;
                     }
                     renderizarTabla();
                 })
                 .catch(error => {
-                    console.error('Error al cargar el stock inicial:', error);
-                    alert("ADVERTENCIA: No se pudo cargar el archivo stock.json. Si es la primera vez que usas esta página, ignora este mensaje. Los registros que añadas se guardarán en un archivo nuevo.");
-                    document.querySelector("#tabla-stock-body").innerHTML = `<tr><td colspan="7" style="text-align:center;">No hay registros cargados.</td></tr>`;
+                    console.error('Error al cargar stock inicial:', error);
+                    alert("ADVERTENCIA: No se pudo cargar el archivo stock.json. Si es la primera vez que usas la página, puedes ignorar este mensaje.");
+                    document.querySelector("#tabla-stock-body").innerHTML = `<tr><td colspan="8" style="text-align:center;">No hay registros cargados.</td></tr>`;
                 });
         }
 
-        // 2. Función para renderizar (dibujar) la tabla con los datos actuales
         function renderizarTabla() {
             const tbody = document.getElementById('tabla-stock-body');
-            tbody.innerHTML = ''; // Limpiar la tabla antes de volver a dibujarla
+            tbody.innerHTML = ''; 
+
+            // Ordenar por fecha más reciente primero
+            registrosCompletos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
             registrosCompletos.forEach(reg => {
                 const tr = document.createElement('tr');
-                // Si el registro tiene la marca 'esNuevo', le añadimos una clase CSS
+                
+                // CAMBIO: Aplicar clases de color según el tipo de movimiento
+                if (reg.tipoMovimiento === 'Ingreso') {
+                    tr.classList.add('fila-ingreso');
+                } else if (reg.tipoMovimiento === 'Consumo') {
+                    tr.classList.add('fila-consumo');
+                }
+                
                 if (reg.esNuevo) {
                     tr.classList.add('nuevo-registro');
                 }
+
+                // CAMBIO: Añadir la celda de tipo de movimiento
                 tr.innerHTML = `
+                    <td>${reg.tipoMovimiento || 'N/A'}</td>
                     <td>${reg.fecha}</td>
                     <td>${reg.cantidad}</td>
                     <td>${reg.ancho || '-'}</td>
@@ -241,68 +261,54 @@
             });
         }
 
-        // 3. Función para el botón "Añadir Registro"
         function anadirRegistro(event) {
-            event.preventDefault(); // Evitar que el formulario recargue la página
-
-            // Crear un objeto con los datos del formulario
+            event.preventDefault(); 
+            
+            // CAMBIO: Leer el nuevo campo
             const nuevoRegistro = {
-                id: Date.now(), // ID único basado en la fecha y hora actual
+                id: Date.now(),
                 fecha: document.getElementById('fecha').value,
+                tipoMovimiento: document.getElementById('tipoMovimiento').value, // <-- NUEVO
                 cantidad: parseInt(document.getElementById('cantidad').value),
                 ancho: parseInt(document.getElementById('ancho').value) || null,
                 alto: parseInt(document.getElementById('alto').value) || null,
                 material: document.getElementById('material').value,
                 sigest: document.getElementById('sigest').value,
                 origen: document.getElementById('origen').value,
-                esNuevo: true // Marca para saber que este registro es de la sesión actual
+                esNuevo: true 
             };
-
-            // Validar campos obligatorios
-            if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen) {
-                alert("Por favor, completa los campos obligatorios: Fecha, Cantidad y Origen.");
+            
+            if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen || !nuevoRegistro.tipoMovimiento) {
+                alert("Por favor, completa todos los campos obligatorios.");
                 return;
             }
 
-            // Añadir el nuevo registro al array global
             registrosCompletos.push(nuevoRegistro);
-
-            // Volver a dibujar la tabla para que se vea el nuevo registro
             renderizarTabla();
-
-            // Limpiar el formulario para la siguiente entrada
             document.getElementById('form-registro').reset();
         }
 
-        // 4. Función para el botón "Generar y Descargar JSON"
         function generarYDescargarJSON() {
             if (registrosCompletos.length === 0) {
                 alert("No hay registros para generar el archivo.");
                 return;
             }
 
-            // Antes de guardar, creamos una copia limpia sin la marca 'esNuevo'
             const registrosParaGuardar = registrosCompletos.map(reg => {
-                const { esNuevo, ...restoDelRegistro } = reg; // Copia el objeto sin la propiedad 'esNuevo'
+                const { esNuevo, ...restoDelRegistro } = reg;
                 return restoDelRegistro;
             });
 
-            // Creamos el objeto final que se guardará en el archivo
             const datosFinales = {
                 registros: registrosParaGuardar
             };
 
-            // Convertimos el objeto a un string JSON formateado
             const jsonString = JSON.stringify(datosFinales, null, 2);
-
-            // Creamos un Blob (archivo en memoria)
             const blob = new Blob([jsonString], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-
-            // Creamos un enlace invisible para iniciar la descarga
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'stock.json'; // Nombre del archivo a descargar
+            a.download = 'stock.json';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -310,7 +316,6 @@
             
             alert("¡Archivo stock.json generado! Súbelo a GitHub para actualizar el stock.");
         }
-
     </script>
 </body>
 </html>
