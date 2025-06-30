@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Stock de Tapas</title>
-    <!-- CAMBIO: Añadido Font Awesome para el ícono de volver -->
+    <!-- Enlace a Font Awesome para el ícono de volver -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
@@ -22,8 +22,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             transition: padding 0.3s ease;
-            /* CAMBIO: Necesario para posicionar el botón de volver */
-            position: relative;
+            position: relative; /* Para posicionar el botón de volver */
         }
         h1, h2 {
             text-align: center;
@@ -34,12 +33,10 @@
         }
         h1 { 
             font-size: 2.2em; 
-            /* CAMBIO: Margen para no chocar con el botón de volver */
-            margin-top: 40px; 
+            margin-top: 40px; /* Margen para no chocar con el botón de volver */
         }
         h2 { font-size: 1.5em; }
 
-        /* CAMBIO: Estilos para el nuevo botón de volver */
         .boton-volver {
             position: absolute;
             top: 25px;
@@ -144,11 +141,11 @@
         .fila-consumo { background-color: rgba(220, 53, 69, 0.2); }
         .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
 
-        /* --- OPTIMIZACIONES PARA MÓVILES --- */
+        /* OPTIMIZACIONES PARA MÓVILES */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; }
-            h1 { font-size: 1.8em; margin-top: 50px; } /* Más espacio para el botón */
+            h1 { font-size: 1.8em; margin-top: 50px; }
             h2 { font-size: 1.3em; }
 
             .boton-volver {
@@ -160,14 +157,11 @@
             .form-buttons { grid-column: auto; flex-direction: column; gap: 15px; }
             .boton { width: 100%; }
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- CAMBIO: Añadido el botón para volver al índice -->
-        <!-- Asegúrate de que el archivo se llame 'index.html' o cambia el nombre aquí -->
         <a href="index.html" class="boton-volver">
             <i class="fa-solid fa-arrow-left"></i>
             <span>Volver</span>
@@ -249,7 +243,7 @@
     </div>
 
     <script>
-        // El código JavaScript no necesita cambios.
+        // El código JavaScript es correcto y no necesita cambios.
         let registrosCompletos = [];
         const urlStockJson = 'stock.json';
 
