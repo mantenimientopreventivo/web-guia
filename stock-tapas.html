@@ -13,7 +13,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1100px; /* Un poco más ancho para la nueva columna */
+            max-width: 1100px;
             margin: 0 auto;
             background-color: #2a3949;
             padding: 25px;
@@ -53,6 +53,11 @@
             border-radius: 4px;
             color: #e1e1e1;
             box-sizing: border-box;
+            height: 37px; /* Altura consistente */
+        }
+        /* Estilo especial para el input de fecha en Chrome/Edge */
+        input[type="date"] {
+            color-scheme: dark;
         }
         .boton {
             padding: 10px 15px;
@@ -62,11 +67,11 @@
             font-weight: bold;
             transition: all 0.2s ease;
             text-align: center;
+            height: 37px;
         }
         .boton-anadir {
             background-color: #28a745;
             color: white;
-            height: 37px; /* Alinear altura con inputs */
         }
         .boton-anadir:hover {
             background-color: #218838;
@@ -101,12 +106,11 @@
             background-color: #3a4959;
             color: #61dafb;
         }
-        /* CAMBIO: Estilos para colorear filas */
         .fila-ingreso {
-            background-color: rgba(40, 167, 69, 0.2); /* Verde translúcido */
+            background-color: rgba(40, 167, 69, 0.2);
         }
         .fila-consumo {
-            background-color: rgba(220, 53, 69, 0.2); /* Rojo translúcido */
+            background-color: rgba(220, 53, 69, 0.2);
         }
         .nuevo-registro td {
              border-top: 2px solid #61dafb;
@@ -124,12 +128,14 @@
         <form id="form-registro" onsubmit="anadirRegistro(event)">
             <div>
                 <label for="fecha">Fecha</label>
+                <!-- CAMBIO: Eliminado el 'placeholder'. Esto hará que aparezca el calendario. -->
                 <input type="date" id="fecha" required>
             </div>
-            <!-- CAMBIO: Añadido campo Tipo de Movimiento -->
+            <!-- CAMBIO: Campo de Ingreso/Consumo AÑADIDO -->
             <div>
                 <label for="tipoMovimiento">Tipo de Movimiento</label>
                 <select id="tipoMovimiento" required>
+                    <option value="" disabled selected>Seleccione...</option>
                     <option value="Ingreso">Ingreso (Fabricación)</option>
                     <option value="Consumo">Consumo (Uso)</option>
                 </select>
@@ -187,7 +193,6 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-stock-body">
-                    <!-- Las filas se insertarán aquí con JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -206,7 +211,6 @@
         });
 
         function cargarStockInicial() {
-            // Se añade un timestamp a la URL para evitar problemas de caché del navegador
             fetch(`${urlStockJson}?v=${new Date().getTime()}`)
                 .then(response => {
                     if (!response.ok) throw new Error("Archivo stock.json no encontrado.");
@@ -220,7 +224,6 @@
                 })
                 .catch(error => {
                     console.error('Error al cargar stock inicial:', error);
-                    alert("ADVERTENCIA: No se pudo cargar el archivo stock.json. Si es la primera vez que usas la página, puedes ignorar este mensaje.");
                     document.querySelector("#tabla-stock-body").innerHTML = `<tr><td colspan="8" style="text-align:center;">No hay registros cargados.</td></tr>`;
                 });
         }
@@ -229,13 +232,11 @@
             const tbody = document.getElementById('tabla-stock-body');
             tbody.innerHTML = ''; 
 
-            // Ordenar por fecha más reciente primero
             registrosCompletos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
             registrosCompletos.forEach(reg => {
                 const tr = document.createElement('tr');
                 
-                // CAMBIO: Aplicar clases de color según el tipo de movimiento
                 if (reg.tipoMovimiento === 'Ingreso') {
                     tr.classList.add('fila-ingreso');
                 } else if (reg.tipoMovimiento === 'Consumo') {
@@ -246,7 +247,6 @@
                     tr.classList.add('nuevo-registro');
                 }
 
-                // CAMBIO: Añadir la celda de tipo de movimiento
                 tr.innerHTML = `
                     <td>${reg.tipoMovimiento || 'N/A'}</td>
                     <td>${reg.fecha}</td>
@@ -264,11 +264,10 @@
         function anadirRegistro(event) {
             event.preventDefault(); 
             
-            // CAMBIO: Leer el nuevo campo
             const nuevoRegistro = {
                 id: Date.now(),
                 fecha: document.getElementById('fecha').value,
-                tipoMovimiento: document.getElementById('tipoMovimiento').value, // <-- NUEVO
+                tipoMovimiento: document.getElementById('tipoMovimiento').value,
                 cantidad: parseInt(document.getElementById('cantidad').value),
                 ancho: parseInt(document.getElementById('ancho').value) || null,
                 alto: parseInt(document.getElementById('alto').value) || null,
@@ -279,7 +278,7 @@
             };
             
             if (!nuevoRegistro.fecha || !nuevoRegistro.cantidad || !nuevoRegistro.origen || !nuevoRegistro.tipoMovimiento) {
-                alert("Por favor, completa todos los campos obligatorios.");
+                alert("Por favor, completa todos los campos obligatorios, incluyendo el Tipo de Movimiento.");
                 return;
             }
 
@@ -310,7 +309,7 @@
             a.href = url;
             a.download = 'stock.json';
             document.body.appendChild(a);
-            a.click();
+a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
