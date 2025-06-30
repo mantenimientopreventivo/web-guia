@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayuda Gestión Mantenimiento Preventivo</title>
+    <title>Gestión Integral de Mantenimiento Preventivo</title>
+    <!-- Agregamos el enlace a la librería de iconos Font Awesome (requiere internet) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Estilos Generales y Fondo */
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: white; }
@@ -11,82 +13,159 @@
             background-image: url('movistar.png'); background-size: contain;
             background-position: center; background-repeat: no-repeat;
             background-color: #0099e4; background-attachment: fixed;
+            padding: 20px;
         }
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; text-align: center; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; text-align: center; }
         h1 {
-            font-size: 2.2em; font-weight: bold; color: #ffffff;
-            text-transform: uppercase; margin-bottom: 40px;
-            text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);
+            font-size: 2.5em;
+            font-weight: bold; color: #ffffff;
+            text-transform: uppercase; margin-bottom: 50px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
         }
         
         /* Diseño en Grilla */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        /* Estilo de los Botones */
+        /* --- Botones con Transparencia --- */
         .topic-button {
-            display: flex; align-items: center; justify-content: center;
-            padding: 25px; text-decoration: none;
-            color: white; font-size: 1.1em; font-weight: 600; text-align: center;
-            background-color: rgba(0, 55, 85, 0.8); border-radius: 10px;
-            transition: background-color 0.3s, transform 0.2s, opacity 0.3s;
-            overflow: hidden; box-sizing: border-box;
-            min-height: 80px;
-        }
-        
-        /* Estilos de Botones Inactivos (grisados) */
-        .topic-button[href="#"] {
-            background-color: #4A5568; color: #A0AEC0;
-            cursor: not-allowed; opacity: 0.6;
-        }
-        
-        .topic-button[href="#"]:hover {
-            background-color: #4A5568; transform: none;
-        }
-        
-        /* Efecto Hover para botones ACTIVOS */
-        .topic-button:not([href="#"]):hover {
-            background-color: rgba(0, 80, 125, 0.9);
-            transform: translateY(-3px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px; /* Padding exterior */
+            text-decoration: none;
+            color: black; /* <-- CAMBIO: Color de texto a negro */
+            font-size: 1.2em; /* <-- CAMBIO: Tamaño de fuente aumentado */
+            font-weight: bold;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.4));
+            border-radius: 50px; /* Forma de píldora */
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            backdrop-filter: blur(5px); /* Efecto vidrio esmerilado */
+            /* text-shadow ha sido eliminado */
         }
 
+        .topic-button .button-text {
+            padding-left: 25px;
+            text-align: left;
+        }
+        
+        .topic-button .button-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; /* Evita que el círculo se encoja */
+            width: 40px;  /* Altura del botón reducida */
+            height: 40px; /* Altura del botón reducida */
+            border-radius: 50%; /* Círculo perfecto */
+            color: white;
+            font-size: 1.1em; /* Icono un poco más pequeño */
+            border: 2px solid white;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.5); /* Sombra interior en el círculo */
+            margin-right: 4px;
+        }
+        
+        /* Colores para la sección del icono */
+        .color-blue .button-icon-wrapper   { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .color-green .button-icon-wrapper  { background: linear-gradient(135deg, #28a745, #1e7e34); }
+        .color-cyan .button-icon-wrapper   { background: linear-gradient(135deg, #17a2b8, #117a8b); }
+        .color-orange .button-icon-wrapper{ background: linear-gradient(135deg, #fd7e14, #d35400); }
+        .color-red .button-icon-wrapper    { background: linear-gradient(135deg, #dc3545, #b21f2d); }
+        .color-purple .button-icon-wrapper { background: linear-gradient(135deg, #6f42c1, #563d7c); }
+
+        
+        /* Estilos de Botones Inactivos */
+        .topic-button.inactive {
+            background: rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #666; /* Texto gris oscuro para inactivos */
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .topic-button.inactive .button-icon-wrapper {
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: none;
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #999;
+        }
+        
+        /* Efecto Hover y Active para botones ACTIVOS */
+        .topic-button:not(.inactive):hover {
+            transform: translateY(-3px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.5));
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .topic-button:not(.inactive):active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
         /* Adaptación para Móviles */
         @media (max-width: 768px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-            .container { margin: 20px auto; }
             h1 { font-size: 1.8em; }
         }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ayuda para Gestión de Mantenimiento Preventivo</h1>
+        <h1>GESTION INTEGRAL DE MANTENIMIENTO PREVENTIVO</h1>
         
         <div class="grid-container">
-            <!-- Fila 1 -->
-            <a href="#" class="topic-button">Apertura de Incidencias</a>
-            <a href="#" class="topic-button">Avales</a>
-            <a href="centrales-cuyo.html" class="topic-button">Centrales de Cuyo</a>
-            
-            <!-- Fila 2 -->
-            <a href="desmontes.html" class="topic-button">Desmontes</a>
-            <a href="gestion-desvios.html" class="topic-button">Gestión de desvíos</a>
-            <a href="incidencias-ftth.html" class="topic-button">Procedimientos FTTH para Guardias</a>
-            
-            <!-- Fila 3 -->
-            <a href="motivos.html" class="topic-button">Motivos</a>
-            <a href="segurizacion-camaras.html" class="topic-button">Segurización de cámaras</a>
-            <a href="valorar-postes-riendas.html" class="topic-button">Valorar postes, riendas y varios</a>
+            <!-- Botones activos -->
+            <a href="actividades-diarias.html" class="topic-button color-green">
+                <span class="button-text">Actividades Diarias</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-calendar-days"></i></span>
+            </a>
+            <a href="desmontes.html" class="topic-button color-orange">
+                <span class="button-text">Desmontes</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-person-digging"></i></span>
+            </a>
+            <a href="gestion-desvios.html" class="topic-button color-purple">
+                <span class="button-text">Gestión de desvíos</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-route"></i></span>
+            </a>
+            <a href="centrales-cuyo.html" class="topic-button color-blue">
+                <span class="button-text">Centrales de Cuyo</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-server"></i></span>
+            </a>
+             <a href="segurizacion-camaras.html" class="topic-button color-red">
+                <span class="button-text">Segurización de cámaras</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-shield-halved"></i></span>
+            </a>
+            <a href="valorar-postes-riendas.html" class="topic-button color-cyan">
+                <span class="button-text">Valorar postes y riendas</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+            </a>
+            <a href="motivos.html" class="topic-button color-blue">
+                <span class="button-text">Motivos</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-magnifying-glass"></i></span>
+            </a>
+             <a href="stock-tapas.html" class="topic-button color-green">
+                <span class="button-text">Stock de Tapas</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-boxes-stacked"></i></span>
+            </a>
+            <a href="incidencias-ftth.html" class="topic-button color-cyan">
+                <span class="button-text">Procedimientos FTTH</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-network-wired"></i></span>
+            </a>
 
-            <!-- Fila 4 -->
-            <!-- MODIFICACIÓN HECHA AQUÍ -->
-            <a href="actividades-diarias.html" class="topic-button">Actividades Diarias</a>
-            <a href="stock-tapas.html" class="topic-button">Stock de Tapas</a>
+            <!-- Botones inactivos -->
+            <a href="#" class="topic-button inactive">
+                <span class="button-text">Apertura de Incidencias</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-file-circle-plus"></i></span>
+            </a>
+             <a href="#" class="topic-button inactive">
+                <span class="button-text">Avales</span>
+                <span class="button-icon-wrapper"><i class="fa-solid fa-thumbs-up"></i></span>
+            </a>
         </div>
     </div>
 </body>
