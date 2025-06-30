@@ -10,6 +10,17 @@
       "material": "Hierro Fundido",
       "sigest": "65",
       "origen": "mop"
+    },
+    {
+      "id": 1751308115646,
+      "fecha": "2025-06-03",
+      "tipoMovimiento": "Ingreso",
+      "cantidad": 32,
+      "ancho": 10,
+      "alto": 10,
+      "material": "Plastico",
+      "sigest": "1",
+      "origen": "retesar"
     }
   ]
 }
