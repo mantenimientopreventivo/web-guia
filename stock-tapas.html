@@ -7,86 +7,137 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #1e2a38; color: #e1e1e1; margin: 0; padding: 20px; }
+        .container { display: none; max-width: 1200px; margin: 0 auto; background-color: #2a3949; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; }
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 42, 56, 0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .login-box { background-color: #2a3949; padding: 40px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 350px; }
+        .login-box h2 { color: #61dafb; margin-top: 0; }
+        .login-box input { width: 100%; padding: 12px; margin: 20px 0; background-color: #1e2a38; border: 1px solid #4a5a6a; border-radius: 4px; color: #e1e1e1; box-sizing: border-box; text-align: center; font-size: 1.2em; }
+        .login-box button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
         
-        /* CAMBIO: Estilos para la pantalla de Login */
-        #login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(30, 42, 56, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .login-box {
-            background-color: #2a3949;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 90%;
-            max-width: 350px;
-        }
-        .login-box h2 {
-            color: #61dafb;
-            margin-top: 0;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            margin: 20px 0;
-            background-color: #1e2a38;
-            border: 1px solid #4a5a6a;
-            border-radius: 4px;
-            color: #e1e1e1;
-            box-sizing: border-box;
-            text-align: center;
-            font-size: 1.2em;
-        }
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Contenedor principal oculto por defecto */
-        .container {
-            display: none; /* CAMBIO: Oculto hasta que se ingrese la clave */
-            max-width: 1200px; margin: 0 auto; background-color: #2a3949; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative;
-        }
         h1, h2 { text-align: center; color: #61dafb; border-bottom: 2px solid #61dafb; padding-bottom: 10px; }
         h1 { font-size: 2.2em; margin-top: 40px; }
         h2 { font-size: 1.5em; }
         hr { border: 1px solid #3a4959; margin: 30px 0; }
         .boton-volver { position: absolute; top: 25px; left: 25px; background-color: #4a5a6a; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; }
         .boton-volver:hover { background-color: #5a6a7a; }
-        #form-registro { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 25px; align-items: end; }
-        #form-registro div { display: flex; flex-direction: column; }
+        
+        #form-registro { display: grid; grid-template-columns: repeat(8, 1fr); gap: 15px; margin-bottom: 25px; align-items: end; }
+        #form-registro div:not(.form-buttons) { display: flex; flex-direction: column; }
         #form-registro label { margin-bottom: 5px; font-weight: bold; font-size: 0.9em; white-space: nowrap; }
         #form-registro input, #form-registro select { width: 100%; padding: 8px; background-color: #1e2a38; border: 1px solid #4a5a6a; border-radius: 4px; color: #e1e1e1; box-sizing: border-box; height: 37px; }
         input[type="date"] { color-scheme: dark; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        input[type { background-color: #3a4959; color: #61dafb; }
+        .fila-ingreso { background-color: rgba(40, 167, 69, 0.2); }
+        .fila-consumo { background-color: rgba(220, 53, 69, 0.2); }
+        .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
+        .stock-positivo { color: #90ee90; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; margin-top: 50px; }
+            h2 { font-size: 1.3em; }
+            #stock-total { font-size: 1.5em; }
+            .boton-volver { top: 15px; left: 15px; }
+            #form-registro { grid-template-columns: 1fr; gap: 20px; }
+            .form-buttons { flex-direction: column; gap: 15px; } /* En móvil se apilan */
+            .boton { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="boton-volver"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
+        <h1>Gestión y Registro de Stock</h1>
+
+        <form id="form-registro" onsubmit="anadirRegistro(event)">
+            <div><label for="fecha">Fecha</label><input type="date" id="fecha" required></div>
+            <div><label for="tipoMovimiento">Tipo</label><select id="tipoMovimiento" required><option value="" disabled selected>Seleccione...</option><option value="Ingreso">Ingreso</option><option value="Consumo">Consumo</option></select></div>
+            <div><label for="cantidad">Cantidad</label><input type="number" id="cantidad" placeholder="Ej: 10" required></div>
+            <div><label for="ancho">Ancho (cm)</label><input type="number" id="ancho" placeholder="Ej: 40"></div>
+            <div><label for="alto">Alto (cm)</label><input type="number" id="alto" placeholder="Ej: 110"></div>
+            <div><label for="material">Material</label><select id="material"><option value="Concreto">Concreto</option><option value="Hierro">Hierro</option><option value="Plastico">Plástico</option><option value="Otro">Otro</option></select></div>
+            <div><label for="sigest">Sigest</label><input type="text" id="sigest" placeholder="Ej: S-12345"></div>
+            <div><label for="origen">Detalle</label><input type="text" id="origen" placeholder="Ej: Retesar" required></div>
+            
+            <!-- CAMBIO: Contenedor de botones para alineación horizontal -->
+            <div class="form-buttons">
+                 <button type="submit" class="boton boton-anadir"><i class="fa-solid fa-plus"></i>Añadir</button>
+                 <button type="button" onclick="copiarJSONAlPortapapeles()" class="boton boton-copiar"><i class="fa-solid fa-copy"></i>Copiar JSON</button>
+                 <button type="button" onclick="generarInformeConsumo()" class="boton boton-informe"><i class="fa-solid fa-file-alt"></i>Informe</button>
+            </div>
+        </form>
+
+        <hr>
+
+        <h2>Resumen de Stock</h2>
+        <div id="stock-total-container"><span id="stock-total">Calculando...</span></div>
+        
+        <div class="tabla-container">
+            <table id="tabla-stock-detallado">
+                <thead><tr><th>Material</th><th>Medida (Ancho x Alto)</th><th>Stock Disponible</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <hr>
+
+        <h2>Historial de Movimientos</h2>
+        <div class="tabla-container">
+            <table id="tabla-historial">
+                <thead><tr><th>Tipo</th><th>Fecha</th><th>Cantidad</th><th>Ancho</th><th>Alto</th><th>Material</th><th>Sigest</th><th>Detalle</th></tr></thead>
+                <tbody id="historial-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // La lógica de la contraseña y la app principal no necesita cambios.
+        // Se mantiene la pantalla de login y todas las funcionalidades de cálculo.
+        let registrosCompletos = [];
+        let stockPorItem = {};
+        const urlStockJson = 'stock.json';
+
+        // --- Lógica de Login (Opcional, si la quieres mantener) ---
+        // Para usarla, descomenta este bloque y el div #login-screen en el HTML,
+        // y oculta el .container por defecto.
+        /*
+        document.addEventListener('DOMContentLoaded', () => {
+             document.getElementById('password-input').focus();
+        });
+        function checkPassword() {
+            if (document.getElementById('password-input').value === '1598') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
+                cargarStockInicial();
+            } else {
+                alert('Clave incorrecta.');
+                document.getElementById('password-input').value = '';
+            }
+        }
+        */
+       
+        // Si no quieres la contraseña, la app se carga directamente
+        document.addEventListener('DOMContentLoaded', cargarStockInicial);
+        
+        // --- Resto del código JavaScript (sin cambios en la lógica) ---
+        function cargarStockInicial() { fetch(`${urlStockJson}?v=${new Date().getTime()}`).then(r=>r.ok?r.json():Promise.reject("E")).then(d=>{registrosCompletos=d&&Array.isArray(d.registros)?d.registros:[];actualizarCalculosYRenderizar()}).catch(e=>{console.error('E:',e);document.querySelector("#historial-body").innerHTML=`<tr><td colspan="8" style="text-align:center;">No hay registros cargados.</td></tr>`;actualizarCalculosYRenderizar()})}
+        function actualizarCalculosYRenderizar() { calcularStockPorItem(); renderizarStockTotal="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        
         .boton { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; text-align: center; height: 37px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .boton-anadir { background-color: #28a745; color: white; }
         .boton-copiar { background-color: #ffc107; color: black; }
-        .boton-descargar { background-color: #007bff; color: white; display: none; } /* Oculto, ya que copiar es mejor */
+        .boton-descargar { background-color: #007bff; color: white; display: none; }
         .boton-informe { background-color: #6f42c1; color: white; }
         
-        /* CAMBIO: Estilo para alinear botones */
+        /* CAMBIO: Estilo para alinear botones en una línea */
         .form-buttons {
             display: flex;
-            flex-wrap: wrap; /* Permite que los botones se apilen en pantallas muy estrechas */
+            flex-wrap: wrap; 
             gap: 10px;
-            grid-column: 1 / -1; /* Ocupa toda la fila inferior del grid */
-            justify-content: flex-start; /* Alinea los botones a la izquierda */
+            grid-column: 1 / -1; /* Ocupa toda la fila */
+            justify-content: flex-start; /* Alinea los botones al inicio */
+            padding-top: 25px; /* Espacio para que no se pegue con las etiquetas de arriba */
         }
         
         #stock-total-container { text-align: center; margin: -10px 0 20px 0; }
@@ -100,6 +151,10 @@
         .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
         .stock-positivo { color: #90ee90; font-weight: bold; }
 
+        @media (max-width: 1024px) {
+            #form-registro { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+            .form-buttons { padding-top: 0; }
+        }
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; }
@@ -114,12 +169,10 @@
     </style>
 </head>
 <body>
-
-    <!-- CAMBIO: Pantalla de Login -->
     <div id="login-screen">
         <div class="login-box">
             <h2>Acceso de Administrador</h2>
-            <input type="password" id="password-input" placeholder="Ingrese la clave">
+            <input type="password" id="password-input" placeholder="Ingrese la clave" onkeyup="if(event.key==='Enter') checkPassword()">
             <button onclick="checkPassword()">Ingresar</button>
         </div>
     </div>
@@ -167,43 +220,16 @@
         let stockPorItem = {};
         const urlStockJson = 'stock.json';
 
-        // --- CAMBIO: Lógica de la contraseña ---
         function checkPassword() {
-            const pass = document.getElementById('password-input').value;
-            // La contraseña está aquí. Es visible en el código fuente.
-            if (pass === '1598') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.querySelector('.container').style.display = 'block';
-                cargarStockInicial(); // Cargar los datos solo después del login
-            } else {
-                alert('Clave incorrecta.');
-                document.getElementById('password-input').value = '';
-            }
-        }
-        
-        // --- El resto de la lógica de la app ---
-        function cargarStockInicial() { /* ... sin cambios ... */ }
-        function actualizarCalculosYRenderizar() { /* ... sin cambios ... */ }
-        function calcularStockPorItem() { /* ... sin cambios ... */ }
-        function renderizarStockTotal() { /* ... sin cambios ... */ }
-        function renderizarTabla() { /* ... sin cambios ... */ }
-        function anadirRegistro(event) { /* ... sin cambios ... */ }
-        function generarInformeConsumo() { /* ... sin cambios ... */ }
-        function renderizarStockDetallado() { /* ... sin cambios ... */ }
-        function copiarJSONAlPortapapeles() { /* ... sin cambios ... */ }
-        function generarYDescargarJSON() { /* ... sin cambios ... */ }
-
-        // --- Código JS completo y legible (por si necesitas revisarlo) ---
-        function cargarStockInicial() { fetch(`${urlStockJson}?v=${new Date().getTime()}`).then(r=>r.ok?r.json():Promise.reject("E")).then(d=>{registrosCompletos=d&&Array.isArray(d.registros)?d.registros:[];actualizarCalculosYRenderizar()}).catch(e=>{console.error('E:',e);document.querySelector("#historial-body").innerHTML=`<tr><td colspan="8" style="text-align:center;">No hay registros cargados.</td></tr>`;actualizarCalculosYRenderizar()})}
-        function actualizarCalculosYRenderizar() { calcularStockPorItem(); renderizarStockTotal(); renderizarStockDetallado(); renderizarTabla(); }
+            if (document.getElementById('password-input').value === '1598') {
+                document.getElementById('login-screen').style.display =(); renderizarStockDetallado(); renderizarTabla(); }
         function calcularStockPorItem() { stockPorItem={}; registrosCompletos.forEach(r=>{const k=`${r.material||"N/A"}-${r.ancho||0}x${r.alto||0}`;stockPorItem[k]||(stockPorItem[k]=0);if(r.tipoMovimiento==="Ingreso"){stockPorItem[k]+=r.cantidad}else if(r.tipoMovimiento==="Consumo"){stockPorItem[k]-=r.cantidad}})}
         function renderizarStockTotal() { const t=Object.values(stockPorItem).reduce((s,c)=>s+c,0); document.getElementById("stock-total").textContent = `Stock Total: ${t} unidades`; }
         function renderizarTabla() { const t=document.getElementById("historial-body");t.innerHTML="";const e=registrosCompletos.slice().sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));e.forEach(r=>{const n=document.createElement("tr");r.tipoMovimiento==="Ingreso"&&n.classList.add("fila-ingreso");r.tipoMovimiento==="Consumo"&&n.classList.add("fila-consumo");r.esNuevo&&n.classList.add("nuevo-registro");n.innerHTML=`<td>${r.tipoMovimiento||"N/A"}</td><td>${r.fecha}</td><td>${r.cantidad}</td><td>${r.ancho||"-"}</td><td>${r.alto||"-"}</td><td>${r.material}</td><td>${r.sigest||"-"}</td><td>${r.origen}</td>`;t.appendChild(n)})}
-        function renderizarStockDetallado(){const t=document.querySelector("#tabla-stock-detallado tbody");t.innerHTML="";const e=Object.entries(stockPorItem);e.sort((a,b)=>{const c=a[0].split("-")[0],d=b[0].split("-")[0];return c<d?-1:c>d?1:b[1]-a[1]});if(0===e.length||e.every(i=>0===i[1]))return void(t.innerHTML='<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>');e.forEach(([k,o])=>{if(o<=0)return;const[i,s]=k.split("-"),l=document.createElement("tr");l.innerHTML=`<td>${i}</td><td>${s.replace("x"," x ")} cm</td><td class="stock-positivo">${o}</td>`;t.appendChild(l)})}
+        function renderizarStockDetallado(){const t=document.querySelector("#tabla-stock-detallado tbody");t.innerHTML="";const e=Object.entries(stockPorItem);e.sort((a,b)=>{const c=a[0].split("-")[0],d=b[0].split("-")[0];return c<d?-1:c>d?1:b[1]-a[1]});if(0===e.length||e.every(i=>0>=i[1]))return void(t.innerHTML='<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>');e.forEach(([k,o])=>{if(o<=0)return;const[i,s]=k.split("-"),l=document.createElement("tr");l.innerHTML=`<td>${i}</td><td>${s.replace("x"," x ")} cm</td><td class="stock-positivo">${o}</td>`;t.appendChild(l)})}
         function anadirRegistro(e){e.preventDefault();const r={id:Date.now(),fecha:document.getElementById("fecha").value,tipoMovimiento:document.getElementById("tipoMovimiento").value,cantidad:parseInt(document.getElementById("cantidad").value),ancho:parseInt(document.getElementById("ancho").value)||0,alto:parseInt(document.getElementById("alto").value)||0,material:document.getElementById("material").value,sigest:document.getElementById("sigest").value,origen:document.getElementById("origen").value,esNuevo:!0};if(!r.fecha||!r.cantidad||!r.origen||!r.tipoMovimiento)return void alert("Por favor, completa todos los campos obligatorios.");if("Consumo"===r.tipoMovimiento){const o=`${r.material}-${r.ancho}x${r.alto}`,t=stockPorItem[o]||0;if(t<r.cantidad)return void alert(`Error: No se puede consumir ${r.cantidad} unidades.\nStock actual de "${r.material} ${r.ancho}x${r.alto}": ${t} unidades.`)}registrosCompletos.push(r);actualizarCalculosYRenderizar();document.getElementById("form-registro").reset()}
         function generarInformeConsumo(){const e=registrosCompletos.filter(r=>"Consumo"===r.tipoMovimiento);if(0===e.length)return void alert("No hay registros de consumo para generar un informe.");const o={};e.forEach(c=>{const t=c.fecha.substring(0,7),n=`${c.ancho||0}x${c.alto||0} cm`,a=c.material;o[t]||(o[t]={});o[t][n]||(o[t][n]={});o[t][n][a]||(o[t][n][a]=0);o[t][n][a]+=c.cantidad});let r="Informe de Consumos\n=====================\n\n";Object.keys(o).sort().forEach(t=>{r+=`-- MES: ${t} --\n`;Object.keys(o[t]).sort().forEach(e=>{r+=`  Medida: ${e}\n`;Object.keys(o[t][e]).sort().forEach(n=>{const a=o[t][e][n];r+=`    - Material: ${n}, Consumido: ${a}\n`})});r+="\n"});const t=new Blob([r],{type:"text/plain"}),n=URL.createObjectURL(t),a=document.createElement("a");a.href=n;a.download="informe_consumo.txt";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(n)}
         function copiarJSONAlPortapapeles(){if(0===registrosCompletos.length)return void alert("No hay registros para copiar.");const e=registrosCompletos.map(({esNuevo:e,...r})=>r),r={registros:e},o=JSON.stringify(r,null,2);navigator.clipboard.writeText(o).then(()=>{alert("¡JSON copiado al portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json.")},e=>{console.error("Error al copiar: ",e),alert("No se pudo copiar el texto. Utiliza la opción de descargar.")})}
-        function generarYDescargarJSON(){if(0===registrosCompletos.length)return void alert("No hay registros para generar el archivo.");const e=registrosCompletos.map(({esNuevo:e,...r})=>r),r={registros:e},o=JSON.stringify(r,null,2),t=new Blob([o],{type:"application/json"}),n=URL.createObjectURL(t),a=document.createElement("a");a.href=n;a.download="stock.json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(n)}
     </script>
 </body>
 </html>
