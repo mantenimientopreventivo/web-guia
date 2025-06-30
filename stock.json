@@ -23,25 +23,25 @@
       "origen": "mop"
     },
     {
-      "id": 1751310219351,
-      "fecha": "2025-06-23",
+      "id": 1751310447199,
+      "fecha": "2025-06-30",
       "tipoMovimiento": "Ingreso",
       "cantidad": 200,
-      "ancho": 50,
-      "alto": 50,
-      "material": "Hierro",
-      "sigest": "65",
+      "ancho": 40,
+      "alto": 40,
+      "material": "Concreto",
+      "sigest": "",
       "origen": "retesar"
     },
     {
-      "id": 1751310251687,
-      "fecha": "2025-06-30",
-      "tipoMovimiento": "Consumo",
-      "cantidad": 10,
-      "ancho": 50,
-      "alto": 50,
-      "material": "Hierro",
-      "sigest": "1",
+      "id": 1751310472814,
+      "fecha": "2025-06-24",
+      "tipoMovimiento": "Ingreso",
+      "cantidad": 6,
+      "ancho": 100,
+      "alto": 100,
+      "material": "Concreto",
+      "sigest": "",
       "origen": "mop"
     }
   ]
