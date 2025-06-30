@@ -1,17 +1,6 @@
 {
   "registros": [
     {
-      "id": 1751309857088,
-      "fecha": "2025-06-23",
-      "tipoMovimiento": "Ingreso",
-      "cantidad": 10,
-      "ancho": 100,
-      "alto": 100,
-      "material": "Concreto",
-      "sigest": "1",
-      "origen": "retesar"
-    },
-    {
       "id": 1751310026480,
       "fecha": "2025-06-30",
       "tipoMovimiento": "Consumo",
