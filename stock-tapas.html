@@ -18,10 +18,7 @@
         }
         .login-box h2 { color: #61dafb; margin-top: 0; border-bottom: 1px solid #61dafb; padding-bottom: 15px; }
         #login-form { display: flex; gap: 10px; margin-top: 25px; }
-        .login-box input {
-            flex-grow: 1; padding: 12px; background-color: #1e2a38; border: 1px solid #4a5a6a;
-            border-radius: 4px; color: #e1e1e1; box-sizing: border-box; text-align: center; font-size: 1.2em;
-        }
+        .login-box input { flex-grow: 1; padding: 12px; background-color: #1e2a38; border: 1px solid #4a5a6a; border-radius: 4px; color: #e1e1e1; box-sizing: border-box; text-align: center; font-size: 1.2em; }
         .login-box button { padding: 12px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; flex-shrink: 0; }
 
         .container {
@@ -46,21 +43,27 @@
         .boton { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; text-align: center; height: 37px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .boton-anadir { background-color: #28a745; color: white; }
         .boton-copiar { background-color: #ffc107; color: black; }
-        .boton-descargar { background-color: #17a2b8; color: white; } /* CAMBIO: Botón restaurado */
+        .boton-descargar { background-color: #17a2b8; color: white; }
         .boton-informe { background-color: #6f42c1; color: white; }
-        .boton-borrar-fila { background-color: transparent; border: 1px solid #dc3545; color: #dc3545; padding: 5px 10px; height: auto; }
+        .boton-borrar-fila { background-color: transparent; border: 1px solid #dc3545; color: #dc3545; padding: 5px 10px; height: auto; border-radius: 50%; width: 30px; height: 30px; font-size: 0.8em;}
         .boton-borrar-fila:hover { background-color: #dc3545; color: white; }
-
+        
         #stock-total-container { text-align: center; margin: -10px 0 20px 0; }
         #stock-total { font-size: 1.8em; font-weight: bold; color: #ffffff; background-color: #3a4959; padding: 10px 20px; border-radius: 8px; display: inline-block; }
         .tabla-container { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #4a5a6a; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #4a5a6a; vertical-align: middle; }
         th { background-color: #3a4959; color: #61dafb; }
         .fila-ingreso { background-color: rgba(40, 167, 69, 0.2); }
         .fila-consumo { background-color: rgba(220, 53, 69, 0.2); }
         .nuevo-registro td { border-top: 2px solid #61dafb; font-weight: bold; }
         .stock-positivo { color: #90ee90; font-weight: bold; }
+
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background-color: #2a3949; padding: 30px; border-radius: 8px; max-width: 90%; width: 600px; max-height: 80vh; overflow-y: auto; position: relative; }
+        .modal-close-button { position: absolute; top: 10px; right: 15px; font-size: 2em; color: #aaa; cursor: pointer; transition: color 0.2s; }
+        .modal-close-button:hover { color: white; }
+        #report-content { font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.9em; }
 
         @media (max-width: 768px) {
             body { padding: 0; }
@@ -99,10 +102,10 @@
         </form>
 
         <div class="actions-container">
-            <button type="submit" form="form-registro" class="boton boton-anadir"><i class="fa-solid fa-plus"></i>Añadir Registro</button>
+            <button type="submit" form="form-registro" class="boton boton-anadir"><i class="fa-solid fa-plus"></i>Añadir</button>
             <button type="button" onclick="copiarJSONAlPortapapeles()" class="boton boton-copiar"><i class="fa-solid fa-copy"></i>Copiar JSON</button>
-            <button type="button" onclick="generarYDescargarJSON()" class="boton boton-descargar"><i class="fa-solid fa-download"></i>Descargar JSON</button>
-            <button type="button" onclick="generarInformeConsumo()" class="boton boton-informe"><i class="fa-solid fa-file-alt"></i>Informe</button>
+            <button type="button" onclick="generarYDescargarJSON()" class="boton boton-descargar"><i class="fa-solid fa-download"></i>Descargar</button>
+            <button type="button" onclick="generarInformeConsumo()" class="boton boton-informe"><i class="fa-solid fa-file-alt"></i>Ver Informe</button>
         </div>
         <hr>
         <h2>Resumen de Stock</h2>
@@ -117,10 +120,17 @@
         <h2>Historial de Movimientos</h2>
         <div class="tabla-container">
             <table id="tabla-historial">
-                <!-- CAMBIO: Añadida columna para el botón de borrar -->
                 <thead><tr><th>Tipo</th><th>Fecha</th><th>Cantidad</th><th>Ancho</th><th>Alto</th><th>Material</th><th>Sigest</th><th>Detalle</th><th>Acción</th></tr></thead>
                 <tbody id="historial-body"></tbody>
             </table>
+        </div>
+    </div>
+    
+    <div id="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-content">
+            <span class="modal-close-button" onclick="cerrarModal(event)">×</span>
+            <h2>Informe de Consumos</h2>
+            <pre id="report-content"></pre>
         </div>
     </div>
 
@@ -151,103 +161,102 @@
             }
         }
         
-        function cargarStockInicial() {
-            fetch(`${urlStockJson}?v=${new Date().getTime()}`)
-                .then(response => response.ok ? response.json() : Promise.reject("Archivo no encontrado"))
-                .then(data => {
-                    registrosCompletos = (data && Array.isArray(data.registros)) ? data.registros : [];
-                    actualizarCalculosYRenderizar();
-                })
-                .catch(error => {
-                    console.error('Error al cargar stock inicial:', error);
-                    document.querySelector("#historial-body").innerHTML = `<tr><td colspan="9" style="text-align:center;">No hay registros cargados.</td></tr>`;
-                    actualizarCalculosYRenderizar();
-                });
-        }
-        
-        function actualizarCalculosYRenderizar() {
-            calcularStockPorItem();
-            renderizarStockTotal();
-            renderizarStockDetallado();
-            renderizarTabla();
-        }
-        
-        function calcularStockPorItem() {
-            stockPorItem = {};
-            registrosCompletos.forEach(reg => {
-                const itemKey = `${reg.material || "N/A"}-${reg.ancho || 0}x${reg.alto || 0}`;
-                stockPorItem[itemKey] = stockPorItem[itemKey] || 0;
-                if (reg.tipoMovimiento === "Ingreso") stockPorItem[itemKey] += reg.cantidad;
-                else if (reg.tipoMovimiento === "Consumo") stockPorItem[itemKey] -= reg.cantidad;
-            });
-        }
-        
+        function cargarStockInicial() { /* ... sin cambios ... */ }
+        function actualizarCalculosYRenderizar() { /* ... sin cambios ... */ }
+        function calcularStockPorItem() { /* ... sin cambios ... */ }
         function renderizarStockTotal() { /* ... sin cambios ... */ }
         function renderizarStockDetallado() { /* ... sin cambios ... */ }
+        function anadirRegistro(event) { /* ... sin cambios ... */ }
+        function copiarJSONAlPortapapeles() { /* ... sin cambios ... */ }
+        function generarYDescargarJSON() { /* ... sin cambios ... */ }
+        function generarInformeConsumo() { /* ... sin cambios ... */ }
+        function cerrarModal(event) { /* ... sin cambios ... */ }
+        function prepararJSONParaGuardar() { /* ... sin cambios ... */ }
 
+        // CAMBIO: La función de renderizado de la tabla ha sido refactorizada
         function renderizarTabla() {
             const tbody = document.getElementById("historial-body");
             tbody.innerHTML = "";
             const registrosOrdenados = registrosCompletos.slice().sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            
             registrosOrdenados.forEach(reg => {
                 const tr = document.createElement("tr");
                 if (reg.tipoMovimiento === "Ingreso") tr.classList.add("fila-ingreso");
                 if (reg.tipoMovimiento === "Consumo") tr.classList.add("fila-consumo");
                 if (reg.esNuevo) tr.classList.add("nuevo-registro");
 
-                // CAMBIO: Añadida la celda con el botón de borrar
                 tr.innerHTML = `
-                    <td>${reg.tipoMovimiento||"N/A"}</td>
+                    <td>${reg.tipoMovimiento || "N/A"}</td>
                     <td>${reg.fecha}</td>
                     <td>${reg.cantidad}</td>
-                    <td>${reg.ancho||"-"}</td>
-                    <td>${reg.alto||"-"}</td>
+                    <td>${reg.ancho || "-"}</td>
+                    <td>${reg.alto || "-"}</td>
                     <td>${reg.material}</td>
-                    <td>${reg.sigest||"-"}</td>
+                    <td>${reg.sigest || "-"}</td>
                     <td>${reg.origen}</td>
-                    <td>
-                        <button class="boton boton-borrar-fila" onclick="borrarRegistroIndividual(${reg.id})">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                `;
+                    <td></td> 
+                `; // Se crea la celda de acción vacía
+
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "boton boton-borrar-fila";
+                deleteButton.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+                
+                // Asignamos el evento de forma programática y segura
+                deleteButton.addEventListener('click', () => {
+                    borrarRegistroIndividual(reg.id);
+                });
+
+                tr.lastElementChild.appendChild(deleteButton); // Añade el botón a la última celda
                 tbody.appendChild(tr);
             });
         }
 
-        function anadirRegistro(event) { /* ... sin cambios ... */ }
-        function generarInformeConsumo() { /* ... sin cambios ... */ }
-        function copiarJSONAlPortapapeles() { /* ... sin cambios ... */ }
-
-        // CAMBIO: Nueva función para borrar un registro individual
         function borrarRegistroIndividual(registroId) {
             if (!confirm("¿Estás seguro de que quieres eliminar este registro?")) {
-                return; // Si el usuario cancela, no hacer nada
+                return;
             }
 
             const index = registrosCompletos.findIndex(reg => reg.id === registroId);
 
             if (index > -1) {
-                registrosCompletos.splice(index, 1); // Elimina el registro del array
-                actualizarCalculosYRenderizar(); // Vuelve a calcular y a dibujar todo
-                alert("Registro eliminado de la sesión.\n\nPara guardar el cambio permanentemente, recuerda Copiar y pegar el JSON en GitHub.");
+                // ANTES DE BORRAR: Validar que la eliminación no cause stock negativo futuro
+                const registroABorrar = registrosCompletos[index];
+                if (registroABorrar.tipoMovimiento === 'Ingreso') {
+                    // Simular el estado del stock sin este ingreso
+                    const stockTemporal = {};
+                    registrosCompletos.forEach((reg, idx) => {
+                        if (idx === index) return; // Ignorar el registro a borrar
+                        const itemKey = `${reg.material || "N/A"}-${reg.ancho || 0}x${reg.alto || 0}`;
+                        stockTemporal[itemKey] = stockTemporal[itemKey] || 0;
+                        if (reg.tipoMovimiento === "Ingreso") stockTemporal[itemKey] += reg.cantidad;
+                        else if (reg.tipoMovimiento === "Consumo") stockTemporal[itemKey] -= reg.cantidad;
+                    });
+                    
+                    // Si algún stock simulado es negativo, significa que este ingreso era necesario
+                    if (Object.values(stockTemporal).some(s => s < 0)) {
+                         alert("Error: No se puede borrar este ingreso porque hay consumos posteriores que dependen de él y dejarían el stock en negativo.");
+                         return;
+                    }
+                }
+
+                registrosCompletos.splice(index, 1);
+                actualizarCalculosYRenderizar();
+                alert("Registro eliminado de la sesión.\n\nPara guardar el cambio, recuerda 'Copiar JSON' y actualizar el archivo en GitHub.");
             }
         }
         
-        function generarYDescargarJSON() {
-            if (registrosCompletos.length === 0) return alert("No hay registros para generar el archivo.");
-            const jsonString = prepararJSONParaGuardar();
-            descargarArchivoDeTexto(jsonString, 'stock.json');
-        }
-
-        // --- Funciones auxiliares (sin cambios) ---
-        function renderizarStockTotal() { const t=Object.values(stockPorItem).reduce((s,c)=>s+c,0); document.getElementById("stock-total").textContent = `Stock Total: ${t} unidades`; }
-        function renderizarStockDetallado(){const t=document.querySelector("#tabla-stock-detallado tbody");t.innerHTML="";const e=Object.entries(stockPorItem).sort((a,b)=>{const c=a[0].split("-")[0],d=b[0].split("-")[0];return c<d?-1:c>d?1:b[1]-a[1]});if(0===e.length||e.every(i=>i[1]<=0))return void(t.innerHTML='<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>');e.forEach(([k,o])=>{if(o<=0)return;const[i,s]=k.split("-"),l=document.createElement("tr");l.innerHTML=`<td>${i}</td><td>${s.replace("x"," x ")} cm</td><td class="stock-positivo">${o}</td>`;t.appendChild(l)})}
-        function anadirRegistro(e){e.preventDefault();const r={id:Date.now(),fecha:document.getElementById("fecha").value,tipoMovimiento:document.getElementById("tipoMovimiento").value,cantidad:parseInt(document.getElementById("cantidad").value),ancho:parseInt(document.getElementById("ancho").value)||0,alto:parseInt(document.getElementById("alto").value)||0,material:document.getElementById("material").value,sigest:document.getElementById("sigest").value,origen:document.getElementById("origen").value,esNuevo:!0};if(!r.fecha||!r.cantidad||!r.origen||!r.tipoMovimiento)return void alert("Por favor, completa todos los campos obligatorios.");if("Consumo"===r.tipoMovimiento){const o=`${r.material}-${r.ancho}x${r.alto}`,t=stockPorItem[o]||0;if(t<r.cantidad)return void alert(`Error: No se puede consumir ${r.cantidad} unidades.\nStock actual de "${r.material} ${r.ancho}x${r.alto}": ${t} unidades.`)}registrosCompletos.push(r);actualizarCalculosYRenderizar();document.getElementById("form-registro").reset()}
-        function generarInformeConsumo(){const e=registrosCompletos.filter(r=>r.tipoMovimiento==="Consumo");if(0===e.length)return void alert("No hay registros de consumo para generar un informe.");const o={};e.forEach(c=>{const t=c.fecha.substring(0,7),n=`${c.ancho||0}x${c.alto||0} cm`,a=c.material;o[t]=o[t]||{};o[t][n]=o[t][n]||{};o[t][n][a]=(o[t][n][a]||0)+c.cantidad});let r="Informe de Consumos\n=====================\n\n";Object.keys(o).sort().forEach(t=>{r+=`-- MES: ${t} --\n`;Object.keys(o[t]).sort().forEach(e=>{r+=`  Medida: ${e}\n`;Object.keys(o[t][e]).sort().forEach(n=>{r+=`    - Material: ${n}, Consumido: ${o[t][e][n]}\n`})});r+="\n"});descargarArchivoDeTexto(r,"informe_consumo.txt")}
-        function copiarJSONAlPortapapeles(){if(0===registrosCompletos.length)return void alert("No hay registros para copiar.");const e=prepararJSONParaGuardar();navigator.clipboard.writeText(e).then(()=>alert("¡JSON copiado al portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json."),e=>{console.error("Error al copiar: ",e),alert("No se pudo copiar el texto.")})}
-        function prepararJSONParaGuardar(){const e=registrosCompletos.map(({esNuevo:e,...r})=>r);return JSON.stringify({registros:e},null,2)}
-        function descargarArchivoDeTexto(e,r){const o=new Blob([e],{type:"text/plain"}),t=URL.createObjectURL(o),n=document.createElement("a");n.href=t;n.download=r;document.body.appendChild(n);n.click();document.body.removeChild(n);URL.revokeObjectURL(t)}
+        // --- Código JS completo y legible (por si necesitas revisarlo) ---
+        function cargarStockInicial(){fetch(`${urlStockJson}?v=${new Date().getTime()}`).then(r=>r.ok?r.json():Promise.reject("E")).then(d=>{registrosCompletos=d&&Array.isArray(d.registros)?d.registros:[];actualizarCalculosYRenderizar()}).catch(e=>{console.error("E:",e);document.querySelector("#historial-body").innerHTML='<tr><td colspan="9" style="text-align:center;">No hay registros cargados.</td></tr>';actualizarCalculosYRenderizar()})}
+        function actualizarCalculosYRenderizar(){calcularStockPorItem();renderizarStockTotal();renderizarStockDetallado();renderizarTabla()}
+        function calcularStockPorItem(){stockPorItem={};registrosCompletos.forEach(r=>{const t=`${r.material||"N/A"}-${r.ancho||0}x${r.alto||0}`;stockPorItem[t]=stockPorItem[t]||0;"Ingreso"===r.tipoMovimiento?stockPorItem[t]+=r.cantidad:"Consumo"===r.tipoMovimiento&&(stockPorItem[t]-=r.cantidad)})}
+        function renderizarStockTotal(){const t=Object.values(stockPorItem).reduce((t,e)=>t+e,0);document.getElementById("stock-total").textContent=`Stock Total: ${t} unidades`}
+        function renderizarStockDetallado(){const t=document.querySelector("#tabla-stock-detallado tbody");t.innerHTML="";const e=Object.entries(stockPorItem).sort((t,e)=>{const r=t[0].split("-")[0],o=e[0].split("-")[0];return r<o?-1:r>o?1:e[1]-t[1]});if(0===e.length||e.every(t=>t[1]<=0))return void(t.innerHTML='<tr><td colspan="3" style="text-align:center;">No hay stock disponible.</td></tr>');e.forEach(([r,o])=>{if(o<=0)return;const[n,s]=r.split("-"),i=document.createElement("tr");i.innerHTML=`<td>${n}</td><td>${s.replace("x"," x ")} cm</td><td class="stock-positivo">${o}</td>`;t.appendChild(i)})}
+        function anadirRegistro(t){t.preventDefault();const e={id:Date.now(),fecha:document.getElementById("fecha").value,tipoMovimiento:document.getElementById("tipoMovimiento").value,cantidad:parseInt(document.getElementById("cantidad").value),ancho:parseInt(document.getElementById("ancho").value)||0,alto:parseInt(document.getElementById("alto").value)||0,material:document.getElementById("material").value,sigest:document.getElementById("sigest").value,origen:document.getElementById("origen").value,esNuevo:!0};if(!e.fecha||!e.cantidad||!e.origen||!e.tipoMovimiento)return void alert("Por favor, completa todos los campos obligatorios.");if("Consumo"===e.tipoMovimiento){const r=`${e.material}-${e.ancho}x${e.alto}`,o=stockPorItem[r]||0;if(o<e.cantidad)return void alert(`Error: No se puede consumir ${e.cantidad} unidades.\nStock actual de "${e.material} ${e.ancho}x${e.alto}": ${o} unidades.`)}registrosCompletos.push(e),actualizarCalculosYRenderizar(),document.getElementById("form-registro").reset()}
+        function generarInformeConsumo(){const t=registrosCompletos.filter(t=>"Consumo"===t.tipoMovimiento);if(0===t.length)return void alert("No hay registros de consumo para generar un informe.");const e={};t.forEach(r=>{const o=r.fecha.substring(0,7),n=`${r.ancho||0}x${r.alto||0} cm`,s=r.material;e[o]=e[o]||{},e[o][n]=e[o][n]||{},e[o][n][s]=(e[o][n][s]||0)+r.cantidad});let r="Informe de Consumos\n=====================\n\n";Object.keys(e).sort().forEach(t=>{r+=`-- MES: ${t} --\n`,Object.keys(e[t]).sort().forEach(o=>{r+=`  Medida: ${o}\n`,Object.keys(e[t][o]).sort().forEach(n=>{r+=`    - Material: ${n}, Consumido: ${e[t][o][n]}\n`})}),r+="\n"}),document.getElementById("report-content").textContent=r,document.getElementById("modal-overlay").style.display="flex"}
+        function cerrarModal(t){"modal-overlay"===t.target.id||t.target.classList.contains("modal-close-button")?document.getElementById("modal-overlay").style.display="none":void 0}
+        function copiarJSONAlPortapapeles(){if(0===registrosCompletos.length)return void alert("No hay registros para copiar.");const t=prepararJSONParaGuardar();navigator.clipboard.writeText(t).then(()=>alert("¡JSON copiado al portapapeles!\n\nAhora ve a GitHub para editar y pegar el nuevo contenido en stock.json."),t=>{console.error("Error al copiar: ",t),alert("No se pudo copiar el texto.")})}
+        function generarYDescargarJSON(){if(0===registrosCompletos.length)return void alert("No hay registros para descargar.");const t=prepararJSONParaGuardar(),e=new Blob([t],{type:"application/json"}),r=URL.createObjectURL(e),o=document.createElement("a");o.href=r,o.download="stock.json",document.body.appendChild(o),o.click(),document.body.removeChild(o),URL.revokeObjectURL(r)}
+        function prepararJSONParaGuardar(){const t=registrosCompletos.map(({esNuevo:t,...e})=>e);return JSON.stringify({registros:t},null,2)}
     </script>
 </body>
 </html>
