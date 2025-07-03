@@ -61,7 +61,9 @@
   },
   "coloresFila": {},
   "weekStartDates": [
-    "2025-06-30"
+    "2025-06-30",
+    "2025-07-07",
+    "2025-07-14"
   ],
   "planificacionSemanas": [
     {
@@ -85,6 +87,52 @@
         "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
         "planes de estabilidad"
+      ]
+    },
+    {
+      "ines raposo": [
+        "atencion de mails y derivacion segun el caso",
+        "valorar desmontes con momento cero",
+        "sigest y valoracion de camaras rotas",
+        "seguimiento de desvios"
+      ],
+      "nicolas ponce": [
+        "postes pendientes de valorar",
+        "valorar sigest de emergencias",
+        "crear sigest de desmontes"
+      ],
+      "gabriela torres": [
+        "segurizaciones CR (sigest y valorar)",
+        "vistos buenos",
+        "verificar sigest devueltos"
+      ],
+      "dante espejo": [
+        "planes de estabilidad",
+        "carga de planos y datos de red a desmontes",
+        "gestion de saneamientos"
+      ]
+    },
+    {
+      "ines raposo": [
+        "atencion de mails y derivacion segun el caso",
+        "crear sigest de desmontes",
+        "seguimiento de desvios",
+        "valorar desmontes con momento cero"
+      ],
+      "nicolas ponce": [
+        "segurizaciones CR (sigest y valorar)",
+        "valorar sigest de emergencias",
+        "sigest y valoracion de camaras rotas"
+      ],
+      "gabriela torres": [
+        "postes pendientes de valorar",
+        "verificar sigest devueltos",
+        "vistos buenos"
+      ],
+      "dante espejo": [
+        "carga de planos y datos de red a desmontes",
+        "planes de estabilidad",
+        "gestion de saneamientos"
       ]
     }
   ]
