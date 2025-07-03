@@ -7,12 +7,7 @@
     <style>
         body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
         body { background-color: #f4f4f4; }
-        .admin-login-btn {
-            position: fixed; top: 15px; right: 15px; z-index: 1001;
-            padding: 8px 16px; background-color: #ffc107; color: black; border: none;
-            border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
-        }
+        .admin-login-btn { position: fixed; top: 15px; right: 15px; z-index: 1001; padding: 8px 16px; background-color: #ffc107; color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.3s; }
         .admin-login-btn:hover { background-color: #e0a800; }
         .main-container { max-width: 1200px; margin: 20px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         h1, h2, h3 { text-align: center; color: #333; }
@@ -30,7 +25,6 @@
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7); }
         .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 1100px; border-radius: 10px; }
         .close-button { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .close-button:hover, .close-button:focus { color: black; text-decoration: none; }
         #profile-matrix-table input[type="checkbox"] { transform: scale(1.4); }
         .management-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
         .management-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px dotted #eee; }
@@ -51,7 +45,7 @@
         <h1>Planificador de Actividades Semanales</h1>
         <h2 id="public-table-title">Asignación para la Semana Actual</h2>
         <table class="assignment-table">
-            <thead><tr><th>Empleado</th><th>Tarea 1</th><th>Tarea 2</th><th>Tarea 3</th><th>Tarea 4</th></tr></thead>
+            <thead><tr><th>Empleado</th><th>Tarea 1</th></tr></thead>
             <tbody id="public-tbody"></tbody>
         </table>
     </div>
@@ -77,97 +71,80 @@
             <span class="close-button" onclick="closeProfileEditor()">×</span>
             <h2>Editar Habilidades y Gestión</h2>
             <h3>Habilidades por Empleado</h3>
-            <div style="max-height: 40vh; overflow: auto;">
-                <table class="assignment-table" id="profile-matrix-table"></table>
+            <div style="max-height: 40vh; overflow: auto;"><table class="assignment-table" id="profile-matrix-table"></table></div>
+            <div class="management-section">
+                <h3>Gestión de Empleados</h3><div id="employee-list"></div>
+                <div class="add-input-group"><input type="text" id="new-employee-name" placeholder="Nuevo empleado"><button class="action-button" onclick="addEmployee()">Agregar</button></div>
             </div>
             <div class="management-section">
-                <h3>Gestión de Empleados</h3>
-                <div id="employee-list"></div>
-                <div class="add-input-group">
-                    <input type="text" id="new-employee-name" placeholder="Nuevo empleado">
-                    <button class="action-button" onclick="addEmployee()">Agregar</button>
-                </div>
-            </div>
-            <div class="management-section">
-                <h3>Gestión de Tareas</h3>
-                <div id="task-list"></div>
-                <div class="add-input-group">
-                    <input type="text" id="new-task-name" placeholder="Nueva tarea">
-                    <button class="action-button" onclick="addTask()">Agregar</button>
-                </div>
+                <h3>Gestión de Tareas</h3><div id="task-list"></div>
+                <div class="add-input-group"><input type="text" id="new-task-name" placeholder="Nueva tarea"><button class="action-button" onclick="addTask()">Agregar</button></div>
             </div>
         </div>
     </div>
 
 <script>
-    console.log("Planificador: Script iniciado correctamente."); // Línea de depuración
+    console.log("Planificador: Script iniciado.");
 
     const GITHUB_CONFIG = {
-        owner: 'TU_USUARIO_DE_GITHUB',
-        repo: 'NOMBRE_DE_TU_REPOSITORIO',
+        owner: 'mantenimientopreventivo',
+        repo: 'web-guia',
         filePath: 'db.json'
     };
     let appState = {};
     const defaultState = {
-        empleados: ["ines raposo","nicolas ponce","gabriela torres","dante espejo"],
+        empleados: ["ines raposo", "nicolas ponce", "gabriela torres", "dante espejo"],
         tareas: ["atencion de mails y derivacion segun el caso","carga de planos y datos de red a desmontes","crear sigest de desmontes","gestion de saneamientos","planes de estabilidad","postes pendientes de valorar","seguimiento de desvios","segurizaciones CR (sigest y valorar)","sigest y valoracion de camaras rotas","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],
         perfiles: {"ines raposo":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","seguimiento de desvios","segurizaciones CR (sigest y valorar)","sigest y valoracion de camaras rotas","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],"nicolas ponce":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","segurizaciones CR (sigest y valorar)","sigest y valoracion de camaras rotas","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],"gabriela torres":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","segurizaciones CR (sigest y valorar)","vistos buenos","verificar sigest devueltos"],"dante espejo":["carga de planos y datos de red a desmontes","gestion de saneamientos","planes de estabilidad","vistos buenos"]},
-        coloresFila: {},
-        weekStartDates: [],
-        planificacionSemanas: []
+        coloresFila: {}, weekStartDates: [], planificacionSemanas: []
     };
 
     function promptForAdmin() { const p = prompt("Contraseña:"); if (p === "1598") { document.getElementById('public-view').style.display = 'none'; document.getElementById('admin-view').style.display = 'block'; document.getElementById('login-button').style.display = 'none'; loadAndInitAdminView(); } else if (p) { alert("Incorrecta."); } }
     function lockAdminView() { if (confirm("¿Salir?")) { document.getElementById('public-view').style.display = 'block'; document.getElementById('admin-view').style.display = 'none'; document.getElementById('login-button').style.display = 'block'; loadPublicData(); } }
 
-    async function loadPublicData() {
+    async function fetchData() {
         const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/${GITHUB_CONFIG.filePath}?t=${new Date().getTime()}`;
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`Error al cargar db.json (Status: ${response.status})`);
-            const data = await response.json();
-            const today = new Date();
-            let currentWeekIndex = 0;
-            if (data.weekStartDates && data.weekStartDates.length > 0) {
-                for (let i = data.weekStartDates.length - 1; i >= 0; i--) { if (today >= new Date(data.weekStartDates[i])) { currentWeekIndex = i; break; } }
-            }
+            if (response.status === 404) throw new Error(`El archivo db.json no se encontró en la URL. Verifica que el archivo exista en el repositorio de GitHub.`);
+            if (!response.ok) throw new Error(`Error de red al cargar db.json (Status: ${response.status})`);
+            const textData = await response.text();
+            try { return JSON.parse(textData); } 
+            catch (jsonError) { throw new Error(`Error de sintaxis en el archivo db.json. Usa un validador online como JSONLint para revisarlo. Detalles: ${jsonError.message}`); }
+        } catch (error) { console.error("Error en fetchData:", error); throw error; }
+    }
+
+    async function loadPublicData() {
+        try {
+            const data = await fetchData();
+            const today = new Date(); let currentWeekIndex = 0;
+            if (data.weekStartDates && data.weekStartDates.length > 0) { for (let i = data.weekStartDates.length - 1; i >= 0; i--) { if (today >= new Date(data.weekStartDates[i])) { currentWeekIndex = i; break; } } }
             renderPublicTable(data, currentWeekIndex);
-        } catch (error) { document.getElementById('public-tbody').innerHTML = `<tr><td colspan="5" style="color:red;">${error.message}</td></tr>`; }
+        } catch (error) { document.getElementById('public-tbody').innerHTML = `<tr><td colspan="5" style="color:red; font-weight:bold;">${error.message}</td></tr>`; }
     }
 
     function renderPublicTable(data, weekIndex) {
-        const tbody = document.getElementById('public-tbody');
-        tbody.innerHTML = '';
-        if (!data.weekStartDates || weekIndex >= data.weekStartDates.length) { document.getElementById('public-table-title').textContent = "No hay planificaciones"; tbody.innerHTML = `<tr><td colspan="5">Aún no se ha cargado ninguna planificación.</td></tr>`; return; }
+        const tbody = document.getElementById('public-tbody'); tbody.innerHTML = '';
+        const headerRow = document.querySelector("#public-view thead tr");
+        if (!data.weekStartDates || weekIndex >= data.weekStartDates.length || !data.planificacionSemanas[weekIndex]) {
+            document.getElementById('public-table-title').textContent = "No hay planificación cargada";
+            tbody.innerHTML = `<tr><td colspan="5">Aún no se ha cargado ninguna planificación.</td></tr>`;
+            headerRow.innerHTML = `<th>Empleado</th><th>Tarea 1</th>`;
+            return;
+        }
         document.getElementById('public-table-title').textContent = `Asignación para la semana del ${new Date(data.weekStartDates[weekIndex]).toLocaleDateString()}`;
         const asignacion = data.planificacionSemanas[weekIndex];
-        if (!asignacion) { tbody.innerHTML = `<tr><td colspan="5">No hay planificación para esta semana.</td></tr>`; return; }
         const maxTareas = Math.max(1, ...Object.values(asignacion).map(arr => (arr || []).length));
-        const headerRow = document.querySelector("#public-view thead tr");
-        headerRow.innerHTML = `<th>Empleado</th>`;
-        for (let i = 1; i <= maxTareas; i++) { headerRow.innerHTML += `<th>Tarea ${i}</th>`; }
-        data.empleados.forEach(empleado => {
-            const tareas = asignacion[empleado] || [];
-            let rowHtml = `<tr><td class="employee-name">${empleado}</td>`;
-            for (let i = 0; i < maxTareas; i++) { rowHtml += `<td>${tareas[i] || ''}</td>`; }
-            tbody.innerHTML += `</tr>`;
-        });
+        headerRow.innerHTML = `<th>Empleado</th>`; for (let i = 1; i <= maxTareas; i++) { headerRow.innerHTML += `<th>Tarea ${i}</th>`; }
+        data.empleados.forEach(empleado => { const tareas = asignacion[empleado] || []; let rowHtml = `<tr><td class="employee-name">${empleado}</td>`; for (let i = 0; i < maxTareas; i++) { rowHtml += `<td>${tareas[i] || ''}</td>`; } tbody.innerHTML += `</tr>`; });
     }
 
     async function loadAndInitAdminView() {
-        const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/${GITHUB_CONFIG.filePath}?t=${new Date().getTime()}`;
         try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                if (response.status === 404) { appState = JSON.parse(JSON.stringify(defaultState)); console.warn("db.json no encontrado, usando datos por defecto."); }
-                else { throw new Error(`Error de red: ${response.statusText}`); }
-            } else {
-                const textData = await response.text();
-                try { appState = JSON.parse(textData); } 
-                catch (jsonError) { throw new Error(`Error de sintaxis en db.json: ${jsonError.message}`); }
-            }
+            appState = await fetchData();
+            console.log("Datos de GitHub cargados en el panel de administración.");
         } catch (error) {
-            alert(`¡ATENCIÓN! ${error.message}\nNo se pudieron cargar los datos guardados. Se usará un estado por defecto. Revisa el archivo 'db.json' en GitHub.`);
+            alert(`¡ATENCIÓN! ${error.message}\n\nNo se pudieron cargar los datos guardados. Se usará un estado por defecto para que puedas trabajar y generar un nuevo archivo.`);
             appState = JSON.parse(JSON.stringify(defaultState));
         }
         renderAdminTables();
@@ -176,24 +153,19 @@
     function generarNuevaAsignacion() {
         if (appState.planificacionSemanas.length >= 3) { alert("Máximo de 3 semanas planificadas."); return; }
         const asignacionAnterior = appState.planificacionSemanas[appState.planificacionSemanas.length - 1] || {};
-        const tareasHechasLaSemanaPasada = new Set(Object.values(asignacionAnterior).flat());
-        const tareasNoHechas = appState.tareas.filter(t => !tareasHechasLaSemanaPasada.has(t)).sort(() => 0.5 - Math.random());
-        const tareasRepetidas = appState.tareas.filter(t => tareasHechasLaSemanaPasada.has(t)).sort(() => 0.5 - Math.random());
-        const mazoDeTareas = [...tareasNoHechas, ...tareasRepetidas];
-        const nuevaAsignacion = {};
-        const contadorTareasPorEmpleado = {};
-        appState.empleados.forEach(emp => { nuevaAsignacion[emp] = []; contadorTareasPorEmpleado[emp] = 0; });
-        mazoDeTareas.forEach(tarea => {
-            const candidatos = appState.empleados.filter(emp => appState.perfiles[emp]?.includes(tarea));
-            if (candidatos.length === 0) { console.warn(`Tarea sin candidato: "${tarea}"`); return; }
-            let mejorCandidato = candidatos.sort((a, b) => contadorTareasPorEmpleado[a] - contadorTareasPorEmpleado[b])[0];
-            nuevaAsignacion[mejorCandidato].push(tarea);
-            contadorTareasPorEmpleado[mejorCandidato]++;
+        const tareasHechas = new Set(Object.values(asignacionAnterior).flat());
+        const mazo = [...appState.tareas.filter(t => !tareasHechas.has(t)).sort(() => 0.5 - Math.random()), ...appState.tareas.filter(t => tareasHechas.has(t)).sort(() => 0.5 - Math.random())];
+        const asignacion = {}; const contadores = {};
+        appState.empleados.forEach(e => { asignacion[e] = []; contadores[e] = 0; });
+        mazo.forEach(t => {
+            const candidatos = appState.empleados.filter(e => appState.perfiles[e]?.includes(t)).sort((a, b) => contadores[a] - contadores[b]);
+            if (candidatos.length > 0) { const elegido = candidatos[0]; asignacion[elegido].push(t); contadores[elegido]++; } 
+            else { console.warn(`Tarea sin candidato: "${t}"`); }
         });
         let lastDate;
         if (appState.weekStartDates.length > 0) { lastDate = new Date(appState.weekStartDates[appState.weekStartDates.length - 1]); lastDate.setDate(lastDate.getDate() + 7); }
         else { const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day === 0 ? -6 : 1); lastDate = new Date(today.setDate(diff)); }
-        appState.planificacionSemanas.push(nuevaAsignacion);
+        appState.planificacionSemanas.push(asignacion);
         appState.weekStartDates.push(lastDate.toISOString().split('T')[0]);
         renderAdminTables();
     }
@@ -201,8 +173,7 @@
     function clearSpecificWeek(weekIndex) { if (confirm(`¿Eliminar la planificación de la Semana ${weekIndex + 1}?`)) { appState.planificacionSemanas.splice(weekIndex, 1); appState.weekStartDates.splice(weekIndex, 1); renderAdminTables(); } }
     
     function renderAdminTables() {
-        const container = document.getElementById('admin-tables-container');
-        container.innerHTML = '';
+        const container = document.getElementById('admin-tables-container'); container.innerHTML = '';
         if (!appState.planificacionSemanas || appState.planificacionSemanas.length === 0) { container.innerHTML = '<p style="text-align:center;">No hay planificaciones. Haz clic en "Generar Próxima Semana" para empezar.</p>'; return; }
         appState.planificacionSemanas.forEach((asignacion, index) => {
             const weekContainer = document.createElement('div');
@@ -213,12 +184,7 @@
             let tableHtml = '<thead><tr><th>Empleado</th>';
             for (let i = 1; i <= maxTareas; i++) { tableHtml += `<th>Tarea ${i}</th>`; }
             tableHtml += '</tr></thead><tbody>';
-            appState.empleados.forEach(empleado => {
-                const tareas = asignacion[empleado] || [];
-                tableHtml += `<tr><td class="employee-name">${empleado}</td>`;
-                for (let i = 0; i < maxTareas; i++) { tableHtml += `<td contenteditable="true">${tareas[i] || ''}</td>`; }
-                tableHtml += `</tr>`;
-            });
+            appState.empleados.forEach(empleado => { const tareas = asignacion[empleado] || []; tableHtml += `<tr><td class="employee-name">${empleado}</td>`; for (let i = 0; i < maxTareas; i++) { tableHtml += `<td contenteditable="true">${tareas[i] || ''}</td>`; } tableHtml += `</tr>`; });
             table.innerHTML = tableHtml + '</tbody>';
             weekContainer.appendChild(table);
             container.appendChild(weekContainer);
@@ -228,41 +194,27 @@
     function openProfileEditor() { renderProfileMatrix(); renderEmployeeManagement(); renderTaskManagement(); document.getElementById('profileModal').style.display = 'block'; }
     function closeProfileEditor() { document.getElementById('profileModal').style.display = 'none'; }
     
-    function renderProfileMatrix() {
-        const table = document.getElementById('profile-matrix-table');
-        let header = '<thead><tr><th>Tarea</th>';
-        appState.empleados.forEach(e => header += `<th>${e}</th>`);
-        header += '</tr></thead><tbody>';
-        appState.tareas.forEach(tarea => {
-            header += `<tr><td class="employee-name">${tarea}</td>`;
-            appState.empleados.forEach(empleado => {
-                const canDo = appState.perfiles[empleado]?.includes(tarea);
-                header += `<td><input type="checkbox" onchange="updateProfile(this, '${empleado}', '${tarea}')" ${canDo ? 'checked' : ''}></td>`;
-            });
-            header += `</tr>`;
-        });
-        table.innerHTML = header + '</tbody>';
-    }
-
-    function updateProfile(checkbox, empleado, tarea) { if (!appState.perfiles[empleado]) appState.perfiles[empleado] = []; const idx = appState.perfiles[empleado].indexOf(tarea); if (checkbox.checked) { if (idx === -1) appState.perfiles[empleado].push(tarea); } else { if (idx > -1) appState.perfiles[empleado].splice(idx, 1); } }
-    function renderEmployeeManagement() { const list = document.getElementById('employee-list'); list.innerHTML = ''; appState.empleados.forEach(emp => { list.innerHTML += `<div class="management-item"><span>${emp}</span><div class="management-item-actions"><button class="action-button clear-btn" onclick="deleteEmployee('${emp}')">Eliminar</button></div></div>`; }); }
-    function addEmployee() { const input = document.getElementById('new-employee-name'); const newName = input.value.trim().toLowerCase(); if (newName && !appState.empleados.includes(newName)) { appState.empleados.push(newName); appState.perfiles[newName] = []; input.value = ''; renderEmployeeManagement(); renderProfileMatrix(); } }
-    function deleteEmployee(empName) { if (confirm(`¿Eliminar a ${empName}?`)) { appState.empleados = appState.empleados.filter(e => e !== empName); delete appState.perfiles[empName]; appState.planificacionSemanas.forEach(s => { if (s) delete s[empName]; }); renderEmployeeManagement(); renderProfileMatrix(); renderAdminTables(); } }
-    function renderTaskManagement() { const list = document.getElementById('task-list'); list.innerHTML = ''; appState.tareas.forEach(task => { list.innerHTML += `<div class="management-item"><span>${task}</span><div class="management-item-actions"><button class="action-button clear-btn" onclick="deleteTask('${task}')">Eliminar</button></div></div>`; }); }
-    function addTask() { const input = document.getElementById('new-task-name'); const newName = input.value.trim().toLowerCase(); if (newName && !appState.tareas.includes(newName)) { appState.tareas.push(newName); input.value = ''; renderTaskManagement(); renderProfileMatrix(); } }
-    function deleteTask(taskName) { if (confirm(`¿Eliminar la tarea "${taskName}"?`)) { appState.tareas = appState.tareas.filter(t => t !== taskName); for (const emp in appState.perfiles) { appState.perfiles[emp] = appState.perfiles[emp].filter(t => t !== taskName); } appState.planificacionSemanas.forEach(s => { if (s) for (const emp in s) { s[emp] = s[emp].filter(t => t !== taskName); } }); renderTaskManagement(); renderProfileMatrix(); renderAdminTables(); } }
+    function renderProfileMatrix() { const table = document.getElementById('profile-matrix-table'); let h = '<thead><tr><th>Tarea</th>'; appState.empleados.forEach(e => h += `<th>${e}</th>`); h += '</tr></thead><tbody>'; appState.tareas.forEach(t => { h += `<tr><td class="employee-name">${t}</td>`; appState.empleados.forEach(e => { const c = appState.perfiles[e]?.includes(t); h += `<td><input type="checkbox" onchange="updateProfile(this,'${e}','${t}')" ${c ? 'checked' : ''}></td>`; }); h += `</tr>`; }); table.innerHTML = h + '</tbody>'; }
+    function updateProfile(cb, e, t) { if (!appState.perfiles[e]) appState.perfiles[e] = []; const i = appState.perfiles[e].indexOf(t); if (cb.checked) { if (i === -1) appState.perfiles[e].push(t); } else { if (i > -1) appState.perfiles[e].splice(i, 1); } }
+    function renderEmployeeManagement() { const l = document.getElementById('employee-list'); l.innerHTML = ''; appState.empleados.forEach(e => { l.innerHTML += `<div class="management-item"><span>${e}</span><div><button class="action-button clear-btn" onclick="deleteEmployee('${e}')">Eliminar</button></div></div>`; }); }
+    function addEmployee() { const i = document.getElementById('new-employee-name'); const n = i.value.trim().toLowerCase(); if (n && !appState.empleados.includes(n)) { appState.empleados.push(n); appState.perfiles[n] = []; i.value = ''; renderEmployeeManagement(); renderProfileMatrix(); } }
+    function deleteEmployee(e) { if (confirm(`¿Eliminar a ${e}?`)) { appState.empleados = appState.empleados.filter(i => i !== e); delete appState.perfiles[e]; appState.planificacionSemanas.forEach(s => { if (s) delete s[e]; }); renderEmployeeManagement(); renderProfileMatrix(); renderAdminTables(); } }
+    function renderTaskManagement() { const l = document.getElementById('task-list'); l.innerHTML = ''; appState.tareas.forEach(t => { l.innerHTML += `<div class="management-item"><span>${t}</span><div><button class="action-button clear-btn" onclick="deleteTask('${t}')">Eliminar</button></div></div>`; }); }
+    function addTask() { const i = document.getElementById('new-task-name'); const n = i.value.trim().toLowerCase(); if (n && !appState.tareas.includes(n)) { appState.tareas.push(n); i.value = ''; renderTaskManagement(); renderProfileMatrix(); } }
+    function deleteTask(t) { if (confirm(`¿Eliminar la tarea "${t}"?`)) { appState.tareas = appState.tareas.filter(i => i !== t); for (const e in appState.perfiles) { appState.perfiles[e] = appState.perfiles[e].filter(i => i !== t); } appState.planificacionSemanas.forEach(s => { if (s) for (const e in s) { s[e] = s[e].filter(i => i !== t); } }); renderTaskManagement(); renderProfileMatrix(); renderAdminTables(); } }
 
     function prepareJsonForExport() {
         const adminTables = document.querySelectorAll('#admin-tables-container .assignment-table');
         adminTables.forEach((table, weekIndex) => {
-            const newAssignment = {};
-            table.querySelectorAll('tbody tr').forEach(row => {
-                const employeeName = row.cells[0].textContent;
-                const tasks = [];
-                for (let i = 1; i < row.cells.length; i++) { const taskText = row.cells[i].textContent.trim(); if (taskText) tasks.push(taskText); }
-                newAssignment[employeeName] = tasks;
-            });
-            appState.planificacionSemanas[weekIndex] = newAssignment;
+            if (appState.planificacionSemanas[weekIndex]) {
+                const newAssignment = {};
+                table.querySelectorAll('tbody tr').forEach(row => {
+                    const employeeName = row.cells[0].textContent; const tasks = [];
+                    for (let i = 1; i < row.cells.length; i++) { const taskText = row.cells[i].textContent.trim(); if (taskText) tasks.push(taskText); }
+                    newAssignment[employeeName] = tasks;
+                });
+                appState.planificacionSemanas[weekIndex] = newAssignment;
+            }
         });
         return JSON.stringify(appState, null, 2);
     }
