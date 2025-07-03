@@ -61,80 +61,32 @@
   },
   "coloresFila": {},
   "weekStartDates": [
-    "2025-06-30",
-    "2025-07-07",
-    "2025-07-14"
+    "2025-06-30"
   ],
   "planificacionSemanas": [
     {
       "ines raposo": [
-        "atencion de mails y derivacion segun el caso",
-        "sigest y valoracion de camaras rotas",
-        "crear sigest de desmontes",
+        "valorar desmontes con momento cero",
+        "valorar sigest de emergencias",
+        "verificar sigest devueltos",
         "seguimiento de desvios"
       ],
       "nicolas ponce": [
-        "segurizaciones CR (sigest y valorar)",
-        "valorar desmontes con momento cero",
-        "postes pendientes de valorar",
-        "valorar sigest de emergencias"
+        "sigest y valoracion de camaras rotas",
+        "crear sigest de desmontes",
+        "vistos buenos",
+        "prueba"
       ],
       "gabriela torres": [
-        "vistos buenos",
-        "verificar sigest devueltos",
-        "crear sigest de desmontes",
-        "prueba"
+        "atencion de mails y derivacion segun el caso",
+        "segurizaciones CR (sigest y valorar)",
+        "postes pendientes de valorar"
       ],
       "dante espejo": [
         "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
-        "planes de estabilidad"
-      ]
-    },
-    {
-      "ines raposo": [
-        "atencion de mails y derivacion segun el caso",
-        "valorar desmontes con momento cero",
-        "sigest y valoracion de camaras rotas",
-        "seguimiento de desvios"
-      ],
-      "nicolas ponce": [
-        "postes pendientes de valorar",
-        "valorar sigest de emergencias",
-        "crear sigest de desmontes"
-      ],
-      "gabriela torres": [
-        "segurizaciones CR (sigest y valorar)",
-        "vistos buenos",
-        "verificar sigest devueltos"
-      ],
-      "dante espejo": [
         "planes de estabilidad",
-        "carga de planos y datos de red a desmontes",
-        "gestion de saneamientos"
-      ]
-    },
-    {
-      "ines raposo": [
-        "atencion de mails y derivacion segun el caso",
-        "crear sigest de desmontes",
-        "seguimiento de desvios",
-        "valorar desmontes con momento cero"
-      ],
-      "nicolas ponce": [
-        "segurizaciones CR (sigest y valorar)",
-        "valorar sigest de emergencias",
-        "sigest y valoracion de camaras rotas"
-      ],
-      "gabriela torres": [
-        "postes pendientes de valorar",
-        "verificar sigest devueltos",
-        "vistos buenos"
-      ],
-      "dante espejo": [
-        "carga de planos y datos de red a desmontes",
-        "planes de estabilidad",
-        "gestion de saneamientos"
+        "prueba"
       ]
     }
   ]
