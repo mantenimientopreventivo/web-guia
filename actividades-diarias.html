@@ -38,6 +38,10 @@
         #export-section { margin-top: 40px; padding: 20px; background-color: #eafaf1; border: 2px dashed #2ecc71; border-radius: 8px; text-align: center; }
         #export-section .download-button { background-color: #2ecc71; font-size: 1.2em; padding: 15px 30px; }
         .week-header { display: flex; justify-content: space-between; align-items: center; }
+        .shortcuts-panel { margin-top: 30px; padding: 15px; background-color: #ecf0f1; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .shortcut-button { display: inline-block; padding: 10px 15px; background-color: #3498db; color: white; text-decoration: none; font-weight: bold; font-size: 0.9em; border-radius: 5px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; transition: all 0.2s ease; text-align: center; }
+        .shortcut-button:hover { background-color: #2980b9; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .shortcut-button .subtitle { display: block; font-size: 0.8em; font-weight: normal; opacity: 0.8; margin-top: 4px; text-transform: none; }
     </style>
 </head>
 <body>
@@ -49,17 +53,25 @@
             <a href="index.html" class="back-button">‹ Volver al Índice</a>
         </div>
         <h1>Planificador de Actividades Semanales</h1>
-        <h2 id="public-table-title">Asignación para la Semana Actual</h2>
+        <h2 id="public-table-title">Cargando...</h2>
         <table class="assignment-table">
             <thead><tr><th>Empleado</th><th>Tarea 1</th></tr></thead>
             <tbody id="public-tbody"></tbody>
         </table>
+        <div class="shortcuts-panel">
+            <a href="https://app.powerbi.com/groups/me/reports/c762f182-4d54-4522-bdf2-9d79542941b4/ReportSectionbdcdc9a9138c0a320819?ctid=9744600e-3e04-492e-baa1-25ec245c6f10&experience=power-bi" class="shortcut-button" target="_blank" rel="noopener noreferrer">
+                POSTES PENDIENTES
+                <span class="subtitle">Filtrar por H (sin emergencias & desvíos) + AI (solo vacías)</span>
+            </a>
+            <a href="https://telefonicacorp-my.sharepoint.com/:x:/r/personal/ernesto_casati_telefonica_com/Documents/mantenimiento/gestion%20de%20desvios.xlsm?d=w8040b987660e468ba4ef595ad1a6a44b&csf=1&web=1&e=PHIJ02" class="shortcut-button" target="_blank" rel="noopener noreferrer">seguimiento de desvios</a>
+            <a href="https://app.powerbi.com/groups/me/reports/c762f182-4d54-4522-bdf2-9d79542941b4/ReportSectiond77c31df2b15d7c287b3?ctid=9744600e-3e04-492e-baa1-25ec245c6f10&pbi_source=shareVisual&visual=b939ee4f71eff941bf61&height=359.47&width=521.39&bookmarkGuid=f1b6220f-7ba7-4d87-8889-c9d71361178e" class="shortcut-button" target="_blank" rel="noopener noreferrer">segurizaciones pendientes</a>
+            <a href="https://telefonicacorp-my.sharepoint.com/:x:/r/personal/ernesto_casati_telefonica_com/Documents/PLANILLA%20DE%20DESMONTE.xlsx?d=w90e21dc265f44545a0b85c2bc5e47168&csf=1&web=1&e=RWNAPU" class="shortcut-button" target="_blank" rel="noopener noreferrer">planilla de momento 0</a>
+            <a href="https://app.powerbi.com/groups/me/reports/c762f182-4d54-4522-bdf2-9d79542941b4/87670009211005d1e0de?ctid=9744600e-3e04-492e-baa1-25ec245c6f10&experience=power-bi" class="shortcut-button" target="_blank" rel="noopener noreferrer">planes de estabilidad y confiabilizacion</a>
+        </div>
     </div>
 
     <div id="admin-view" class="main-container" style="display: none;">
-        <div class="header-controls">
-            <a href="index.html" class="back-button">‹ Volver al Índice</a>
-        </div>
+        <div class="header-controls"><a href="index.html" class="back-button">‹ Volver al Índice</a></div>
         <h1>Panel de Administración</h1>
         <p style="text-align: center;">Usa esta interfaz para gestionar la planificación. Cuando termines, descarga el archivo JSON y súbelo a GitHub.</p>
         <div class="actions-panel">
@@ -70,7 +82,7 @@
         <div id="admin-tables-container"></div>
         <div id="export-section">
             <h3>Paso Final: Descargar y Subir a GitHub</h3>
-            <p>Cuando hayas terminado todos los cambios, haz clic aquí para descargar el archivo <strong>db.json</strong>. Luego, reemplaza el archivo antiguo en tu repositorio de GitHub.</p>
+            <p>Cuando hayas terminado todos los cambios (incluidos los manuales), haz clic aquí para descargar el archivo <strong>db.json</strong>.</p>
             <button class="action-button download-button" onclick="downloadJsonFile()">Descargar Archivo db.json</button>
         </div>
     </div>
@@ -94,12 +106,7 @@
 
 <script>
     console.log("Planificador: Script iniciado.");
-
-    const GITHUB_CONFIG = {
-        owner: 'mantenimientopreventivo',
-        repo: 'web-guia',
-        filePath: 'db.json'
-    };
+    const GITHUB_CONFIG = { owner: 'mantenimientopreventivo', repo: 'web-guia', filePath: 'db.json' };
     let appState = {};
     const defaultState = {
         empleados: ["ines raposo", "nicolas ponce", "gabriela torres", "dante espejo"],
@@ -109,17 +116,17 @@
     };
 
     function promptForAdmin() { const p = prompt("Contraseña:"); if (p === "1598") { document.getElementById('public-view').style.display = 'none'; document.getElementById('admin-view').style.display = 'block'; document.getElementById('login-button').style.display = 'none'; loadAndInitAdminView(); } else if (p) { alert("Incorrecta."); } }
-    function lockAdminView() { if (confirm("¿Salir?")) { document.getElementById('public-view').style.display = 'block'; document.getElementById('admin-view').style.display = 'none'; document.getElementById('login-button').style.display = 'block'; loadPublicData(); } }
+    function lockAdminView() { if (confirm("¿Salir del modo administrador?")) { document.getElementById('public-view').style.display = 'block'; document.getElementById('admin-view').style.display = 'none'; document.getElementById('login-button').style.display = 'block'; loadPublicData(); } }
 
     async function fetchData() {
         const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/${GITHUB_CONFIG.filePath}?t=${new Date().getTime()}`;
         try {
             const response = await fetch(url);
-            if (response.status === 404) throw new Error(`El archivo db.json no se encontró. Verifica que exista en el repositorio.`);
+            if (response.status === 404) throw new Error(`El archivo db.json no se encontró en GitHub. Verifica que exista en la raíz del repositorio.`);
             if (!response.ok) throw new Error(`Error de red al cargar db.json (Status: ${response.status})`);
             const textData = await response.text();
             try { return JSON.parse(textData); } 
-            catch (jsonError) { throw new Error(`Error de sintaxis en db.json. Usa un validador online. Detalles: ${jsonError.message}`); }
+            catch (jsonError) { throw new Error(`Error de sintaxis en el archivo db.json. Usa un validador online (como JSONLint) para revisarlo.`); }
         } catch (error) { console.error("Error en fetchData:", error); throw error; }
     }
 
@@ -127,7 +134,9 @@
         try {
             const data = await fetchData();
             const today = new Date(); let currentWeekIndex = 0;
-            if (data.weekStartDates && data.weekStartDates.length > 0) { for (let i = data.weekStartDates.length - 1; i >= 0; i--) { if (today >= new Date(data.weekStartDates[i])) { currentWeekIndex = i; break; } } }
+            if (data.weekStartDates && data.weekStartDates.length > 0) {
+                for (let i = data.weekStartDates.length - 1; i >= 0; i--) { if (today >= new Date(data.weekStartDates[i])) { currentWeekIndex = i; break; } }
+            }
             renderPublicTable(data, currentWeekIndex);
         } catch (error) { document.getElementById('public-table-title').textContent = "Error al Cargar Datos"; document.getElementById('public-tbody').innerHTML = `<tr><td colspan="5" style="color:red; font-weight:bold;">${error.message}</td></tr>`; }
     }
@@ -135,11 +144,17 @@
     function renderPublicTable(data, weekIndex) {
         const tbody = document.getElementById('public-tbody'); tbody.innerHTML = '';
         const headerRow = document.querySelector("#public-view thead tr");
-        if (!data.weekStartDates || weekIndex >= data.weekStartDates.length || !data.planificacionSemanas[weekIndex]) { document.getElementById('public-table-title').textContent = "No hay planificación cargada"; tbody.innerHTML = `<tr><td colspan="5">Aún no se ha cargado ninguna planificación para la fecha actual.</td></tr>`; headerRow.innerHTML = `<th>Empleado</th><th>Tarea 1</th>`; return; }
+        if (!data.weekStartDates || data.weekStartDates.length === 0 || weekIndex >= data.weekStartDates.length || !data.planificacionSemanas[weekIndex]) {
+            document.getElementById('public-table-title').textContent = "No hay planificación cargada";
+            tbody.innerHTML = `<tr><td colspan="5">Aún no se ha cargado ninguna planificación para la fecha actual.</td></tr>`;
+            headerRow.innerHTML = `<th>Empleado</th><th>Tarea 1</th>`;
+            return;
+        }
         document.getElementById('public-table-title').textContent = `Asignación para la semana del ${new Date(data.weekStartDates[weekIndex]).toLocaleDateString()}`;
         const asignacion = data.planificacionSemanas[weekIndex];
         const maxTareas = Math.max(1, ...Object.values(asignacion).map(arr => (arr || []).length));
-        headerRow.innerHTML = `<th>Empleado</th>`; for (let i = 1; i <= maxTareas; i++) { headerRow.innerHTML += `<th>Tarea ${i}</th>`; }
+        headerRow.innerHTML = `<th>Empleado</th>`;
+        for (let i = 1; i <= maxTareas; i++) { headerRow.innerHTML += `<th>Tarea ${i}</th>`; }
         data.empleados.forEach(empleado => {
             const tareas = asignacion[empleado] || [];
             let rowHtml = `<tr><td class="employee-name">${empleado}</td>`;
@@ -150,12 +165,18 @@
     }
 
     async function loadAndInitAdminView() {
-        try { appState = await fetchData(); console.log("Datos de GitHub cargados."); } 
-        catch (error) { alert(`¡ATENCIÓN! ${error.message}\nSe usará un estado por defecto.`); appState = JSON.parse(JSON.stringify(defaultState)); }
+        try {
+            appState = await fetchData();
+            console.log("Datos de GitHub cargados para administración.");
+        } catch (error) {
+            alert(`¡ATENCIÓN! ${error.message}\nNo se pudieron cargar los datos guardados. Se usará un estado por defecto.`);
+            appState = JSON.parse(JSON.stringify(defaultState));
+        }
         renderAdminTables();
     }
 
     function generarNuevaAsignacion() {
+        updateStateFromAdminTables();
         if (appState.planificacionSemanas.length >= 3) { alert("Máximo de 3 semanas planificadas."); return; }
         const asignacionAnterior = appState.planificacionSemanas[appState.planificacionSemanas.length - 1] || {};
         const tareasHechas = new Set(Object.values(asignacionAnterior).flat());
@@ -181,7 +202,7 @@
             const startDate = new Date(appState.weekStartDates[index]).toLocaleDateString();
             const maxTareas = Math.max(1, ...Object.values(asignacion).map(arr => (arr || []).length));
             weekContainer.innerHTML = `<div class="week-header"><h3>Semana ${index + 1} (Inicia el ${startDate})</h3><button class="action-button clear-btn" onclick="clearSpecificWeek(${index})">Limpiar esta Semana</button></div>`;
-            const table = document.createElement('table'); table.className = 'assignment-table';
+            const table = document.createElement('table'); table.className = 'assignment-table'; table.setAttribute('data-week-index', index);
             let tableHtml = '<thead><tr><th>Empleado</th>';
             for (let i = 1; i <= maxTareas; i++) { tableHtml += `<th>Tarea ${i}</th>`; }
             tableHtml += '</tr></thead><tbody>';
@@ -200,7 +221,7 @@
         let header = '<thead><tr><th>Tarea</th>';
         appState.empleados.forEach(e => header += `<th>${e}</th>`);
         header += '</tr></thead>';
-        let body = '<tbody>'; // Variable 'body' separada
+        let body = '<tbody>';
         appState.tareas.forEach(tarea => {
             body += `<tr><td class="employee-name">${tarea}</td>`;
             appState.empleados.forEach(empleado => {
@@ -220,25 +241,42 @@
     function addTask() { const i = document.getElementById('new-task-name'); const n = i.value.trim().toLowerCase(); if (n && !appState.tareas.includes(n)) { appState.tareas.push(n); i.value = ''; renderTaskManagement(); renderProfileMatrix(); } }
     function deleteTask(t) { if (confirm(`¿Eliminar la tarea "${t}"?`)) { appState.tareas = appState.tareas.filter(i => i !== t); for (const e in appState.perfiles) { appState.perfiles[e] = appState.perfiles[e].filter(i => i !== t); } appState.planificacionSemanas.forEach(s => { if (s) for (const e in s) { s[e] = s[e].filter(i => i !== t); } }); renderTaskManagement(); renderProfileMatrix(); renderAdminTables(); } }
 
-    function prepareJsonForExport() {
+    function updateStateFromAdminTables() {
         const adminTables = document.querySelectorAll('#admin-tables-container .assignment-table');
-        adminTables.forEach((table, weekIndex) => {
+        adminTables.forEach(table => {
+            const weekIndex = parseInt(table.dataset.weekIndex, 10);
             if (appState.planificacionSemanas[weekIndex]) {
                 const newAssignment = {};
                 table.querySelectorAll('tbody tr').forEach(row => {
                     const employeeName = row.cells[0].textContent; const tasks = [];
-                    for (let i = 1; i < row.cells.length; i++) { const taskText = row.cells[i].textContent.trim(); if (taskText) tasks.push(taskText); }
+                    for (let i = 1; i < row.cells.length; i++) {
+                        const taskText = row.cells[i].textContent.trim();
+                        if (taskText) tasks.push(taskText);
+                    }
                     newAssignment[employeeName] = tasks;
                 });
                 appState.planificacionSemanas[weekIndex] = newAssignment;
             }
         });
-        return JSON.stringify(appState, null, 2);
     }
     
-    function downloadJsonFile() { const jsonString = prepareJsonForExport(); const blob = new Blob([jsonString], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'db.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
+    function downloadJsonFile() {
+        updateStateFromAdminTables();
+        const jsonString = JSON.stringify(appState, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'db.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 
-    document.addEventListener("DOMContentLoaded", () => { loadPublicData(); });
+    document.addEventListener("DOMContentLoaded", () => {
+        loadPublicData();
+    });
 </script>
 
 </body>
