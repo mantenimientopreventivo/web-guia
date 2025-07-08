@@ -13,12 +13,11 @@
     "planes de estabilidad",
     "postes pendientes de valorar",
     "seguimiento de desvios",
-    "segurizaciones CR (sigest y valorar)",
-    "sigest y valoracion de camaras rotas",
     "valorar desmontes con momento cero",
     "valorar sigest de emergencias",
     "vistos buenos",
-    "verificar sigest devueltos"
+    "verificar sigest devueltos",
+    "(segurizaciones cr / cr rotas)  sigest y valoracion"
   ],
   "perfiles": {
     "ines raposo": [
@@ -26,8 +25,6 @@
       "crear sigest de desmontes",
       "postes pendientes de valorar",
       "seguimiento de desvios",
-      "segurizaciones CR (sigest y valorar)",
-      "sigest y valoracion de camaras rotas",
       "valorar desmontes con momento cero",
       "valorar sigest de emergencias",
       "vistos buenos",
@@ -37,8 +34,6 @@
       "atencion de mails y derivacion segun el caso",
       "crear sigest de desmontes",
       "postes pendientes de valorar",
-      "segurizaciones CR (sigest y valorar)",
-      "sigest y valoracion de camaras rotas",
       "valorar desmontes con momento cero",
       "valorar sigest de emergencias",
       "vistos buenos",
@@ -48,7 +43,6 @@
       "atencion de mails y derivacion segun el caso",
       "crear sigest de desmontes",
       "postes pendientes de valorar",
-      "segurizaciones CR (sigest y valorar)",
       "vistos buenos",
       "verificar sigest devueltos"
     ],
@@ -69,12 +63,10 @@
     {
       "ines raposo": [
         "atencion de mails y derivacion segun el caso",
-        "sigest y valoracion de camaras rotas",
         "crear sigest de desmontes",
         "seguimiento de desvios"
       ],
       "nicolas ponce": [
-        "segurizaciones CR (sigest y valorar)",
         "valorar desmontes con momento cero",
         "postes pendientes de valorar",
         "valorar sigest de emergencias"
@@ -101,8 +93,6 @@
         "atencion de mails y derivacion segun el caso"
       ],
       "gabriela torres": [
-        "segurizaciones CR (sigest y valorar)",
-        "sigest y valoracion de camaras rotas",
         "verificar sigest devueltos",
         "valorar desmontes con momento cero"
       ],
@@ -121,9 +111,7 @@
         "valorar desmontes con momento cero"
       ],
       "nicolas ponce": [
-        "segurizaciones CR (sigest y valorar)",
-        "valorar sigest de emergencias",
-        "sigest y valoracion de camaras rotas"
+        "valorar sigest de emergencias"
       ],
       "gabriela torres": [
         "postes pendientes de valorar",
