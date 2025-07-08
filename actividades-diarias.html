@@ -104,97 +104,43 @@
 
     function promptForAdmin() { const p = prompt("Contraseña:"); if (p === "1598") { document.getElementById('public-view').style.display = 'none'; document.getElementById('admin-view').style.display = 'block'; document.getElementById('login-button').style.display = 'none'; loadAndInitAdminView(); } else if (p) { alert("Incorrecta."); } }
     function lockAdminView() { if (confirm("¿Salir del modo administrador?")) { document.getElementById('public-view').style.display = 'block'; document.getElementById('admin-view').style.display = 'none'; document.getElementById('login-button').style.display = 'block'; loadPublicData(); } }
-    async function fetchData() { const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/${GITHUB_CONFIG.filePath}?t=${new Date().getTime()}`; try { const response = await fetch(url); if (response.status === 404) throw new Error(`El archivo db.json no se encontró.`); if (!response.ok) throw new Error(`Error de red (Status: ${response.status})`); const textData = await response.text(); try { return JSON.parse(textData); } catch (jsonError) { throw new Error(`Error de sintaxis en db.json.`); } } catch (error) { console.error("Error en fetchData:", error); throw error; } }
+    async function fetchData() { const url = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/${GITHUB_CONFIG.filePath}?t=${new Date().getTime()}`; try { const response = await fetch(url); if (response.status === 404) throw new Error(`El archivo db.json no se encontró en GitHub.`); if (!response.ok) throw new Error(`Error de red (Status: ${response.status})`); const textData = await response.text(); try { return JSON.parse(textData); } catch (jsonError) { throw new Error(`Error de sintaxis en db.json.`); } } catch (error) { console.error("Error en fetchData:", error); throw error; } }
+    async function loadPublicData() { try { const data = await fetchData(); const today = new Date(); let currentWeekIndex = 0; if (data.weekStartDates && data.weekStartDates.length > 0) { for (let i = data.weekStartDates.length - 1; i >= 0; i--) { if (today >= new Date(data.weekStartDates[i])) { currentWeekIndex = i; break; } } } renderPublicTable(data, currentWeekIndex); } catch (error) { document.getElementById('public-table-title').textContent = "Error al Cargar Datos"; document.getElementById('public-tbody').innerHTML = `<tr><td colspan="5" style="color:red; font-weight:bold;">${error.message}</td></tr>`; } }
     
-    async function loadPublicData() {
-        try {
-            const data = await fetchData();
-            const today = new Date(); let currentWeekIndex = 0;
-            if (data.weekStartDates && data.weekStartDates.length > 0) {
-                for (let i = data.weekStartDates.length - 1; i >= 0; i--) { if (today >= new Date(data.weekStartDates[i])) { currentWeekIndex = i; break; } }
-            }
-            renderPublicTable(data, currentWeekIndex);
-        } catch (error) {
-            document.getElementById('public-table-title').textContent = "Error al Cargar Datos";
-            document.getElementById('public-tbody').innerHTML = `<tr><td colspan="5" style="color:red; font-weight:bold;">${error.message}</td></tr>`;
-        }
-    }
-
-    // --- FUNCIÓN MODIFICADA ---
     function renderPublicTable(data, weekIndex) {
         const tbody = document.getElementById('public-tbody'); tbody.innerHTML = '';
         const headerRow = document.querySelector("#public-view thead tr");
-        if (!data.weekStartDates || data.weekStartDates.length === 0 || weekIndex >= data.weekStartDates.length || !data.planificacionSemanas[weekIndex]) {
-            document.getElementById('public-table-title').textContent = "No hay planificación cargada";
-            tbody.innerHTML = `<tr><td colspan="5">Aún no se ha cargado ninguna planificación para la fecha actual.</td></tr>`;
-            headerRow.innerHTML = `<th>Empleado</th><th>Tarea 1</th><th>Tarea 2</th><th>Tarea 3</th><th>Tarea 4</th>`;
-            return;
-        }
+        if (!data.weekStartDates || data.weekStartDates.length === 0 || weekIndex >= data.weekStartDates.length || !data.planificacionSemanas[weekIndex]) { document.getElementById('public-table-title').textContent = "No hay planificación cargada"; tbody.innerHTML = `<tr><td colspan="5">Aún no se ha cargado ninguna planificación para la fecha actual.</td></tr>`; headerRow.innerHTML = `<th>Empleado</th><th>Tarea 1</th><th>Tarea 2</th><th>Tarea 3</th><th>Tarea 4</th>`; return; }
         document.getElementById('public-table-title').textContent = `Asignación para la semana del ${new Date(data.weekStartDates[weekIndex]).toLocaleDateString()}`;
         const asignacion = data.planificacionSemanas[weekIndex];
-        // Asegura un mínimo de 4 columnas, o más si es necesario
         const maxTareas = Math.max(4, ...Object.values(asignacion).map(arr => (arr || []).length));
-        headerRow.innerHTML = `<th>Empleado</th>`;
-        for (let i = 1; i <= maxTareas; i++) {
-            headerRow.innerHTML += `<th>Tarea ${i}</th>`;
-        }
+        headerRow.innerHTML = `<th>Empleado</th>`; for (let i = 1; i <= maxTareas; i++) { headerRow.innerHTML += `<th>Tarea ${i}</th>`; }
         data.empleados.forEach(empleado => {
             const tareas = asignacion[empleado] || [];
             let rowHtml = `<tr><td class="employee-name">${empleado}</td>`;
-            for (let i = 0; i < maxTareas; i++) { // Bucle hasta el máximo de columnas
-                rowHtml += `<td>${tareas[i] || ''}</td>`;
-            }
+            for (let i = 0; i < maxTareas; i++) { rowHtml += `<td>${tareas[i] || ''}</td>`; }
             rowHtml += `</tr>`;
             tbody.innerHTML += rowHtml;
         });
     }
 
-    async function loadAndInitAdminView() {
-        try { appState = await fetchData(); } catch (error) { alert(`¡ATENCIÓN! ${error.message}\nSe usará un estado por defecto.`); appState = JSON.parse(JSON.stringify(defaultState)); }
-        renderAdminTables();
-    }
-
-    function generarNuevaAsignacion() {
-        updateStateFromAdminTables();
-        if (appState.planificacionSemanas.length >= 3) { alert("Máximo de 3 semanas planificadas."); return; }
-        const asignacionAnterior = appState.planificacionSemanas[appState.planificacionSemanas.length - 1] || {};
-        const tareasHechas = new Set(Object.values(asignacionAnterior).flat());
-        const mazo = [...appState.tareas.filter(t => !tareasHechas.has(t)).sort(() => 0.5 - Math.random()), ...appState.tareas.filter(t => tareasHechas.has(t)).sort(() => 0.5 - Math.random())];
-        const asignacion = {}; const contadores = {};
-        appState.empleados.forEach(e => { asignacion[e] = []; contadores[e] = 0; });
-        mazo.forEach(t => { const candidatos = appState.empleados.filter(e => appState.perfiles[e]?.includes(t)).sort((a, b) => contadores[a] - contadores[b]); if (candidatos.length > 0) { const elegido = candidatos[0]; asignacion[elegido].push(t); contadores[elegido]++; } else { console.warn(`Tarea sin candidato: "${t}"`); } });
-        let lastDate;
-        if (appState.weekStartDates.length > 0) { lastDate = new Date(appState.weekStartDates[appState.weekStartDates.length - 1]); lastDate.setDate(lastDate.getDate() + 7); }
-        else { const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day === 0 ? -6 : 1); lastDate = new Date(today.setDate(diff)); }
-        appState.planificacionSemanas.push(asignacion);
-        appState.weekStartDates.push(lastDate.toISOString().split('T')[0]);
-        renderAdminTables();
-    }
-    
+    async function loadAndInitAdminView() { try { appState = await fetchData(); } catch (error) { alert(`¡ATENCIÓN! ${error.message}\nSe usará un estado por defecto.`); appState = JSON.parse(JSON.stringify(defaultState)); } renderAdminTables(); }
+    function generarNuevaAsignacion() { updateStateFromAdminTables(); if (appState.planificacionSemanas.length >= 3) { alert("Máximo de 3 semanas planificadas."); return; } const asignacionAnterior = appState.planificacionSemanas[appState.planificacionSemanas.length - 1] || {}; const tareasHechas = new Set(Object.values(asignacionAnterior).flat()); const mazo = [...appState.tareas.filter(t => !tareasHechas.has(t)).sort(() => 0.5 - Math.random()), ...appState.tareas.filter(t => tareasHechas.has(t)).sort(() => 0.5 - Math.random())]; const asignacion = {}; const contadores = {}; appState.empleados.forEach(e => { asignacion[e] = []; contadores[e] = 0; }); mazo.forEach(t => { const candidatos = appState.empleados.filter(e => appState.perfiles[e]?.includes(t)).sort((a, b) => contadores[a] - contadores[b]); if (candidatos.length > 0) { const elegido = candidatos[0]; asignacion[elegido].push(t); contadores[elegido]++; } else { console.warn(`Tarea sin candidato: "${t}"`); } }); let lastDate; if (appState.weekStartDates.length > 0) { lastDate = new Date(appState.weekStartDates[appState.weekStartDates.length - 1]); lastDate.setDate(lastDate.getDate() + 7); } else { const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day === 0 ? -6 : 1); lastDate = new Date(today.setDate(diff)); } appState.planificacionSemanas.push(asignacion); appState.weekStartDates.push(lastDate.toISOString().split('T')[0]); renderAdminTables(); }
     function clearSpecificWeek(weekIndex) { if (confirm(`¿Eliminar la planificación de la Semana ${weekIndex + 1}?`)) { appState.planificacionSemanas.splice(weekIndex, 1); appState.weekStartDates.splice(weekIndex, 1); renderAdminTables(); } }
     
-    // --- FUNCIÓN MODIFICADA ---
     function renderAdminTables() {
         const container = document.getElementById('admin-tables-container'); container.innerHTML = '';
         if (!appState.planificacionSemanas || appState.planificacionSemanas.length === 0) { container.innerHTML = '<p style="text-align:center;">No hay planificaciones. Haz clic en "Generar Próxima Semana" para empezar.</p>'; return; }
         appState.planificacionSemanas.forEach((asignacion, index) => {
             const weekContainer = document.createElement('div');
             const startDate = new Date(appState.weekStartDates[index]).toLocaleDateString();
-            // Asegura un mínimo de 4 columnas, o más si es necesario
             const maxTareas = Math.max(4, ...Object.values(asignacion).map(arr => (arr || []).length));
             weekContainer.innerHTML = `<div class="week-header"><h3>Semana ${index + 1} (Inicia el ${startDate})</h3><button class="action-button clear-btn" onclick="clearSpecificWeek(${index})">Limpiar esta Semana</button></div>`;
             const table = document.createElement('table'); table.className = 'assignment-table'; table.setAttribute('data-week-index', index);
             let tableHtml = '<thead><tr><th>Empleado</th>';
             for (let i = 1; i <= maxTareas; i++) { tableHtml += `<th>Tarea ${i}</th>`; }
             tableHtml += '</tr></thead><tbody>';
-            appState.empleados.forEach(empleado => {
-                const tareas = asignacion[empleado] || [];
-                tableHtml += `<tr><td class="employee-name">${empleado}</td>`;
-                for (let i = 0; i < maxTareas; i++) { // Bucle hasta el máximo de columnas
-                    tableHtml += `<td contenteditable="true">${tareas[i] || ''}</td>`;
-                }
-                tableHtml += `</tr>`;
-            });
+            appState.empleados.forEach(empleado => { const tareas = asignacion[empleado] || []; tableHtml += `<tr><td class="employee-name">${empleado}</td>`; for (let i = 0; i < maxTareas; i++) { tableHtml += `<td contenteditable="true">${tareas[i] || ''}</td>`; } tableHtml += `</tr>`; });
             table.innerHTML = tableHtml + '</tbody>';
             weekContainer.appendChild(table);
             container.appendChild(weekContainer);
@@ -211,9 +157,42 @@
     function renderTaskManagement() { const l = document.getElementById('task-list'); l.innerHTML = ''; appState.tareas.forEach(t => { l.innerHTML += `<div class="management-item"><span>${t}</span><div><button class="action-button clear-btn" onclick="deleteTask('${t}')">Eliminar</button></div></div>`; }); }
     function addTask() { const i = document.getElementById('new-task-name'); const n = i.value.trim().toLowerCase(); if (n && !appState.tareas.includes(n)) { appState.tareas.push(n); i.value = ''; renderTaskManagement(); renderProfileMatrix(); } }
     function deleteTask(t) { if (confirm(`¿Eliminar la tarea "${t}"?`)) { appState.tareas = appState.tareas.filter(i => i !== t); for (const e in appState.perfiles) { appState.perfiles[e] = appState.perfiles[e].filter(i => i !== t); } appState.planificacionSemanas.forEach(s => { if (s) for (const e in s) { s[e] = s[e].filter(i => i !== t); } }); renderTaskManagement(); renderProfileMatrix(); renderAdminTables(); } }
-    function updateStateFromAdminTables() { const adminTables = document.querySelectorAll('#admin-tables-container .assignment-table'); adminTables.forEach(table => { const weekIndex = parseInt(table.dataset.weekIndex, 10); if (appState.planificacionSemanas[weekIndex]) { const newAssignment = {}; table.querySelectorAll('tbody tr').forEach(row => { const employeeName = row.cells[0].textContent; const tasks = []; for (let i = 1; i < row.cells.length; i++) { const taskText = row.cells[i].textContent.trim(); if (taskText) tasks.push(taskText); } newAssignment[employeeName] = tasks; }); appState.planificacionSemanas[weekIndex] = newAssignment; } }); }
-    function downloadJsonFile() { updateStateFromAdminTables(); const jsonString = JSON.stringify(appState, null, 2); const blob = new Blob([jsonString], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'db.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
-    document.addEventListener("DOMContentLoaded", () => { loadPublicData(); });
+    
+    function updateStateFromAdminTables() {
+        const adminTables = document.querySelectorAll('#admin-tables-container .assignment-table');
+        const newPlanificacionSemanas = [];
+        adminTables.forEach(table => {
+            const newAssignment = {};
+            table.querySelectorAll('tbody tr').forEach(row => {
+                const employeeName = row.cells[0].textContent; const tasks = [];
+                for (let i = 1; i < row.cells.length; i++) {
+                    const taskText = row.cells[i].textContent.trim();
+                    if (taskText) tasks.push(taskText);
+                }
+                newAssignment[employeeName] = tasks;
+            });
+            newPlanificacionSemanas.push(newAssignment);
+        });
+        appState.planificacionSemanas = newPlanificacionSemanas;
+    }
+    
+    function downloadJsonFile() {
+        updateStateFromAdminTables();
+        const jsonString = JSON.stringify(appState, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'db.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadPublicData();
+    });
 </script>
 
 </body>
