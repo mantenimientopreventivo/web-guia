@@ -16,8 +16,8 @@
     "valorar desmontes con momento cero",
     "valorar sigest de emergencias",
     "vistos buenos",
-    "verificar sigest devueltos",
-    "(segurizaciones cr / cr rotas)  sigest y valoracion"
+    "(segurizaciones cr / cr rotas)  sigest y valoracion",
+    "sigest devueltos y pendientes de propuesta"
   ],
   "perfiles": {
     "ines raposo": [
@@ -28,8 +28,8 @@
       "valorar desmontes con momento cero",
       "valorar sigest de emergencias",
       "vistos buenos",
-      "verificar sigest devueltos",
-      "(segurizaciones cr / cr rotas)  sigest y valoracion"
+      "(segurizaciones cr / cr rotas)  sigest y valoracion",
+      "sigest devueltos y pendientes de propuesta"
     ],
     "nicolas ponce": [
       "atencion de mails y derivacion segun el caso",
@@ -38,16 +38,16 @@
       "valorar desmontes con momento cero",
       "valorar sigest de emergencias",
       "vistos buenos",
-      "verificar sigest devueltos",
-      "(segurizaciones cr / cr rotas)  sigest y valoracion"
+      "(segurizaciones cr / cr rotas)  sigest y valoracion",
+      "sigest devueltos y pendientes de propuesta"
     ],
     "gabriela torres": [
       "atencion de mails y derivacion segun el caso",
       "crear sigest de desmontes",
       "postes pendientes de valorar",
       "vistos buenos",
-      "verificar sigest devueltos",
-      "(segurizaciones cr / cr rotas)  sigest y valoracion"
+      "(segurizaciones cr / cr rotas)  sigest y valoracion",
+      "sigest devueltos y pendientes de propuesta"
     ],
     "dante espejo": [
       "carga de planos y datos de red a desmontes",
@@ -77,7 +77,7 @@
       ],
       "gabriela torres": [
         "vistos buenos",
-        "verificar sigest devueltos"
+        "sigest devueltos y pendientes de propuesta"
       ],
       "dante espejo": [
         "planes de estabilidad",
@@ -98,7 +98,7 @@
         "carga de planos y datos de red a desmontes"
       ],
       "gabriela torres": [
-        "verificar sigest devueltos",
+        "sigest devueltos y pendientes de propuesta",
         "postes pendientes de valorar",
         "vistos buenos"
       ],
@@ -108,7 +108,7 @@
     },
     {
       "ines raposo": [
-        "verificar sigest devueltos",
+        "sigest devueltos y pendientes de propuesta",
         "postes pendientes de valorar",
         "seguimiento de desvios"
       ],
