@@ -1,26 +1,26 @@
 {
   "registros": [
     {
-      "id": 1751310447199,
-      "fecha": "2025-06-30",
+      "id": 1752936133026,
+      "fecha": "2025-06-03",
       "tipoMovimiento": "Ingreso",
-      "cantidad": 200,
+      "cantidad": 10,
       "ancho": 40,
-      "alto": 40,
+      "alto": 110,
       "material": "Concreto",
-      "sigest": "",
+      "sigest": "59746355",
       "origen": "retesar"
     },
     {
-      "id": 1751310472814,
-      "fecha": "2025-06-24",
-      "tipoMovimiento": "Ingreso",
-      "cantidad": 6,
-      "ancho": 100,
-      "alto": 100,
+      "id": 1752936197450,
+      "fecha": "2025-06-11",
+      "tipoMovimiento": "Consumo",
+      "cantidad": 2,
+      "ancho": 40,
+      "alto": 110,
       "material": "Concreto",
-      "sigest": "",
-      "origen": "mop"
+      "sigest": "59880385",
+      "origen": "retesar"
     }
   ]
 }
