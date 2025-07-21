@@ -18,7 +18,8 @@
     "valorar desmontes con momento cero",
     "valorar sigest de emergencias",
     "vistos buenos",
-    "verificar sigest devueltos"
+    "verificar sigest devueltos",
+    "operativo zonda"
   ],
   "perfiles": {
     "ines raposo": [
@@ -160,25 +161,25 @@
     },
     {
       "ines raposo": [
-        "sigest y valoracion de camaras rotas",
+        "postes pendientes de valorar",
         "valorar desmontes con momento cero",
-        "seguimiento de desvios",
-        "valorar sigest de emergencias"
+        "seguimiento de desvios"
       ],
       "nicolas ponce": [
         "atencion de mails y derivacion segun el caso",
         "crear sigest de desmontes",
-        "postes pendientes de valorar"
+        "sigest y valoracion de camaras rotas"
       ],
       "gabriela torres": [
         "segurizaciones CR (sigest y valorar)",
-        "vistos buenos",
+        "valorar sigest de emergencias",
         "verificar sigest devueltos"
       ],
       "dante espejo": [
         "planes de estabilidad",
         "gestion de saneamientos",
-        "carga de planos y datos de red a desmontes"
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
       ],
       "tareasNoAsignadas": []
     },
