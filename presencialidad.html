@@ -7,70 +7,260 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: #333; margin: 20px; background-color: #f4f4f4; }
-        .container { max-width: 900px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { color: #0099e4; text-align: center; margin-bottom: 30px; }
+        .admin-login-btn { position: fixed; top: 15px; right: 15px; z-index: 1001; padding: 8px 16px; background-color: #ffc107; color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.3s; }
+        .admin-login-btn:hover { background-color: #e0a800; }
+        .main-container { max-width: 900px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2, h3 { text-align: center; color: #0099e4; margin-bottom: 20px; }
+        .back-button { display: inline-block; margin-bottom: 20px; padding: 10px 15px; background-color: #0099e4; color: white; text-decoration: none; border-radius: 5px; }
+        .back-button:hover { background-color: #0078a8; }
         .employee-schedule { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
         .employee-schedule h2 { margin-top: 0; color: #555; }
         .schedule-day { margin-bottom: 5px; }
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #0099e4;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
+
+        /* Estilos de Admin Panel */
+        #admin-view { margin-top: 40px; }
+        .admin-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
+        .admin-controls button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .admin-controls button:hover { background-color: #0056b3; }
+        .admin-controls .generate-btn { background-color: #28a745; }
+        .admin-controls .generate-btn:hover { background-color: #218838; }
+        .admin-controls .download-btn { background-color: #17a2b8; }
+        .admin-controls .download-btn:hover { background-color: #138496; }
+        .admin-controls .lock-btn { background-color: #dc3545; }
+        .admin-controls .lock-btn:hover { background-color: #c82333; }
+        
+        .management-section { margin-top: 30px; padding: 15px; border: 1px solid #eee; border-radius: 8px; background-color: #fcfcfc;}
+        .management-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px dotted #eee; }
+        .management-item:last-child { border-bottom: none; }
+        .management-item span { flex-grow: 1; font-weight: bold; }
+        .management-item button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .management-item button:hover { background-color: #c82333; }
+        .add-input-group { display: flex; margin-top: 10px; }
+        .add-input-group input { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .add-input-group button { margin-left: 10px; background-color: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;}
+        .add-input-group button:hover { background-color: #218838; }
+
+        .calendar-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .calendar-table thead { background-color: #00A9E0; color: white; }
+        .calendar-table td select { width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <button id="login-button" class="admin-login-btn" onclick="promptForAdmin()">Modo Administrador</button>
+
+    <div id="public-view" class="main-container">
+        <a href="index.html" class="back-button">‹ Volver al Inicio</a>
         <h1>Calendario de Presencialidad</h1>
         <div id="presencialidad-data">Cargando datos...</div>
-        <a href="index.html" class="back-button">Volver al Inicio</a>
+    </div>
+
+    <div id="admin-view" class="main-container" style="display: none;">
+        <a href="index.html" class="back-button">‹ Volver al Inicio</a>
+        <h1>Panel de Administración de Presencialidad</h1>
+        <p style="text-align: center;">Gestiona los empleados y sus días de oficina. Descarga el JSON y súbelo a GitHub para guardar los cambios.</p>
+
+        <div class="admin-controls">
+            <button class="generate-btn" onclick="generateNextMonthCalendar()">Generar Calendario para Próximo Mes</button>
+            <button class="download-btn" onclick="downloadJsonFile()">Guardar y Descargar JSON</button>
+            <button class="lock-btn" onclick="lockAdminView()">Salir del Modo Admin</button>
+        </div>
+
+        <div class="management-section">
+            <h3>Gestión de Empleados</h3>
+            <div id="employee-list-admin"></div>
+            <div class="add-input-group">
+                <input type="text" id="new-employee-name" placeholder="Nuevo empleado">
+                <button onclick="addEmployee()">Agregar</button>
+            </div>
+        </div>
+
+        <div class="management-section" style="margin-top: 20px;">
+            <h3>Calendario por Fecha</h3>
+            <table class="calendar-table">
+                <thead>
+                    <tr id="calendar-header-row">
+                        <th>Empleado</th>
+                    </tr>
+                </thead>
+                <tbody id="calendar-tbody">
+                    </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('presencialidad.json') // Aquí está la CORRECCIÓN: ahora es una ruta relativa
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const container = document.getElementById('presencialidad-data');
-                    container.innerHTML = ''; // Limpiar el mensaje de carga
+        let presencialidadState = {
+            empleados: [],
+            calendar: [] // [{ name: "Empleado", schedule: [{ date: "YYYY-MM-DD", status: "Oficina" }] }]
+        };
 
-                    // Mostrar el calendario (ejemplo simple, puedes mejorar la presentación)
-                    if (data.calendar && Array.isArray(data.calendar)) {
-                        data.calendar.forEach(employee => {
-                            const employeeDiv = document.createElement('div');
-                            employeeDiv.classList.add('employee-schedule');
-                            employeeDiv.innerHTML = `<h2>${employee.name}</h2>`;
-                            
-                            if (employee.schedule && Array.isArray(employee.schedule)) {
-                                employee.schedule.forEach(dayInfo => {
-                                    const dayP = document.createElement('p');
-                                    dayP.classList.add('schedule-day');
-                                    dayP.textContent = `${dayInfo.date}: ${dayInfo.status}`;
-                                    employeeDiv.appendChild(dayP);
-                                });
-                            } else {
-                                employeeDiv.innerHTML += `<p>No hay información de horario para ${employee.name}.</p>`;
-                            }
-                            container.appendChild(employeeDiv);
-                        });
-                    } else {
-                        container.innerHTML = '<p>No se encontraron datos de calendario válidos.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al cargar el archivo JSON:', error);
-                    document.getElementById('presencialidad-data').innerHTML = `<p>Error al cargar los datos de presencialidad: ${error.message}</p>`;
+        const GITHUB_JSON_URL = 'presencialidad.json'; // Ruta relativa
+
+        function promptForAdmin() {
+            const passwordPrompt = prompt("Contraseña:");
+            const decodedPassword = atob("MTU5OA=="); // Contraseña "1598" en Base64
+            if (passwordPrompt === decodedPassword) {
+                document.getElementById('public-view').style.display = 'none';
+                document.getElementById('admin-view').style.display = 'block';
+                document.getElementById('login-button').style.display = 'none';
+                loadAndInitAdminView();
+            } else if (passwordPrompt !== null) {
+                alert("Contraseña incorrecta.");
+            }
+        }
+
+        function lockAdminView() {
+            if (confirm("¿Salir del modo administrador?")) {
+                document.getElementById('public-view').style.display = 'block';
+                document.getElementById('admin-view').style.display = 'none';
+                document.getElementById('login-button').style.display = 'block';
+                loadPublicData(); // Recargar vista pública
+            }
+        }
+
+        async function fetchPresencialidadData() {
+            try {
+                // Añadir un timestamp para evitar la caché del navegador
+                const url = `${GITHUB_JSON_URL}?t=${new Date().getTime()}`;
+                const response = await fetch(url);
+                if (response.status === 404) {
+                     console.warn("presencialidad.json no encontrado, se usará un estado por defecto.");
+                     return { empleados: [], calendar: [] }; // Retornar vacío si no existe
+                }
+                if (!response.ok) {
+                    throw new Error(`Error de red al cargar presencialidad.json (Status: ${response.status})`);
+                }
+                const textData = await response.text();
+                return JSON.parse(textData);
+            } catch (error) {
+                console.error("Error en fetchPresencialidadData:", error);
+                alert(`Error al cargar los datos de presencialidad: ${error.message}\nSe usará un estado vacío o por defecto.`);
+                return { empleados: [], calendar: [] };
+            }
+        }
+
+        async function loadPublicData() {
+            presencialidadState = await fetchPresencialidadData();
+            renderPublicCalendar(presencialidadState);
+        }
+
+        function renderPublicCalendar(data) {
+            const container = document.getElementById('presencialidad-data');
+            container.innerHTML = '';
+
+            if (!data.calendar || data.calendar.length === 0) {
+                container.innerHTML = '<p style="text-align: center;">No hay información de presencialidad disponible.</p>';
+                return;
+            }
+
+            // Ordenar el calendario para mostrar primero a los empleados que tienen schedule
+            const sortedCalendar = [...data.calendar].sort((a, b) => {
+                const aHasSchedule = a.schedule && a.schedule.length > 0;
+                const bHasSchedule = b.schedule && b.schedule.length > 0;
+                if (aHasSchedule && !bHasSchedule) return -1;
+                if (!aHasSchedule && bHasSchedule) return 1;
+                return a.name.localeCompare(b.name); // Orden alfabético si ambos tienen o no tienen horario
+            });
+
+            // Agrupar el calendario por fecha
+            const datesMap = new Map();
+            sortedCalendar.forEach(employee => {
+                if (employee.schedule) {
+                    employee.schedule.forEach(dayInfo => {
+                        if (!datesMap.has(dayInfo.date)) {
+                            datesMap.set(dayInfo.date, []);
+                        }
+                        datesMap.get(dayInfo.date).push({ employee: employee.name, status: dayInfo.status });
+                    });
+                }
+            });
+
+            // Convertir el mapa a un array y ordenar por fecha
+            const sortedDates = Array.from(datesMap.keys()).sort();
+
+            if (sortedDates.length === 0) {
+                 container.innerHTML = '<p style="text-align: center;">No hay fechas de presencialidad planificadas.</p>';
+                 return;
+            }
+
+            const table = document.createElement('table');
+            table.className = 'calendar-table'; // Usamos la misma clase de tabla para estilo
+            let tableHtml = '<thead><tr><th>Fecha</th>';
+
+            // Agregamos encabezados para cada empleado en el orden de `empleados` en presencialidadState
+            const allEmployeesInOrder = [...new Set(data.empleados.concat(sortedCalendar.map(e => e.name)))];
+            allEmployeesInOrder.forEach(emp => {
+                tableHtml += `<th>${emp}</th>`;
+            });
+            tableHtml += '</tr></thead><tbody>';
+
+            sortedDates.forEach(date => {
+                tableHtml += `<tr><td>${new Date(date).toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })}</td>`;
+                const employeesForDate = datesMap.get(date) || [];
+                const employeeStatusMap = new Map(employeesForDate.map(item => [item.employee, item.status]));
+
+                allEmployeesInOrder.forEach(empName => {
+                    const status = employeeStatusMap.get(empName) || '-'; // '-' si no hay status para ese día
+                    tableHtml += `<td>${status}</td>`;
                 });
-        });
-    </script>
-</body>
-</html>
+                tableHtml += '</tr>';
+            });
+            tableHtml += '</tbody>';
+            table.innerHTML = tableHtml;
+            container.appendChild(table);
+        }
+
+
+        async function loadAndInitAdminView() {
+            presencialidadState = await fetchPresencialidadData();
+            // Asegurarse de que los empleados del calendario existan en la lista de empleados general
+            const employeesInCalendar = new Set(presencialidadState.calendar.map(e => e.name));
+            employeesInCalendar.forEach(emp => {
+                if (!presencialidadState.empleados.includes(emp)) {
+                    presencialidadState.empleados.push(emp);
+                }
+            });
+            presencialidadState.empleados.sort(); // Ordenar alfabéticamente
+            renderAdminPanel();
+        }
+
+        function renderAdminPanel() {
+            renderEmployeeManagement();
+            renderCalendarTable();
+        }
+
+        function renderEmployeeManagement() {
+            const list = document.getElementById('employee-list-admin');
+            list.innerHTML = '';
+            presencialidadState.empleados.forEach(employee => {
+                list.innerHTML += `
+                    <div class="management-item">
+                        <span>${employee}</span>
+                        <button onclick="deleteEmployee('${employee}')">Eliminar</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addEmployee() {
+            const input = document.getElementById('new-employee-name');
+            const name = input.value.trim().toLowerCase();
+            if (name && !presencialidadState.empleados.includes(name)) {
+                presencialidadState.empleados.push(name);
+                presencialidadState.empleados.sort(); // Mantener orden alfabético
+                // Añadir el nuevo empleado al calendario si aún no está
+                if (!presencialidadState.calendar.some(emp => emp.name === name)) {
+                    presencialidadState.calendar.push({ name: name, schedule: [] });
+                }
+                presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name));
+                input.value = '';
+                renderAdminPanel();
+            } else if (name) {
+                alert('Este empleado ya existe.');
+            }
+        }
+
+        function deleteEmployee(nameToDelete) {
+            if (confirm(`¿Estás seguro de que quieres eliminar a ${nameToDelete}? Esto eliminará todo su registro de presencialidad.`)) {
+                presencialidadState.empleados = presencial
