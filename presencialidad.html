@@ -533,7 +533,7 @@
 
             // Preparar las filas de datos
             sortedDates.forEach(date => {
-                const row = [new Date(date).toLocaleDateString('es-ES')]; // Formato de fecha localizado
+                const row = [new Date(date).toLocaleDateString('es-ES')]; // Formato de fecha localizado (ej. 31/07/2025)
                 const employeeStatusMap = new Map();
                 data.calendar.forEach(employee => {
                     employee.schedule.forEach(dayInfo => {
