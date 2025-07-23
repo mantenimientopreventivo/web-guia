@@ -43,7 +43,45 @@
         .calendar-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         .calendar-table thead { background-color: #00A9E0; color: white; }
-        .calendar-table td select { width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        /* Ajuste de select para que los colores se vean bien */
+        .calendar-table td select { width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px; background-color: white; /* Base */ color: #333; }
+        
+        /* Estilos para los colores de estado en la tabla (vista pública y selects en admin) */
+        .status-oficina { background-color: #e6ffe6; color: #28a745; font-weight: bold; } /* Verde claro para Oficina */
+        .status-remoto { background-color: #e6f7ff; color: #007bff; font-weight: bold; } /* Azul claro para Remoto */
+        .status-empty { background-color: white; color: #333; } /* Fondo blanco para vacío */
+        
+        /* Estilos específicos para los selects en la vista de administración */
+        .calendar-table td select.select-oficina { background-color: #a7f7a7; color: #004d00; } /* Verde más oscuro para el select */
+        .calendar-table td select.select-remoto { background-color: #a7d9f7; color: #003366; } /* Azul más oscuro para el select */
+        .calendar-table td select.select-empty { background-color: #f7f7f7; color: #333; } /* Gris claro para el select vacío */
+
+
+        /* Estilos para la sección de referencias */
+        .references-section {
+            margin-top: 40px;
+            padding: 15px;
+            background-color: #eaf1f7;
+            border: 1px solid #d4e0eb;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .reference-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 15px;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .color-box.oficina { background-color: #28a745; }
+        .color-box.remoto { background-color: #007bff; }
     </style>
 </head>
 <body>
@@ -53,6 +91,16 @@
         <a href="index.html" class="back-button">‹ Volver al Inicio</a>
         <h1>Calendario de Presencialidad</h1>
         <div id="presencialidad-data">Cargando datos...</div>
+
+        <div class="references-section">
+            <h3>Referencias de Estado</h3>
+            <div class="reference-item">
+                <div class="color-box oficina"></div> Oficina
+            </div>
+            <div class="reference-item">
+                <div class="color-box remoto"></div> Remoto
+            </div>
+        </div>
     </div>
 
     <div id="admin-view" class="main-container" style="display: none;">
@@ -86,6 +134,16 @@
                 <tbody id="calendar-tbody">
                     </tbody>
             </table>
+        </div>
+        
+        <div class="references-section">
+            <h3>Referencias de Estado</h3>
+            <div class="reference-item">
+                <div class="color-box oficina"></div> Oficina
+            </div>
+            <div class="reference-item">
+                <div class="color-box remoto"></div> Remoto
+            </div>
         </div>
     </div>
 
@@ -203,7 +261,15 @@
 
                 allEmployeesInOrder.forEach(empName => {
                     const status = employeeStatusMap.get(empName) || '-'; // '-' si no hay status para ese día
-                    tableHtml += `<td>${status}</td>`;
+                    let statusClass = '';
+                    if (status === 'Oficina') {
+                        statusClass = 'status-oficina';
+                    } else if (status === 'Remoto') {
+                        statusClass = 'status-remoto';
+                    } else {
+                        statusClass = 'status-empty';
+                    }
+                    tableHtml += `<td class="${statusClass}">${status}</td>`; // Aplicar clase de estilo
                 });
                 tableHtml += '</tr>';
             });
@@ -315,8 +381,14 @@
                 sortedDates.forEach(date => {
                     // Busca el estado para la fecha actual
                     const status = employeeCalendar.schedule?.find(day => day.date === date)?.status || '';
+                    let selectClass = 'select-empty'; // Clase por defecto para selects
+                    if (status === 'Oficina') {
+                        selectClass = 'select-oficina';
+                    } else if (status === 'Remoto') {
+                        selectClass = 'select-remoto';
+                    }
                     rowHtml += `<td>
-                                <select onchange="updateSchedule('${employeeName}', '${date}', this.value)">
+                                <select onchange="updateSchedule(this, '${employeeName}', '${date}', this.value)" class="${selectClass}">
                                     <option value="" ${status === '' ? 'selected' : ''}></option>
                                     <option value="Oficina" ${status === 'Oficina' ? 'selected' : ''}>Oficina</option>
                                     <option value="Remoto" ${status === 'Remoto' ? 'selected' : ''}>Remoto</option>
@@ -326,9 +398,26 @@
                 rowHtml += '</tr>';
                 tbody.innerHTML += rowHtml;
             });
+            // Aplicar los colores iniciales a los selects después de que la tabla se renderiza
+            tbody.querySelectorAll('select').forEach(select => {
+                applySelectColor(select);
+            });
         }
 
-        function updateSchedule(employeeName, date, status) {
+        // Nueva función para aplicar el color al select
+        function applySelectColor(selectElement) {
+            selectElement.classList.remove('select-oficina', 'select-remoto', 'select-empty');
+            if (selectElement.value === 'Oficina') {
+                selectElement.classList.add('select-oficina');
+            } else if (selectElement.value === 'Remoto') {
+                selectElement.classList.add('select-remoto');
+            } else {
+                selectElement.classList.add('select-empty');
+            }
+        }
+
+        // Modificamos updateSchedule para que reciba el elemento select
+        function updateSchedule(selectElement, employeeName, date, status) {
             let employeeEntry = presencialidadState.calendar.find(e => e.name === employeeName);
             // Si el empleado no existe en el calendario, lo creamos
             if (!employeeEntry) {
@@ -351,8 +440,17 @@
                     employeeEntry.schedule.sort((a, b) => new Date(a.date) - new Date(b.date)); // Mantenemos el horario ordenado por fecha
                 }
             }
-            // Re-renderizar el panel de administración para reflejar cambios en columnas o datos
-            renderAdminPanel();
+            
+            // Aplicar color al select directamente
+            applySelectColor(selectElement);
+
+            // Re-renderizar el panel de administración para reflejar cambios en columnas o datos si es necesario (ej. si se añade una fecha nueva)
+            // No lo hacemos automáticamente para no perder el foco si estás editando muchos combos.
+            // Si eliminas todas las entradas de un día, la columna de ese día no desaparecerá hasta que recargues el admin view.
+            // Considera si quieres un `renderAdminPanel()` aquí o solo cuando se genere el calendario o se añada/elimine un empleado.
+            // Por ahora, solo actualizamos el color del combo.
+            // Si se borra el status de un día y quieres que la columna desaparezca, necesitarías un renderAdminPanel() aquí
+            // o un mecanismo más sofisticado. Para evitar parpadeos, lo dejamos sin renderAdminPanel() aquí.
         }
 
         function generateNextMonthCalendar() {
@@ -362,15 +460,11 @@
             // Calcular el número de días en el próximo mes
             const lastDayOfNextMonth = new Date(nextMonth.getFullYear(), nextMonth.getMonth() + 1, 0).getDate();
 
-            // NOTA: No limpiamos el calendario completo. Solo añadimos/actualizamos el próximo mes.
-            // Los días de meses anteriores se mantienen.
-
             presencialidadState.empleados.forEach(employeeName => {
                 let employeeEntry = presencialidadState.calendar.find(e => e.name === employeeName);
                 if (!employeeEntry) {
                     employeeEntry = { name: employeeName, schedule: [] };
                     presencialidadState.calendar.push(employeeEntry);
-                    presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name));
                 }
 
                 for (let day = 1; day <= lastDayOfNextMonth; day++) {
@@ -378,24 +472,23 @@
                     // Solo agregar días de Lunes a Viernes
                     if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) { // 1=Lunes, 5=Viernes
                         const dateString = currentDate.toISOString().split('T')[0];
-                        // Buscar si ya existe una entrada para esta fecha y empleado
+                        
                         let existingDay = employeeEntry.schedule.find(s => s.date === dateString);
                         
                         if (existingDay) {
-                            // Si ya existe, no hacemos nada o podrías decidir resetear el estado si quieres
-                            // existingDay.status = ""; // Descomentar para resetear a vacío
+                            // Si ya existe, no hacemos nada, o lo reseteamos si se desea
+                            // existingDay.status = "Remoto"; // Puedes forzar el reset a remoto si generas de nuevo
                         } else {
-                            // Si no existe, añadir con estado vacío por defecto
-                            employeeEntry.schedule.push({ date: dateString, status: "" }); 
+                            // Si no existe, añadir con "Remoto" por defecto
+                            employeeEntry.schedule.push({ date: dateString, status: "Remoto" }); 
                         }
                     }
                 }
                 employeeEntry.schedule.sort((a, b) => new Date(a.date) - new Date(b.date));
             });
-            // Asegurarse de que el array principal 'calendar' también esté ordenado por nombre de empleado
             presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name)); 
-            renderAdminPanel();
-            alert("Calendario del próximo mes generado con días laborales. Revisa y asigna los estados (Oficina/Remoto).");
+            renderAdminPanel(); // Se vuelve a renderizar para mostrar las nuevas fechas y estados
+            alert("Calendario del próximo mes generado con días laborales en 'Remoto' por defecto.");
         }
 
 
