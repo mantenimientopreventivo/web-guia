@@ -444,13 +444,9 @@
             // Aplicar color al select directamente
             applySelectColor(selectElement);
 
-            // Re-renderizar el panel de administración para reflejar cambios en columnas o datos si es necesario (ej. si se añade una fecha nueva)
-            // No lo hacemos automáticamente para no perder el foco si estás editando muchos combos.
-            // Si eliminas todas las entradas de un día, la columna de ese día no desaparecerá hasta que recargues el admin view.
-            // Considera si quieres un `renderAdminPanel()` aquí o solo cuando se genere el calendario o se añada/elimine un empleado.
-            // Por ahora, solo actualizamos el color del combo.
-            // Si se borra el status de un día y quieres que la columna desaparezca, necesitarías un renderAdminPanel() aquí
-            // o un mecanismo más sofisticado. Para evitar parpadeos, lo dejamos sin renderAdminPanel() aquí.
+            // No re-renderizamos la tabla completa aquí para evitar parpadeos y pérdida de foco
+            // en el panel de administración cuando el usuario cambia múltiples selectores.
+            // La tabla se re-renderizará al generar el calendario o al añadir/eliminar empleados.
         }
 
         function generateNextMonthCalendar() {
@@ -476,8 +472,11 @@
                         let existingDay = employeeEntry.schedule.find(s => s.date === dateString);
                         
                         if (existingDay) {
-                            // Si ya existe, no hacemos nada, o lo reseteamos si se desea
-                            // existingDay.status = "Remoto"; // Puedes forzar el reset a remoto si generas de nuevo
+                            // Si ya existe, actualizamos a "Remoto" si no tiene un valor ya asignado
+                            // Esto previene sobrescribir una asignación manual si se regenera
+                            if (existingDay.status === "" || existingDay.status === "-") {
+                                existingDay.status = "Remoto"; 
+                            }
                         } else {
                             // Si no existe, añadir con "Remoto" por defecto
                             employeeEntry.schedule.push({ date: dateString, status: "Remoto" }); 
