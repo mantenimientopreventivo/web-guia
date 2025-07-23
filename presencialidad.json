@@ -10,41 +10,41 @@
     {
       "name": "Juan Perez",
       "schedule": [
-        { "date": "2025-08-01", "status": "Oficina" },
-        { "date": "2025-08-04", "status": "Remoto" },
-        { "date": "2025-08-05", "status": "Oficina" }
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
       ]
     },
     {
       "name": "Maria Garcia",
       "schedule": [
-        { "date": "2025-08-01", "status": "Remoto" },
-        { "date": "2025-08-04", "status": "Oficina" },
-        { "date": "2025-08-05", "status": "Remoto" }
+        { "date": "2025-07-28", "status": "Remoto" },
+        { "date": "2025-07-29", "status": "Oficina" },
+        { "date": "2025-07-30", "status": "Remoto" }
       ]
     },
     {
       "name": "Carlos Rodriguez",
       "schedule": [
-        { "date": "2025-08-01", "status": "Oficina" },
-        { "date": "2025-08-04", "status": "Oficina" },
-        { "date": "2025-08-05", "status": "Remoto" }
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Oficina" },
+        { "date": "2025-07-30", "status": "Remoto" }
       ]
     },
     {
       "name": "Ana Lopez",
       "schedule": [
-        { "date": "2025-08-01", "status": "Remoto" },
-        { "date": "2025-08-04", "status": "Remoto" },
-        { "date": "2025-08-05", "status": "Oficina" }
+        { "date": "2025-07-28", "status": "Remoto" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
       ]
     },
     {
       "name": "Pedro Sanchez",
       "schedule": [
-        { "date": "2025-08-01", "status": "Oficina" },
-        { "date": "2025-08-04", "status": "Remoto" },
-        { "date": "2025-08-05", "status": "Oficina" }
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
       ]
     }
   ]
