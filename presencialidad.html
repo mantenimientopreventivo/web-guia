@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <script>
+    <script defer>
         let presencialidadState = {
             empleados: [],
             calendar: [] // [{ name: "Empleado", schedule: [{ date: "YYYY-MM-DD", status: "Oficina" }] }]
@@ -135,7 +135,7 @@
                 return JSON.parse(textData);
             } catch (error) {
                 console.error("Error en fetchPresencialidadData:", error);
-                alert(`Error al cargar los datos de presencialidad: ${error.message}\nSe usará un estado vacío o por defecto.`);
+                document.getElementById('presencialidad-data').innerHTML = `<p style="color:red; text-align:center;">Error al cargar los datos de presencialidad: ${error.message}</p>`;
                 return { empleados: [], calendar: [] };
             }
         }
@@ -147,7 +147,7 @@
 
         function renderPublicCalendar(data) {
             const container = document.getElementById('presencialidad-data');
-            container.innerHTML = '';
+            container.innerHTML = ''; // Limpiar "Cargando datos..."
 
             if (!data.calendar || data.calendar.length === 0) {
                 container.innerHTML = '<p style="text-align: center;">No hay información de presencialidad disponible.</p>';
@@ -189,7 +189,8 @@
             let tableHtml = '<thead><tr><th>Fecha</th>';
 
             // Agregamos encabezados para cada empleado en el orden de `empleados` en presencialidadState
-            const allEmployeesInOrder = [...new Set(data.empleados.concat(sortedCalendar.map(e => e.name)))];
+            // Usamos `allEmployeesInOrder` para asegurar que el orden de las columnas sea consistente
+            const allEmployeesInOrder = [...new Set(data.empleados.concat(sortedCalendar.map(e => e.name)))].sort(); // Aseguramos que la lista sea única y ordenada
             allEmployeesInOrder.forEach(emp => {
                 tableHtml += `<th>${emp}</th>`;
             });
@@ -245,7 +246,7 @@
 
         function addEmployee() {
             const input = document.getElementById('new-employee-name');
-            const name = input.value.trim().toLowerCase();
+            const name = input.value.trim(); // No convertir a minúsculas para nombres propios
             if (name && !presencialidadState.empleados.includes(name)) {
                 presencialidadState.empleados.push(name);
                 presencialidadState.empleados.sort(); // Mantener orden alfabético
@@ -263,4 +264,157 @@
 
         function deleteEmployee(nameToDelete) {
             if (confirm(`¿Estás seguro de que quieres eliminar a ${nameToDelete}? Esto eliminará todo su registro de presencialidad.`)) {
-                presencialidadState.empleados = presencial
+                presencialidadState.empleados = presencialidadState.empleados.filter(name => name !== nameToDelete);
+                presencialidadState.calendar = presencialidadState.calendar.filter(employee => employee.name !== nameToDelete);
+                renderAdminPanel();
+            }
+        }
+
+        function renderCalendarTable() {
+            const headerRow = document.getElementById('calendar-header-row');
+            const tbody = document.getElementById('calendar-tbody');
+            headerRow.innerHTML = '<th>Empleado</th>';
+            tbody.innerHTML = '';
+
+            // Obtener todas las fechas únicas del calendario
+            const allDates = new Set();
+            // Recorre los empleados en el orden definido en presencialidadState.empleados
+            presencialidadState.empleados.forEach(empName => {
+                const employeeEntry = presencialidadState.calendar.find(e => e.name === empName);
+                if (employeeEntry && employeeEntry.schedule) {
+                    employeeEntry.schedule.forEach(dayInfo => allDates.add(dayInfo.date));
+                }
+            });
+            
+            // Si no hay empleados o no hay fechas, no generamos la tabla de calendario
+            if (presencialidadState.empleados.length === 0 && allDates.size === 0) {
+                tbody.innerHTML = '<tr><td colspan="1">No hay empleados ni fechas en el calendario.</td></tr>';
+                return;
+            }
+
+            const sortedDates = Array.from(allDates).sort();
+
+            // Rellenar encabezado de fechas
+            sortedDates.forEach(date => {
+                headerRow.innerHTML += `<th>${new Date(date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })}</th>`;
+            });
+
+            // Rellenar cuerpo de la tabla
+            presencialidadState.empleados.forEach(employeeName => {
+                let rowHtml = `<tr><td>${employeeName}</td>`;
+                // Busca la entrada del empleado en el 'calendar' array
+                let employeeCalendar = presencialidadState.calendar.find(e => e.name === employeeName);
+                
+                // Si el empleado no tiene una entrada en 'calendar', créala para evitar errores
+                if (!employeeCalendar) {
+                    employeeCalendar = { name: employeeName, schedule: [] };
+                    presencialidadState.calendar.push(employeeCalendar);
+                    presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name));
+                }
+
+                sortedDates.forEach(date => {
+                    // Busca el estado para la fecha actual
+                    const status = employeeCalendar.schedule?.find(day => day.date === date)?.status || '';
+                    rowHtml += `<td>
+                                <select onchange="updateSchedule('${employeeName}', '${date}', this.value)">
+                                    <option value="" ${status === '' ? 'selected' : ''}></option>
+                                    <option value="Oficina" ${status === 'Oficina' ? 'selected' : ''}>Oficina</option>
+                                    <option value="Remoto" ${status === 'Remoto' ? 'selected' : ''}>Remoto</option>
+                                </select>
+                            </td>`;
+                });
+                rowHtml += '</tr>';
+                tbody.innerHTML += rowHtml;
+            });
+        }
+
+        function updateSchedule(employeeName, date, status) {
+            let employeeEntry = presencialidadState.calendar.find(e => e.name === employeeName);
+            // Si el empleado no existe en el calendario, lo creamos
+            if (!employeeEntry) {
+                employeeEntry = { name: employeeName, schedule: [] };
+                presencialidadState.calendar.push(employeeEntry);
+                presencialidadState.calendar.sort((a, b) => a.name.localeCompare(b.name)); // Aseguramos el orden
+            }
+
+            let dayEntry = employeeEntry.schedule.find(day => day.date === date);
+
+            if (status === "") {
+                if (dayEntry) { // Si el estado está vacío y la entrada existe, la eliminamos
+                    employeeEntry.schedule = employeeEntry.schedule.filter(day => day.date !== date);
+                }
+            } else { // Si hay un estado, actualizamos o añadimos la entrada
+                if (dayEntry) {
+                    dayEntry.status = status;
+                } else {
+                    employeeEntry.schedule.push({ date: date, status: status });
+                    employeeEntry.schedule.sort((a, b) => new Date(a.date) - new Date(b.date)); // Mantenemos el horario ordenado por fecha
+                }
+            }
+            // Re-renderizar el panel de administración para reflejar cambios en columnas o datos
+            renderAdminPanel();
+        }
+
+        function generateNextMonthCalendar() {
+            const today = new Date();
+            const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Primer día del próximo mes
+
+            // Calcular el número de días en el próximo mes
+            const lastDayOfNextMonth = new Date(nextMonth.getFullYear(), nextMonth.getMonth() + 1, 0).getDate();
+
+            // NOTA: No limpiamos el calendario completo. Solo añadimos/actualizamos el próximo mes.
+            // Los días de meses anteriores se mantienen.
+
+            presencialidadState.empleados.forEach(employeeName => {
+                let employeeEntry = presencialidadState.calendar.find(e => e.name === employeeName);
+                if (!employeeEntry) {
+                    employeeEntry = { name: employeeName, schedule: [] };
+                    presencialidadState.calendar.push(employeeEntry);
+                    presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name));
+                }
+
+                for (let day = 1; day <= lastDayOfNextMonth; day++) {
+                    const currentDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), day);
+                    // Solo agregar días de Lunes a Viernes
+                    if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) { // 1=Lunes, 5=Viernes
+                        const dateString = currentDate.toISOString().split('T')[0];
+                        // Buscar si ya existe una entrada para esta fecha y empleado
+                        let existingDay = employeeEntry.schedule.find(s => s.date === dateString);
+                        
+                        if (existingDay) {
+                            // Si ya existe, no hacemos nada o podrías decidir resetear el estado si quieres
+                            // existingDay.status = ""; // Descomentar para resetear a vacío
+                        } else {
+                            // Si no existe, añadir con estado vacío por defecto
+                            employeeEntry.schedule.push({ date: dateString, status: "" }); 
+                        }
+                    }
+                }
+                employeeEntry.schedule.sort((a, b) => new Date(a.date) - new Date(b.date));
+            });
+            // Asegurarse de que el array principal 'calendar' también esté ordenado por nombre de empleado
+            presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name)); 
+            renderAdminPanel();
+            alert("Calendario del próximo mes generado con días laborales. Revisa y asigna los estados (Oficina/Remoto).");
+        }
+
+
+        function downloadJsonFile() {
+            const jsonString = JSON.stringify(presencialidadState, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'presencialidad.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert("Archivo presencialidad.json generado y listo para descargar. Recuerda subirlo a GitHub.");
+        }
+
+        // Cargar datos al iniciar la página (vista pública)
+        document.addEventListener('DOMContentLoaded', loadPublicData);
+    </script>
+</body>
+</html>
