@@ -1,0 +1,44 @@
+{
+  "calendar": [
+    {
+      "name": "Empleado 1",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
+      ]
+    },
+    {
+      "name": "Empleado 2",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Remoto" },
+        { "date": "2025-07-29", "status": "Oficina" },
+        { "date": "2025-07-30", "status": "Remoto" }
+      ]
+    },
+    {
+      "name": "Empleado 3",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Oficina" },
+        { "date": "2025-07-30", "status": "Remoto" }
+      ]
+    },
+    {
+      "name": "Empleado 4",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Remoto" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
+      ]
+    },
+    {
+      "name": "Empleado 5",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
+      ]
+    }
+  ]
+}

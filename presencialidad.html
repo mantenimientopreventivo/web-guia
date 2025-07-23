@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Presencialidad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: #333; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 900px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #0099e4; text-align: center; margin-bottom: 30px; }
+        .employee-schedule { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+        .employee-schedule h2 { margin-top: 0; color: #555; }
+        .schedule-day { margin-bottom: 5px; }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #0099e4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calendario de Presencialidad</h1>
+        <div id="presencialidad-data">Cargando datos...</div>
+        <a href="index.html" class="back-button">Volver al Inicio</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('presencialidad.json') // Aquí está la CORRECCIÓN: ahora es una ruta relativa
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const container = document.getElementById('presencialidad-data');
+                    container.innerHTML = ''; // Limpiar el mensaje de carga
+
+                    // Mostrar el calendario (ejemplo simple, puedes mejorar la presentación)
+                    if (data.calendar && Array.isArray(data.calendar)) {
+                        data.calendar.forEach(employee => {
+                            const employeeDiv = document.createElement('div');
+                            employeeDiv.classList.add('employee-schedule');
+                            employeeDiv.innerHTML = `<h2>${employee.name}</h2>`;
+                            
+                            if (employee.schedule && Array.isArray(employee.schedule)) {
+                                employee.schedule.forEach(dayInfo => {
+                                    const dayP = document.createElement('p');
+                                    dayP.classList.add('schedule-day');
+                                    dayP.textContent = `${dayInfo.date}: ${dayInfo.status}`;
+                                    employeeDiv.appendChild(dayP);
+                                });
+                            } else {
+                                employeeDiv.innerHTML += `<p>No hay información de horario para ${employee.name}.</p>`;
+                            }
+                            container.appendChild(employeeDiv);
+                        });
+                    } else {
+                        container.innerHTML = '<p>No se encontraron datos de calendario válidos.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar el archivo JSON:', error);
+                    document.getElementById('presencialidad-data').innerHTML = `<p>Error al cargar los datos de presencialidad: ${error.message}</p>`;
+                });
+        });
+    </script>
+</body>
+</html>

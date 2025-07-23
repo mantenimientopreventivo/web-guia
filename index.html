@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión Integral de Mantenimiento Preventivo</title>
-    <!-- Agregamos el enlace a la librería de iconos Font Awesome (requiere internet) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Estilos Generales y Fondo */
@@ -76,105 +75,4 @@
         .color-cyan .button-icon-wrapper   { background: linear-gradient(135deg, #17a2b8, #117a8b); }
         .color-orange .button-icon-wrapper{ background: linear-gradient(135deg, #fd7e14, #d35400); }
         .color-red .button-icon-wrapper    { background: linear-gradient(135deg, #dc3545, #b21f2d); }
-        .color-purple .button-icon-wrapper { background: linear-gradient(135deg, #6f42c1, #563d7c); }
-
-        
-        /* Estilos de Botones Inactivos */
-        .topic-button.inactive {
-            background: rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #666; /* Texto gris oscuro para inactivos */
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        .topic-button.inactive .button-icon-wrapper {
-            background: rgba(0, 0, 0, 0.3);
-            box-shadow: none;
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #999;
-        }
-        
-        /* Efecto Hover y Active para botones ACTIVOS */
-        .topic-button:not(.inactive):hover {
-            transform: translateY(-3px);
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.5));
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        .topic-button:not(.inactive):active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-        }
-        
-        /* Adaptación para Móviles */
-        @media (max-width: 768px) {
-            h1 { font-size: 1.8em; }
-        }
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>GESTION INTEGRAL DE MANTENIMIENTO PREVENTIVO</h1>
-        
-        <div class="grid-container">
-            <!-- Botones activos -->
-            <a href="actividades-diarias.html" class="topic-button color-green">
-                <span class="button-text">Actividades Diarias</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-calendar-days"></i></span>
-            </a>
-            <a href="desmontes.html" class="topic-button color-orange">
-                <span class="button-text">Desmontes</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-person-digging"></i></span>
-            </a>
-            <a href="gestion-desvios.html" class="topic-button color-purple">
-                <span class="button-text">Gestión de desvíos</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-route"></i></span>
-            </a>
-            <a href="centrales-cuyo.html" class="topic-button color-blue">
-                <span class="button-text">Centrales de Cuyo</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-server"></i></span>
-             </a>
-             <a href="segurizacion-camaras.html" class="topic-button color-red">
-                <span class="button-text">Segurización de cámaras</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-shield-halved"></i></span>
-            </a>
-            <a href="valorar-postes-riendas.html" class="topic-button color-cyan">
-                <span class="button-text">Valorar postes y riendas</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-hand-holding-dollar"></i></span>
-            </a>
-            <a href="motivos.html" class="topic-button color-blue">
-                <span class="button-text">Motivos</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-magnifying-glass"></i></span>
-            </a>
-             <a href="stock-tapas.html" class="topic-button color-green">
-                <span class="button-text">Stock de Tapas</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-boxes-stacked"></i></span>
-            </a>
-            <a href="incidencias-ftth.html" class="topic-button color-cyan">
-                <span class="button-text">Procedimientos FTTH</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-network-wired"></i></span>
-            </a>
-            <!-- Botón de Centrales Vendidas (MODIFICADO para abrir en nueva pestaña) -->
-            <a href="https://telefonicacorp-my.sharepoint.com/:x:/r/personal/ernesto_casati_telefonica_com/Documents/mantenimiento/centrales%20vendidas.xlsx?d=wc730f88bda07431696245faa97de6c01&csf=1&web=1&e=dBFddA" class="topic-button color-purple" target="_blank" rel="noopener noreferrer">
-                <span class="button-text">Centrales vendidas</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-file-excel"></i></span>
-            </a>
-
-            <!-- ¡NUEVO BOTÓN AÑADIDO AQUÍ! -->
-            <a href="horas-ex-vacaciones.html" class="topic-button color-orange">
-                <span class="button-text">Horas EX y Vacaciones</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-clock"></i></span>
-            </a>
-            <!-------------------------------->
-
-            <!-- Botón inactivo -->
-            <a href="#" class="topic-button inactive">
-                <span class="button-text">Apertura de Incidencias</span>
-                <span class="button-icon-wrapper"><i class="fa-solid fa-file-circle-plus"></i></span>
-            </a>
-        </div>
-    </div>
-</body>
-</html>
+        .color-purple .button-icon-wrapper { background
