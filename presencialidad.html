@@ -82,6 +82,24 @@
         }
         .color-box.oficina { background-color: #28a745; }
         .color-box.remoto { background-color: #007bff; }
+
+        /* Estilo para el botón de descarga en la vista pública */
+        .download-public-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background-color: #007bff; /* Un azul estándar */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .download-public-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +109,8 @@
         <a href="index.html" class="back-button">‹ Volver al Inicio</a>
         <h1>Calendario de Presencialidad</h1>
         <div id="presencialidad-data">Cargando datos...</div>
+
+        <button class="download-public-btn" onclick="exportCalendarToCSV()">Descargar Calendario (Excel/CSV)</button>
 
         <div class="references-section">
             <h3>Referencias de Estado</h3>
@@ -489,6 +509,74 @@
             renderAdminPanel(); // Se vuelve a renderizar para mostrar las nuevas fechas y estados
             alert("Calendario del próximo mes generado con días laborales en 'Remoto' por defecto.");
         }
+
+        // --- Nueva función para exportar a CSV ---
+        function exportCalendarToCSV() {
+            const data = presencialidadState;
+            if (!data.calendar || data.calendar.length === 0) {
+                alert("No hay datos en el calendario para exportar.");
+                return;
+            }
+
+            // Obtener todas las fechas únicas y ordenarlas
+            const allDates = new Set();
+            data.calendar.forEach(employee => {
+                if (employee.schedule) {
+                    employee.schedule.forEach(dayInfo => allDates.add(dayInfo.date));
+                }
+            });
+            const sortedDates = Array.from(allDates).sort();
+
+            // Preparar las cabeceras (primera fila del CSV)
+            const headers = ['Fecha'].concat(data.empleados);
+            let csvContent = headers.map(header => escapeCsv(header)).join(',') + '\n';
+
+            // Preparar las filas de datos
+            sortedDates.forEach(date => {
+                const row = [new Date(date).toLocaleDateString('es-ES')]; // Formato de fecha localizado
+                const employeeStatusMap = new Map();
+                data.calendar.forEach(employee => {
+                    employee.schedule.forEach(dayInfo => {
+                        if (dayInfo.date === date) {
+                            employeeStatusMap.set(employee.name, dayInfo.status);
+                        }
+                    });
+                });
+
+                data.empleados.forEach(empName => {
+                    row.push(employeeStatusMap.get(empName) || '-'); // Usa '-' si no hay estado para ese día
+                });
+                csvContent += row.map(cell => escapeCsv(cell)).join(',') + '\n';
+            });
+
+            // Función auxiliar para escapar valores CSV
+            function escapeCsv(value) {
+                if (value === null || value === undefined) {
+                    return "";
+                }
+                let stringValue = String(value);
+                // Si el valor contiene coma, comillas dobles o salto de línea, encerrar en comillas dobles
+                if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+                    // Escapar comillas dobles existentes duplicándolas
+                    stringValue = stringValue.replace(/"/g, '""');
+                    return `"${stringValue}"`;
+                }
+                return stringValue;
+            }
+
+            // Descargar el archivo CSV
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'calendario_presencialidad.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert("Calendario descargado como calendario_presencialidad.csv");
+        }
+        // --- Fin de Nueva función para exportar a CSV ---
 
 
         function downloadJsonFile() {
