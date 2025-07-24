@@ -267,31 +267,49 @@
                 const response = await fetch(url);
                 if (response.status === 404) {
                      console.warn("presencialidad.json no encontrado, se usará un estado por defecto.");
-                     return { empleados: [], calendariosPorMes: [] }; // Retornar estructura vacía
+                     // Si no se encuentra, inicializa con estructura vacía pero válida
+                     return { empleados: [], calendariosPorMes: [] }; 
                 }
                 if (!response.ok) {
                     throw new Error(`Error de red al cargar presencialidad.json (Status: ${response.status})`);
                 }
                 const textData = await response.text();
-                const parsedData = JSON.parse(textData);
+                let parsedData;
+                try {
+                    parsedData = JSON.parse(textData);
+                } catch (jsonError) {
+                    throw new Error(`Error de sintaxis en presencialidad.json: ${jsonError.message}`);
+                }
 
                 // --- Inicialización y Migración Robusta ---
-                // Asegurar que 'empleados' siempre es un array
+                // Asegurar que 'empleados' siempre es un array. Si no existe o no es array, usar un array vacío.
                 parsedData.empleados = Array.isArray(parsedData.empleados) ? parsedData.empleados : [];
-                // Asegurar que 'calendariosPorMes' siempre es un array
+                // Si 'empleados' está vacío después de la carga, inicializar con un ejemplo
+                if (parsedData.empleados.length === 0) {
+                    parsedData.empleados = ["Dante Espejo", "Gabriela Torres", "Ines Raposo", "Nicolas Alurralde", "Nicolas Ponce"];
+                }
+
+                // Asegurar que 'calendariosPorMes' siempre es un array.
                 parsedData.calendariosPorMes = Array.isArray(parsedData.calendariosPorMes) ? parsedData.calendariosPorMes : [];
 
-                // Migración o inicialización si el JSON está en formato antiguo (con 'calendar' directamente)
-                if (parsedData.calendar && !parsedData.calendariosPorMes.length) { // Si existe 'calendar' y no hay 'calendariosPorMes'
+                // Migración si el JSON está en formato antiguo (con 'calendar' directamente)
+                if (parsedData.calendar && !parsedData.calendariosPorMes.length) { 
                     console.warn("Detectado formato JSON antiguo. Migrando a 'calendariosPorMes'.");
                     const today = new Date();
                     const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+                    
+                    // Asegurarse de que los días dentro del calendario migrado sean válidos
+                    const migratedDays = Array.isArray(parsedData.calendar) ? parsedData.calendar.map(emp => ({
+                        name: emp.name,
+                        schedule: Array.isArray(emp.schedule) ? emp.schedule : []
+                    })) : [];
+
                     parsedData.calendariosPorMes.push({
                         mesAnio: currentMonthKey,
                         fechasGeneradas: today.toISOString().split('T')[0],
-                        dias: parsedData.calendar // Mover el calendario existente a 'dias' del mes actual
+                        dias: migratedDays 
                     });
-                    delete parsedData.calendar; // Eliminar la propiedad antigua
+                    delete parsedData.calendar; 
                 }
                 // --- Fin Inicialización y Migración Robusta ---
 
@@ -300,7 +318,11 @@
             } catch (error) {
                 console.error("Error en fetchPresencialidadData:", error);
                 document.getElementById('presencialidad-data').innerHTML = `<p style="color:red; text-align:center;">Error al cargar los datos de presencialidad: ${error.message}</p>`;
-                return { empleados: [], calendariosPorMes: [] }; // Retornar estructura vacía en caso de error
+                // Retornar una estructura vacía y válida en caso de cualquier error de carga/parseo
+                return { 
+                    empleados: ["Dante Espejo", "Gabriela Torres", "Ines Raposo", "Nicolas Alurralde", "Nicolas Ponce"], 
+                    calendariosPorMes: [] 
+                }; 
             }
         }
 
@@ -310,8 +332,7 @@
             currentDisplayMonth = new Date();
             if (presencialidadState.calendariosPorMes.length > 0) {
                 const lastMonthEntry = presencialidadState.calendariosPorMes[presencialidadState.calendariosPorMes.length - 1];
-                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); // Asegurar fecha válida
-                // Si el último mes generado es futuro respecto al actual, lo mostramos por defecto
+                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); 
                 if (lastMonthDate.getFullYear() > currentDisplayMonth.getFullYear() || 
                    (lastMonthDate.getFullYear() === currentDisplayMonth.getFullYear() && lastMonthDate.getMonth() > currentDisplayMonth.getMonth())) {
                     currentDisplayMonth = lastMonthDate;
@@ -329,7 +350,7 @@
             currentAdminDisplayMonth = new Date();
             if (presencialidadState.calendariosPorMes.length > 0) {
                 const lastMonthEntry = presencialidadState.calendariosPorMes[presencialidadState.calendariosPorMes.length - 1];
-                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); // Asegurar fecha válida
+                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); 
                 if (lastMonthDate.getFullYear() > currentAdminDisplayMonth.getFullYear() || 
                    (lastMonthDate.getFullYear() === currentAdminDisplayMonth.getFullYear() && lastMonthDate.getMonth() > currentAdminDisplayMonth.getMonth())) {
                     currentAdminDisplayMonth = lastMonthDate;
@@ -365,15 +386,15 @@
             const monthKey = `${displayMonth.getFullYear()}-${(displayMonth.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthData = data.calendariosPorMes.find(m => m.mesAnio === monthKey);
 
-            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) { // Comprobar que 'dias' es un array
+            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) { 
                 container.innerHTML = `<p style="text-align: center;">No hay información de presencialidad disponible para ${monthName}.</p>`;
                 return;
             }
 
             // Agrupar el calendario por fecha, FILTRANDO SOLO DÍAS HÁBILES
             const datesMap = new Map();
-            monthData.dias.forEach(employeeEntry => { // employeeEntry = { name: "...", schedule: [...] }
-                if (Array.isArray(employeeEntry.schedule)) { // Comprobar que 'schedule' es un array
+            monthData.dias.forEach(employeeEntry => { 
+                if (Array.isArray(employeeEntry.schedule)) { 
                     employeeEntry.schedule.forEach(dayInfo => {
                         const dayDate = new Date(dayInfo.date + 'T00:00:00'); 
                         if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) { // Lunes=1 a Viernes=5
@@ -398,7 +419,10 @@
             table.className = 'calendar-table'; 
             let tableHtml = '<thead><tr><th>Fecha</th>';
 
-            const allEmployeesInOrder = [...new Set(data.empleados.concat(monthData.dias.map(e => e.name)))].sort(); 
+            // Asegurarse de que data.empleados sea un array antes de usar concat/map
+            const allEmployeesInOrder = [...new Set(data.empleados.concat(
+                Array.isArray(monthData.dias) ? monthData.dias.map(e => e.name) : []
+            ))].sort(); 
             allEmployeesInOrder.forEach(emp => {
                 tableHtml += `<th>${emp}</th>`;
             });
@@ -438,14 +462,17 @@
         function renderEmployeeManagement() {
             const list = document.getElementById('employee-list-admin');
             list.innerHTML = '';
-            presencialidadState.empleados.forEach(employee => {
-                list.innerHTML += `
-                    <div class="management-item">
-                        <span>${employee}</span>
-                        <button onclick="deleteEmployee('${employee}')">Eliminar</button>
-                    </div>
-                `;
-            });
+            // Asegurarse de que presencialidadState.empleados es un array antes de forEach
+            if (Array.isArray(presencialidadState.empleados)) {
+                presencialidadState.empleados.forEach(employee => {
+                    list.innerHTML += `
+                        <div class="management-item">
+                            <span>${employee}</span>
+                            <button onclick="deleteEmployee('${employee}')">Eliminar</button>
+                        </div>
+                    `;
+                });
+            }
         }
 
         function addEmployee() {
@@ -456,14 +483,20 @@
                 presencialidadState.empleados.sort((a,b) => a.localeCompare(b)); 
                 
                 // Añadir el nuevo empleado a todos los calendarios mensuales existentes
-                presencialidadState.calendariosPorMes.forEach(monthEntry => {
-                    if (!monthEntry.dias.some(emp => emp.name === name)) {
-                        monthEntry.dias.push({ name: name, schedule: [] });
-                        monthEntry.dias.sort((a,b) => a.name.localeCompare(b.name));
-                    }
-                });
+                if (Array.isArray(presencialidadState.calendariosPorMes)) {
+                    presencialidadState.calendariosPorMes.forEach(monthEntry => {
+                        // Asegurarse de que monthEntry.dias es un array
+                        if (!Array.isArray(monthEntry.dias)) {
+                           monthEntry.dias = [];
+                        }
+                        if (!monthEntry.dias.some(emp => emp.name === name)) {
+                            monthEntry.dias.push({ name: name, schedule: [] });
+                            monthEntry.dias.sort((a,b) => a.name.localeCompare(b.name));
+                        }
+                    });
+                }
                 input.value = '';
-                renderAdminPanel(currentAdminDisplayMonth); // Re-renderizar el panel de admin para el mes actual
+                renderAdminPanel(currentAdminDisplayMonth); 
             } else if (name) {
                 alert('Este empleado ya existe.');
             }
@@ -474,9 +507,13 @@
                 presencialidadState.empleados = presencialidadState.empleados.filter(name => name !== nameToDelete);
                 
                 // Eliminar el empleado de todos los calendarios mensuales
-                presencialidadState.calendariosPorMes.forEach(monthEntry => {
-                    monthEntry.dias = monthEntry.dias.filter(employee => employee.name !== nameToDelete);
-                });
+                if (Array.isArray(presencialidadState.calendariosPorMes)) {
+                    presencialidadState.calendariosPorMes.forEach(monthEntry => {
+                        if (Array.isArray(monthEntry.dias)) {
+                            monthEntry.dias = monthEntry.dias.filter(employee => employee.name !== nameToDelete);
+                        }
+                    });
+                }
                 renderAdminPanel(currentAdminDisplayMonth);
             }
         }
@@ -490,15 +527,15 @@
             const monthKey = `${displayMonth.getFullYear()}-${(displayMonth.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthData = presencialidadState.calendariosPorMes.find(m => m.mesAnio === monthKey);
 
-            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) { // Comprobar que 'dias' es un array
+            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) { 
                 tbody.innerHTML = `<tr><td colspan="1">No hay datos de calendario para ${displayMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}. Genera el calendario.</td></tr>`;
                 return;
             }
 
             // Obtener todas las fechas únicas del mes a mostrar, filtrando solo días hábiles
             const allDates = new Set();
-            monthData.dias.forEach(employeeEntry => { // employeeEntry = { name: "...", schedule: [...] }
-                if (Array.isArray(employeeEntry.schedule)) { // Comprobar que 'schedule' es un array
+            monthData.dias.forEach(employeeEntry => { 
+                if (Array.isArray(employeeEntry.schedule)) { 
                     employeeEntry.schedule.forEach(dayInfo => {
                         const dayDate = new Date(dayInfo.date + 'T00:00:00'); 
                         if (dayDate.getMonth() === displayMonth.getMonth() && dayDate.getFullYear() === displayMonth.getFullYear() &&
@@ -509,7 +546,8 @@
                 }
             });
             
-            if (presencialidadState.empleados.length === 0 && allDates.size === 0) {
+            // Asegurarse de que presencialidadState.empleados es un array antes de usar length
+            if (!Array.isArray(presencialidadState.empleados) || (presencialidadState.empleados.length === 0 && allDates.size === 0)) {
                 tbody.innerHTML = '<tr><td colspan="1">No hay empleados ni fechas hábiles en el calendario.</td></tr>';
                 return;
             }
@@ -518,17 +556,14 @@
 
             // Rellenar encabezado de fechas
             sortedDates.forEach(date => {
-                // Mostrar el día de la semana y la fecha para mayor claridad en el admin
                 headerRow.innerHTML += `<th>${new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })}</th>`;
             });
 
             // Rellenar cuerpo de la tabla
             presencialidadState.empleados.forEach(employeeName => {
                 let rowHtml = `<tr><td>${employeeName}</td>`;
-                // Busca la entrada del empleado para el MES ACTUALMENTE SELECCIONADO
                 let employeeCalendarForMonth = monthData.dias.find(e => e.name === employeeName);
                 
-                // Si el empleado no tiene una entrada en 'calendar' para este mes, créala
                 if (!employeeCalendarForMonth) {
                     employeeCalendarForMonth = { name: employeeName, schedule: [] };
                     monthData.dias.push(employeeCalendarForMonth);
@@ -536,7 +571,7 @@
                 }
 
                 sortedDates.forEach(date => {
-                    const status = employeeCalendarForMonth.schedule?.find(day => day.date === date)?.status || '';
+                    const status = Array.isArray(employeeCalendarForMonth.schedule) ? employeeCalendarForMonth.schedule.find(day => day.date === date)?.status || '' : '';
                     let selectClass = 'select-empty'; 
                     if (status === 'Oficina') {
                         selectClass = 'select-oficina';
@@ -554,7 +589,6 @@
                 rowHtml += '</tr>';
                 tbody.innerHTML += rowHtml;
             });
-            // Aplicar los colores iniciales a los selects después de que la tabla se renderiza
             tbody.querySelectorAll('select').forEach(select => {
                 applySelectColor(select);
             });
@@ -587,6 +621,11 @@
                 monthEntry.dias.sort((a,b) => a.name.localeCompare(b.name));
             }
 
+            // Asegurarse de que employeeEntry.schedule es un array
+            if (!Array.isArray(employeeEntry.schedule)) {
+                employeeEntry.schedule = [];
+            }
+
             let dayEntry = employeeEntry.schedule.find(day => day.date === date);
 
             if (status === "") {
@@ -613,9 +652,9 @@
             
             const monthsToGenerate = [currentMonthStart, nextMonthStart];
 
-            // Identificar los meses que ya están generados en calendariosPorMes
-            const existingMonthsKeys = new Set(presencialidadState.calendariosPorMes.map(m => m.mesAnio));
-            
+            // Filtrar y limpiar calendariosPorMes para eliminar entradas con 'dias' no válidos
+            presencialidadState.calendariosPorMes = presencialidadState.calendariosPorMes.filter(m => Array.isArray(m.dias));
+
             let generatedCount = 0;
 
             monthsToGenerate.forEach(monthDate => {
@@ -624,57 +663,55 @@
                 let monthEntry = presencialidadState.calendariosPorMes.find(m => m.mesAnio === monthKey);
 
                 if (!monthEntry) {
-                    // Si el mes no existe, creamos una nueva entrada
                     monthEntry = {
                         mesAnio: monthKey,
                         fechasGeneradas: today.toISOString().split('T')[0],
-                        dias: [] // Inicializamos el array de días para este mes
+                        dias: [] 
                     };
                     presencialidadState.calendariosPorMes.push(monthEntry);
-                    // Ordenar calendariosPorMes por fecha
                     presencialidadState.calendariosPorMes.sort((a, b) => new Date(a.mesAnio) - new Date(b.mesAnio));
                 }
 
-                // Generar/Actualizar días hábiles para este mes
                 const lastDayOfMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
 
-                presencialidadState.empleados.forEach(employeeName => {
-                    let employeeScheduleInMonth = monthEntry.dias.find(e => e.name === employeeName);
-                    if (!employeeScheduleInMonth) {
-                        employeeScheduleInMonth = { name: employeeName, schedule: [] };
-                        monthEntry.dias.push(employeeScheduleInMonth);
-                        monthEntry.dias.sort((a,b) => a.name.localeCompare(b.name));
-                    }
+                // Asegurarse de que presencialidadState.empleados es un array antes de forEach
+                if (Array.isArray(presencialidadState.empleados)) {
+                    presencialidadState.empleados.forEach(employeeName => {
+                        let employeeScheduleInMonth = monthEntry.dias.find(e => e.name === employeeName);
+                        if (!employeeScheduleInMonth) {
+                            employeeScheduleInMonth = { name: employeeName, schedule: [] };
+                            monthEntry.dias.push(employeeScheduleInMonth);
+                            monthEntry.dias.sort((a,b) => a.name.localeCompare(b.name));
+                        }
 
-                    for (let day = 1; day <= lastDayOfMonth; day++) {
-                        const currentDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
-                        if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) { // Lunes=1 a Viernes=5
-                            const dateString = currentDate.toISOString().split('T')[0];
-                            
-                            let existingDay = employeeScheduleInMonth.schedule.find(s => s.date === dateString);
-                            
-                            if (existingDay) {
-                                // Si ya existe, actualizamos a "Remoto" si no tiene un valor ya asignado
-                                if (existingDay.status === "" || existingDay.status === "-") {
-                                    existingDay.status = "Remoto"; 
+                        // Asegurarse de que employeeScheduleInMonth.schedule es un array
+                        if (!Array.isArray(employeeScheduleInMonth.schedule)) {
+                            employeeScheduleInMonth.schedule = [];
+                        }
+
+                        for (let day = 1; day <= lastDayOfMonth; day++) {
+                            const currentDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
+                            if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) { 
+                                const dateString = currentDate.toISOString().split('T')[0];
+                                
+                                let existingDay = employeeScheduleInMonth.schedule.find(s => s.date === dateString);
+                                
+                                if (existingDay) {
+                                    if (existingDay.status === "" || existingDay.status === "-") {
+                                        existingDay.status = "Remoto"; 
+                                    }
+                                } else {
+                                    employeeScheduleInMonth.schedule.push({ date: dateString, status: "Remoto" }); 
                                 }
-                            } else {
-                                // Si no existe, añadir con "Remoto" por defecto
-                                employeeScheduleInMonth.schedule.push({ date: dateString, status: "Remoto" }); 
                             }
                         }
-                    }
-                    employeeScheduleInMonth.schedule.sort((a, b) => new Date(a.date) - new Date(b.date));
-                });
+                        employeeScheduleInMonth.schedule.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    });
+                }
                 generatedCount++;
             });
             
-            // Limitar el número de meses en el historial (ej. mantener solo los últimos 3-4 meses)
-            // Esto es opcional, pero ayuda a que el JSON no crezca indefinidamente.
-            // Por ahora, no implementaremos una limpieza automática de meses muy antiguos aquí,
-            // pero es una consideración para el futuro.
-
-            renderAdminPanel(currentAdminDisplayMonth); // Re-renderizar el panel de admin para el mes actual
+            renderAdminPanel(currentAdminDisplayMonth); 
             alert(`Calendario generado/actualizado para ${monthsToGenerate.length} mes(es) (Mes actual y próximo).`);
         }
 
@@ -694,7 +731,7 @@
         // --- Función para exportar a CSV ---
         function exportCalendarToCSV() {
             const data = presencialidadState;
-            const displayMonth = currentDisplayMonth; // Usar el mes que se está mostrando actualmente
+            const displayMonth = currentDisplayMonth; 
 
             const monthKey = `${displayMonth.getFullYear()}-${(displayMonth.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthData = data.calendariosPorMes.find(m => m.mesAnio === monthKey);
@@ -704,7 +741,6 @@
                 return;
             }
 
-            // Obtener todas las fechas únicas y ordenarlas, filtrando solo días hábiles del mes actual
             const allDates = new Set();
             monthData.dias.forEach(employeeEntry => {
                 if (Array.isArray(employeeEntry.schedule)) {
