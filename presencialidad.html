@@ -41,8 +41,22 @@
         .add-input-group button { margin-left: 10px; background-color: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;}
         .add-input-group button:hover { background-color: #218838; }
 
-        .calendar-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        /* Estilos de la tabla del calendario */
+        .calendar-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            font-size: 0.8em; /* Fuente más pequeña para que quepa */
+        }
+        .calendar-table th, .calendar-table td { 
+            border: 1px solid #ddd; 
+            padding: 6px 3px; /* Padding reducido */
+            text-align: center; 
+            white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+        }
+        .calendar-table th {
+            font-size: 0.9em; /* Headers ligeramente más grandes */
+        }
         .calendar-table thead { background-color: #00A9E0; color: white; }
         /* Ajuste de select para que los colores se vean bien */
         .calendar-table td select { width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px; background-color: white; /* Base */ color: #333; }
@@ -147,16 +161,19 @@
 
         <div class="management-section" style="margin-top: 20px;">
             <h3>Calendario por Fecha</h3>
-            <table class="calendar-table">
-                <thead>
-                    <tr id="calendar-header-row">
-                        <th>Empleado</th>
-                    </tr>
-                </thead>
-                <tbody id="calendar-tbody">
-                    <!-- Filas de empleados y días de calendario se generarán aquí -->
-                </tbody>
-            </table>
+            <!-- Contenedor para scroll horizontal -->
+            <div style="overflow-x: auto;">
+                <table class="calendar-table">
+                    <thead>
+                        <tr id="calendar-header-row">
+                            <th>Empleado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-tbody">
+                        <!-- Filas de empleados y días de calendario se generarán aquí -->
+                    </tbody>
+                </table>
+            </div>
         </div>
         
         <div class="references-section">
@@ -250,10 +267,14 @@
             sortedCalendar.forEach(employee => {
                 if (employee.schedule) {
                     employee.schedule.forEach(dayInfo => {
-                        if (!datesMap.has(dayInfo.date)) {
-                            datesMap.set(dayInfo.date, []);
+                        // Filtrar solo días hábiles para la vista pública
+                        const dayDate = new Date(dayInfo.date);
+                        if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) { // Lunes=1 a Viernes=5
+                            if (!datesMap.has(dayInfo.date)) {
+                                datesMap.set(dayInfo.date, []);
+                            }
+                            datesMap.get(dayInfo.date).push({ employee: employee.name, status: dayInfo.status });
                         }
-                        datesMap.get(dayInfo.date).push({ employee: employee.name, status: dayInfo.status });
                     });
                 }
             });
@@ -279,6 +300,7 @@
             tableHtml += '</tr></thead><tbody>';
 
             sortedDates.forEach(date => {
+                // Incluir el día de la semana en el formato de fecha para la vista pública
                 tableHtml += `<tr><td>${new Date(date).toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })}</td>`;
                 const employeesForDate = datesMap.get(date) || [];
                 const employeeStatusMap = new Map(employeesForDate.map(item => [item.employee, item.status]));
@@ -366,19 +388,22 @@
             headerRow.innerHTML = '<th>Empleado</th>';
             tbody.innerHTML = '';
 
-            // Obtener todas las fechas únicas del calendario
+            // Obtener todas las fechas únicas del calendario, filtrando solo días hábiles
             const allDates = new Set();
-            // Recorre los empleados en el orden definido en presencialidadState.empleados
-            presencialidadState.empleados.forEach(empName => {
-                const employeeEntry = presencialidadState.calendar.find(e => e.name === empName);
-                if (employeeEntry && employeeEntry.schedule) {
-                    employeeEntry.schedule.forEach(dayInfo => allDates.add(dayInfo.date));
+            presencialidadState.calendar.forEach(employee => {
+                if (employee.schedule) {
+                    employee.schedule.forEach(dayInfo => {
+                        const dayDate = new Date(dayInfo.date);
+                        if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) { // Lunes=1 a Viernes=5
+                            allDates.add(dayInfo.date);
+                        }
+                    });
                 }
             });
             
-            // Si no hay empleados o no hay fechas, no generamos la tabla de calendario
+            // Si no hay empleados o no hay fechas hábiles, no generamos la tabla de calendario
             if (presencialidadState.empleados.length === 0 && allDates.size === 0) {
-                tbody.innerHTML = '<tr><td colspan="1">No hay empleados ni fechas en el calendario.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="1">No hay empleados ni fechas hábiles en el calendario.</td></tr>';
                 return;
             }
 
@@ -386,7 +411,8 @@
 
             // Rellenar encabezado de fechas
             sortedDates.forEach(date => {
-                headerRow.innerHTML += `<th>${new Date(date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })}</th>`;
+                // Mostrar el día de la semana y la fecha para mayor claridad en el admin
+                headerRow.innerHTML += `<th>${new Date(date).toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })}</th>`;
             });
 
             // Rellenar cuerpo de la tabla
@@ -467,11 +493,43 @@
             
             // Aplicar color al select directamente
             applySelectColor(selectElement);
+
+            // No re-renderizamos la tabla completa aquí para evitar parpadeos y pérdida de foco
+            // en el panel de administración cuando el usuario cambia múltiples selectores.
+            // La tabla se re-renderizará al generar el calendario o al añadir/eliminar empleados.
         }
 
         function generateNextMonthCalendar() {
             const today = new Date();
             const nextMonthDate = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Primer día del próximo mes
+            
+            // Obtener el mes y año del mes que se va a generar (próximo mes)
+            const monthToGenerateKey = `${nextMonthDate.getFullYear()}-${(nextMonthDate.getMonth() + 1).toString().padStart(2, '0')}`;
+
+            // Contar cuántos meses futuros ya están en el calendario
+            let futureMonthsCount = 0;
+            const existingFutureMonths = new Set();
+            presencialidadState.calendar.forEach(employee => {
+                if (employee.schedule) {
+                    employee.schedule.forEach(dayInfo => {
+                        const dayDate = new Date(dayInfo.date);
+                        // Solo contamos fechas que estén en el futuro respecto al mes actual
+                        if (dayDate.getFullYear() > today.getFullYear() || 
+                           (dayDate.getFullYear() === today.getFullYear() && dayDate.getMonth() > today.getMonth())) {
+                            existingFutureMonths.add(`${dayDate.getFullYear()}-${(dayDate.getMonth() + 1).toString().padStart(2, '0')}`);
+                        }
+                    });
+                }
+            });
+            futureMonthsCount = existingFutureMonths.size;
+
+            // Verificar si el mes a generar ya existe y está dentro de los 2 meses futuros permitidos
+            const isMonthAlreadyGenerated = existingFutureMonths.has(monthToGenerateKey);
+
+            if (futureMonthsCount >= 2 && !isMonthAlreadyGenerated) {
+                alert("No se puede generar. Ya tienes un calendario generado para los próximos 2 meses. Primero debes avanzar en el tiempo o eliminar datos antiguos para generar más.");
+                return;
+            }
             
             // Calcular el número de días en el próximo mes
             const lastDayOfNextMonth = new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1, 0).getDate();
@@ -492,11 +550,14 @@
                         let existingDay = employeeEntry.schedule.find(s => s.date === dateString);
                         
                         if (existingDay) {
-                            // Si ya existe, no hacemos nada, o lo reseteamos si se desea
-                            // existingDay.status = ""; // Descomentar para resetear a vacío
+                            // Si ya existe, actualizamos a "Remoto" si no tiene un valor ya asignado
+                            // Esto previene sobrescribir una asignación manual si se regenera
+                            if (existingDay.status === "" || existingDay.status === "-") {
+                                existingDay.status = "Remoto"; 
+                            }
                         } else {
-                            // Si no existe, añadir con estado vacío por defecto
-                            employeeEntry.schedule.push({ date: dateString, status: "" }); 
+                            // Si no existe, añadir con "Remoto" por defecto
+                            employeeEntry.schedule.push({ date: dateString, status: "Remoto" }); // Se añade como "Remoto" por defecto
                         }
                     }
                 }
@@ -504,7 +565,7 @@
             });
             presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name)); 
             renderAdminPanel(); // Se vuelve a renderizar para mostrar las nuevas fechas y estados
-            alert("Calendario del próximo mes generado con días laborales.");
+            alert("Calendario del próximo mes generado con días laborales en 'Remoto' por defecto.");
         }
 
         // --- Función auxiliar para escapar valores CSV ---
@@ -530,11 +591,16 @@
                 return;
             }
 
-            // Obtener todas las fechas únicas y ordenarlas
+            // Obtener todas las fechas únicas y ordenarlas, filtrando solo días hábiles
             const allDates = new Set();
             data.calendar.forEach(employee => {
                 if (employee.schedule) {
-                    employee.schedule.forEach(dayInfo => allDates.add(dayInfo.date));
+                    employee.schedule.forEach(dayInfo => {
+                        const dayDate = new Date(dayInfo.date);
+                        if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) { // Lunes=1 a Viernes=5
+                            allDates.add(dayInfo.date);
+                        }
+                    });
                 }
             });
             const sortedDates = Array.from(allDates).sort();
@@ -545,7 +611,7 @@
 
             // Preparar las filas de datos
             sortedDates.forEach(date => {
-                const row = [new Date(date).toLocaleDateString('es-ES')]; // Formato de fecha localizado (ej. 31/07/2025)
+                const row = [new Date(date).toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })]; // Formato de fecha localizado con día de la semana
                 const employeeStatusMap = new Map();
                 data.calendar.forEach(employee => {
                     employee.schedule.forEach(dayInfo => {
