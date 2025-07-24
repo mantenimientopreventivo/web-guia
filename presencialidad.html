@@ -65,11 +65,13 @@
         .status-oficina { background-color: #e6ffe6; color: #28a745; font-weight: bold; } /* Verde claro para Oficina */
         .status-remoto { background-color: #e6f7ff; color: #007bff; font-weight: bold; } /* Azul claro para Remoto */
         .status-empty { background-color: white; color: #333; } /* Fondo blanco para vacío */
+        .status-vacaciones { background-color: #ffe6e6; color: #dc3545; font-weight: bold; } /* Rojo claro para Vacaciones */
         
         /* Estilos específicos para los selects en la vista de administración */
         .calendar-table td select.select-oficina { background-color: #a7f7a7; color: #004d00; } /* Verde más oscuro para el select */
         .calendar-table td select.select-remoto { background-color: #a7d9f7; color: #003366; } /* Azul más oscuro para el select */
         .calendar-table td select.select-empty { background-color: #f7f7f7; color: #333; } /* Gris claro para el select vacío */
+        .calendar-table td select.select-vacaciones { background-color: #f7a7a7; color: #8b0000; } /* Rojo más oscuro para el select */
 
 
         /* Estilos para la sección de referencias */
@@ -97,6 +99,7 @@
         }
         .color-box.oficina { background-color: #28a745; }
         .color-box.remoto { background-color: #007bff; }
+        .color-box.vacaciones { background-color: #dc3545; } /* Rojo para Vacaciones */
 
         /* Estilo para el botón de descarga en la vista pública */
         .download-public-btn {
@@ -170,6 +173,9 @@
             <div class="reference-item">
                 <div class="color-box remoto"></div> Remoto
             </div>
+            <div class="reference-item">
+                <div class="color-box vacaciones"></div> Vacaciones
+            </div>
         </div>
     </div>
 
@@ -223,6 +229,9 @@
             </div>
             <div class="reference-item">
                 <div class="color-box remoto"></div> Remoto
+            </div>
+            <div class="reference-item">
+                <div class="color-box vacaciones"></div> Vacaciones
             </div>
         </div>
     </div>
@@ -332,7 +341,7 @@
             currentDisplayMonth = new Date();
             if (presencialidadState.calendariosPorMes.length > 0) {
                 const lastMonthEntry = presencialidadState.calendariosPorMes[presencialidadState.calendariosPorMes.length - 1];
-                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); 
+                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); // Asegurar fecha válida
                 if (lastMonthDate.getFullYear() > currentDisplayMonth.getFullYear() || 
                    (lastMonthDate.getFullYear() === currentDisplayMonth.getFullYear() && lastMonthDate.getMonth() > currentDisplayMonth.getMonth())) {
                     currentDisplayMonth = lastMonthDate;
@@ -350,7 +359,7 @@
             currentAdminDisplayMonth = new Date();
             if (presencialidadState.calendariosPorMes.length > 0) {
                 const lastMonthEntry = presencialidadState.calendariosPorMes[presencialidadState.calendariosPorMes.length - 1];
-                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); 
+                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); // Asegurar fecha válida
                 if (lastMonthDate.getFullYear() > currentAdminDisplayMonth.getFullYear() || 
                    (lastMonthDate.getFullYear() === currentAdminDisplayMonth.getFullYear() && lastMonthDate.getMonth() > currentAdminDisplayMonth.getMonth())) {
                     currentAdminDisplayMonth = lastMonthDate;
@@ -422,7 +431,7 @@
             // Asegurarse de que data.empleados sea un array antes de usar concat/map
             const allEmployeesInOrder = [...new Set(data.empleados.concat(
                 Array.isArray(monthData.dias) ? monthData.dias.map(e => e.name) : []
-            ))].sort(); 
+            ))].sort((a,b) => a.localeCompare(b)); 
             allEmployeesInOrder.forEach(emp => {
                 tableHtml += `<th>${emp}</th>`;
             });
@@ -440,8 +449,8 @@
                         statusClass = 'status-oficina';
                     } else if (status === 'Remoto') {
                         statusClass = 'status-remoto';
-                    } else {
-                        statusClass = 'status-empty';
+                    } else if (status === 'Vacaciones') { // Nuevo estado
+                        statusClass = 'status-vacaciones';
                     }
                     tableHtml += `<td class="${statusClass}">${status}</td>`; 
                 });
@@ -577,12 +586,15 @@
                         selectClass = 'select-oficina';
                     } else if (status === 'Remoto') {
                         selectClass = 'select-remoto';
+                    } else if (status === 'Vacaciones') { // Nuevo estado
+                        selectClass = 'select-vacaciones';
                     }
                     rowHtml += `<td>
                                 <select onchange="updateSchedule(this, '${employeeName}', '${date}', this.value, '${monthKey}')" class="${selectClass}">
                                     <option value="" ${status === '' ? 'selected' : ''}></option>
                                     <option value="Oficina" ${status === 'Oficina' ? 'selected' : ''}>Oficina</option>
                                     <option value="Remoto" ${status === 'Remoto' ? 'selected' : ''}>Remoto</option>
+                                    <option value="Vacaciones" ${status === 'Vacaciones' ? 'selected' : ''}>Vacaciones</option>
                                 </select>
                             </td>`;
                 });
@@ -596,11 +608,13 @@
 
         // Nueva función para aplicar el color al select
         function applySelectColor(selectElement) {
-            selectElement.classList.remove('select-oficina', 'select-remoto', 'select-empty');
+            selectElement.classList.remove('select-oficina', 'select-remoto', 'select-empty', 'select-vacaciones'); // Eliminar todas las clases de estado
             if (selectElement.value === 'Oficina') {
                 selectElement.classList.add('select-oficina');
             } else if (selectElement.value === 'Remoto') {
                 selectElement.classList.add('select-remoto');
+            } else if (selectElement.value === 'Vacaciones') { // Nuevo estado
+                selectElement.classList.add('select-vacaciones');
             } else {
                 selectElement.classList.add('select-empty');
             }
@@ -697,6 +711,7 @@
                                 let existingDay = employeeScheduleInMonth.schedule.find(s => s.date === dateString);
                                 
                                 if (existingDay) {
+                                    // No sobrescribir si ya tiene un valor diferente a vacío o '-'
                                     if (existingDay.status === "" || existingDay.status === "-") {
                                         existingDay.status = "Remoto"; 
                                     }
