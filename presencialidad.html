@@ -471,10 +471,41 @@
 
         function generateNextMonthCalendar() {
             const today = new Date();
-            const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Primer día del próximo mes
+            const nextMonthDate = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Primer día del próximo mes
+            const twoMonthsLaterDate = new Date(today.getFullYear(), today.getMonth() + 2, 1); // Primer día de dos meses más adelante
 
+            // Obtener el mes y año del mes que se va a generar (próximo mes)
+            const monthToGenerateKey = `${nextMonthDate.getFullYear()}-${(nextMonthDate.getMonth() + 1).toString().padStart(2, '0')}`;
+
+            // Contar cuántos meses futuros ya están en el calendario
+            let futureMonthsCount = 0;
+            // Obtenemos los meses únicos ya generados para el futuro
+            const existingFutureMonths = new Set();
+            presencialidadState.calendar.forEach(employee => {
+                if (employee.schedule) {
+                    employee.schedule.forEach(dayInfo => {
+                        const dayDate = new Date(dayInfo.date);
+                        // Solo contamos fechas que estén en el futuro respecto al mes actual
+                        if (dayDate.getFullYear() > today.getFullYear() || 
+                           (dayDate.getFullYear() === today.getFullYear() && dayDate.getMonth() > today.getMonth())) {
+                            existingFutureMonths.add(`${dayDate.getFullYear()}-${(dayDate.getMonth() + 1).toString().padStart(2, '0')}`);
+                        }
+                    });
+                }
+            });
+            futureMonthsCount = existingFutureMonths.size;
+
+            // Verificar si el mes a generar ya existe y está dentro de los 2 meses futuros permitidos
+            // O si ya hay 2 meses futuros generados y el mes a generar no es uno de ellos
+            const isMonthAlreadyGenerated = existingFutureMonths.has(monthToGenerateKey);
+
+            if (futureMonthsCount >= 2 && !isMonthAlreadyGenerated) {
+                alert("No se puede generar. Ya tienes un calendario generado para los próximos 2 meses. Primero debes avanzar en el tiempo o eliminar datos antiguos para generar más.");
+                return;
+            }
+            
             // Calcular el número de días en el próximo mes
-            const lastDayOfNextMonth = new Date(nextMonth.getFullYear(), nextMonth.getMonth() + 1, 0).getDate();
+            const lastDayOfNextMonth = new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1, 0).getDate();
 
             presencialidadState.empleados.forEach(employeeName => {
                 let employeeEntry = presencialidadState.calendar.find(e => e.name === employeeName);
@@ -484,7 +515,7 @@
                 }
 
                 for (let day = 1; day <= lastDayOfNextMonth; day++) {
-                    const currentDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), day);
+                    const currentDate = new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth(), day);
                     // Solo agregar días de Lunes a Viernes
                     if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) { // 1=Lunes, 5=Viernes
                         const dateString = currentDate.toISOString().split('T')[0];
