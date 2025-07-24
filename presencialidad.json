@@ -1,40 +1,51 @@
 {
   "empleados": [
     "Juan Perez",
-    "Maria Garcia"
+    "Maria Garcia",
+    "Carlos Rodriguez",
+    "Ana Lopez",
+    "Pedro Sanchez"
   ],
-  "calendariosPorMes": [ // Nuevo array para el historial
+  "calendar": [
     {
-      "mesAnio": "2025-07", // Formato YYYY-MM
-      "fechasGeneradas": "2025-07-01", // Fecha en que se generó este mes (para referencia)
-      "calendarioMensual": [ // El calendario de ese mes específico
-        {
-          "name": "Juan Perez",
-          "schedule": [
-            { "date": "2025-07-01", "status": "Oficina" },
-            { "date": "2025-07-02", "status": "Remoto" }
-          ]
-        },
-        {
-          "name": "Maria Garcia",
-          "schedule": [
-            { "date": "2025-07-01", "status": "Remoto" }
-          ]
-        }
+      "name": "Juan Perez",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
       ]
     },
     {
-      "mesAnio": "2025-08",
-      "fechasGeneradas": "2025-07-24",
-      "calendarioMensual": [
-         // ... datos del calendario de agosto ...
+      "name": "Maria Garcia",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Remoto" },
+        { "date": "2025-07-29", "status": "Oficina" },
+        { "date": "2025-07-30", "status": "Remoto" }
+      ]
+    },
+    {
+      "name": "Carlos Rodriguez",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Oficina" },
+        { "date": "2025-07-30", "status": "Remoto" }
+      ]
+    },
+    {
+      "name": "Ana Lopez",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Remoto" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
+      ]
+    },
+    {
+      "name": "Pedro Sanchez",
+      "schedule": [
+        { "date": "2025-07-28", "status": "Oficina" },
+        { "date": "2025-07-29", "status": "Remoto" },
+        { "date": "2025-07-30", "status": "Oficina" }
       ]
     }
-  ],
-  "currentCalendarData": { // Este mantendrá solo el calendario que se está visualizando/editando actualmente
-    "empleadosEnCalendario": [ "Juan Perez", "Maria Garcia" ], // Lista de empleados activos en la vista actual
-    "scheduleData": [
-        // ... el contenido actual de 'calendar' se movería aquí para la edición activa ...
-    ]
-  }
+  ]
 }
