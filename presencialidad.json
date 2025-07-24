@@ -1,50 +1,55 @@
 {
   "empleados": [
-    "Juan Perez",
-    "Maria Garcia",
-    "Carlos Rodriguez",
-    "Ana Lopez",
-    "Pedro Sanchez"
+    "Dante Espejo",
+    "Gabriela Torres",
+    "Ines Raposo",
+    "Nicolas Alurralde",
+    "Nicolas Ponce"
   ],
   "calendar": [
     {
-      "name": "Juan Perez",
+      "name": "Dante Espejo",
       "schedule": [
         { "date": "2025-07-28", "status": "Oficina" },
         { "date": "2025-07-29", "status": "Remoto" },
-        { "date": "2025-07-30", "status": "Oficina" }
+        { "date": "2025-07-30", "status": "Oficina" },
+        { "date": "2025-07-31", "status": "Oficina" }
       ]
     },
     {
-      "name": "Maria Garcia",
+      "name": "Gabriela Torres",
       "schedule": [
         { "date": "2025-07-28", "status": "Remoto" },
         { "date": "2025-07-29", "status": "Oficina" },
-        { "date": "2025-07-30", "status": "Remoto" }
+        { "date": "2025-07-30", "status": "Remoto" },
+        { "date": "2025-07-31", "status": "Remoto" }
       ]
     },
     {
-      "name": "Carlos Rodriguez",
+      "name": "Ines Raposo",
       "schedule": [
         { "date": "2025-07-28", "status": "Oficina" },
         { "date": "2025-07-29", "status": "Oficina" },
-        { "date": "2025-07-30", "status": "Remoto" }
+        { "date": "2025-07-30", "status": "Remoto" },
+        { "date": "2025-07-31", "status": "Oficina" }
       ]
     },
     {
-      "name": "Ana Lopez",
+      "name": "Nicolas Alurralde",
       "schedule": [
         { "date": "2025-07-28", "status": "Remoto" },
         { "date": "2025-07-29", "status": "Remoto" },
-        { "date": "2025-07-30", "status": "Oficina" }
+        { "date": "2025-07-30", "status": "Oficina" },
+        { "date": "2025-07-31", "status": "Remoto" }
       ]
     },
     {
-      "name": "Pedro Sanchez",
+      "name": "Nicolas Ponce",
       "schedule": [
         { "date": "2025-07-28", "status": "Oficina" },
         { "date": "2025-07-29", "status": "Remoto" },
-        { "date": "2025-07-30", "status": "Oficina" }
+        { "date": "2025-07-30", "status": "Oficina" },
+        { "date": "2025-07-31", "status": "Oficina" }
       ]
     }
   ]
