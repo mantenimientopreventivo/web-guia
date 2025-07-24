@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario de Presencialidad</title>
+    <!-- Enlace a la librería de iconos Font Awesome (requiere internet) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: #333; margin: 20px; background-color: #f4f4f4; }
@@ -110,6 +111,7 @@
         <h1>Calendario de Presencialidad</h1>
         <div id="presencialidad-data">Cargando datos...</div>
 
+        <!-- Botón de descarga para la vista pública -->
         <button class="download-public-btn" onclick="exportCalendarToCSV()">Descargar Calendario (Excel/CSV)</button>
 
         <div class="references-section">
@@ -152,7 +154,8 @@
                     </tr>
                 </thead>
                 <tbody id="calendar-tbody">
-                    </tbody>
+                    <!-- Filas de empleados y días de calendario se generarán aquí -->
+                </tbody>
             </table>
         </div>
         
@@ -167,6 +170,7 @@
         </div>
     </div>
 
+    <!-- El script se mueve al final del body y se le añade 'defer' para asegurar que el HTML esté cargado -->
     <script defer>
         let presencialidadState = {
             empleados: [],
@@ -463,44 +467,11 @@
             
             // Aplicar color al select directamente
             applySelectColor(selectElement);
-
-            // No re-renderizamos la tabla completa aquí para evitar parpadeos y pérdida de foco
-            // en el panel de administración cuando el usuario cambia múltiples selectores.
-            // La tabla se re-renderizará al generar el calendario o al añadir/eliminar empleados.
         }
 
         function generateNextMonthCalendar() {
             const today = new Date();
             const nextMonthDate = new Date(today.getFullYear(), today.getMonth() + 1, 1); // Primer día del próximo mes
-            
-            // Obtener el mes y año del mes que se va a generar (próximo mes)
-            const monthToGenerateKey = `${nextMonthDate.getFullYear()}-${(nextMonthDate.getMonth() + 1).toString().padStart(2, '0')}`;
-
-            // Contar cuántos meses futuros ya están en el calendario
-            let futureMonthsCount = 0;
-            // Obtenemos los meses únicos ya generados para el futuro
-            const existingFutureMonths = new Set();
-            presencialidadState.calendar.forEach(employee => {
-                if (employee.schedule) {
-                    employee.schedule.forEach(dayInfo => {
-                        const dayDate = new Date(dayInfo.date);
-                        // Solo contamos fechas que estén en el futuro respecto al mes actual
-                        if (dayDate.getFullYear() > today.getFullYear() || 
-                           (dayDate.getFullYear() === today.getFullYear() && dayDate.getMonth() > today.getMonth())) {
-                            existingFutureMonths.add(`${dayDate.getFullYear()}-${(dayDate.getMonth() + 1).toString().padStart(2, '0')}`);
-                        }
-                    });
-                }
-            });
-            futureMonthsCount = existingFutureMonths.size;
-
-            // Verificar si el mes a generar ya existe y está dentro de los 2 meses futuros permitidos
-            const isMonthAlreadyGenerated = existingFutureMonths.has(monthToGenerateKey);
-
-            if (futureMonthsCount >= 2 && !isMonthAlreadyGenerated) {
-                alert("No se puede generar. Ya tienes un calendario generado para los próximos 2 meses. Primero debes avanzar en el tiempo o eliminar datos antiguos para generar más.");
-                return;
-            }
             
             // Calcular el número de días en el próximo mes
             const lastDayOfNextMonth = new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1, 0).getDate();
@@ -521,14 +492,11 @@
                         let existingDay = employeeEntry.schedule.find(s => s.date === dateString);
                         
                         if (existingDay) {
-                            // Si ya existe, actualizamos a "Remoto" si no tiene un valor ya asignado
-                            // Esto previene sobrescribir una asignación manual si se regenera
-                            if (existingDay.status === "" || existingDay.status === "-") {
-                                existingDay.status = "Remoto"; 
-                            }
+                            // Si ya existe, no hacemos nada, o lo reseteamos si se desea
+                            // existingDay.status = ""; // Descomentar para resetear a vacío
                         } else {
-                            // Si no existe, añadir con "Remoto" por defecto
-                            employeeEntry.schedule.push({ date: dateString, status: "Remoto" }); 
+                            // Si no existe, añadir con estado vacío por defecto
+                            employeeEntry.schedule.push({ date: dateString, status: "" }); 
                         }
                     }
                 }
@@ -536,7 +504,7 @@
             });
             presencialidadState.calendar.sort((a,b) => a.name.localeCompare(b.name)); 
             renderAdminPanel(); // Se vuelve a renderizar para mostrar las nuevas fechas y estados
-            alert("Calendario del próximo mes generado con días laborales en 'Remoto' por defecto.");
+            alert("Calendario del próximo mes generado con días laborales.");
         }
 
         // --- Función auxiliar para escapar valores CSV ---
