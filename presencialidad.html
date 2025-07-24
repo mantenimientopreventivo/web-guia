@@ -233,7 +233,7 @@
             empleados: [],
             calendariosPorMes: [] // Nuevo array para almacenar el historial de calendarios por mes
         };
-        let currentDisplayMonth = new Date(); // Objeto Date para el mes que se está mostrando/editando
+        let currentDisplayMonth = new Date(); // Objeto Date para el mes que se está mostrando/editando en vista pública
         let currentAdminDisplayMonth = new Date(); // Objeto Date para el mes que se está mostrando/editando en admin
 
         const GITHUB_JSON_URL = 'presencialidad.json'; // Ruta relativa
@@ -275,24 +275,25 @@
                 const textData = await response.text();
                 const parsedData = JSON.parse(textData);
 
-                // Migración o inicialización si el JSON está vacío o en formato antiguo
-                if (!parsedData.calendariosPorMes && parsedData.calendar) {
-                    // Si encontramos el formato antiguo (con 'calendar' directamente)
+                // --- Inicialización y Migración Robusta ---
+                // Asegurar que 'empleados' siempre es un array
+                parsedData.empleados = Array.isArray(parsedData.empleados) ? parsedData.empleados : [];
+                // Asegurar que 'calendariosPorMes' siempre es un array
+                parsedData.calendariosPorMes = Array.isArray(parsedData.calendariosPorMes) ? parsedData.calendariosPorMes : [];
+
+                // Migración o inicialización si el JSON está en formato antiguo (con 'calendar' directamente)
+                if (parsedData.calendar && !parsedData.calendariosPorMes.length) { // Si existe 'calendar' y no hay 'calendariosPorMes'
                     console.warn("Detectado formato JSON antiguo. Migrando a 'calendariosPorMes'.");
                     const today = new Date();
                     const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
-                    parsedData.calendariosPorMes = [{
+                    parsedData.calendariosPorMes.push({
                         mesAnio: currentMonthKey,
                         fechasGeneradas: today.toISOString().split('T')[0],
                         dias: parsedData.calendar // Mover el calendario existente a 'dias' del mes actual
-                    }];
+                    });
                     delete parsedData.calendar; // Eliminar la propiedad antigua
-                } else if (!parsedData.calendariosPorMes) {
-                    parsedData.calendariosPorMes = [];
                 }
-                if (!parsedData.empleados) {
-                    parsedData.empleados = [];
-                }
+                // --- Fin Inicialización y Migración Robusta ---
 
                 return parsedData;
 
@@ -309,7 +310,7 @@
             currentDisplayMonth = new Date();
             if (presencialidadState.calendariosPorMes.length > 0) {
                 const lastMonthEntry = presencialidadState.calendariosPorMes[presencialidadState.calendariosPorMes.length - 1];
-                const lastMonthDate = new Date(lastMonthEntry.mesAnio);
+                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); // Asegurar fecha válida
                 // Si el último mes generado es futuro respecto al actual, lo mostramos por defecto
                 if (lastMonthDate.getFullYear() > currentDisplayMonth.getFullYear() || 
                    (lastMonthDate.getFullYear() === currentDisplayMonth.getFullYear() && lastMonthDate.getMonth() > currentDisplayMonth.getMonth())) {
@@ -321,17 +322,6 @@
 
         async function loadAndInitAdminView() {
             presencialidadState = await fetchPresencialidadData();
-            // Asegurarse de que los empleados del calendario existan en la lista de empleados general
-            const employeesInCalendar = new Set();
-            presencialidadState.calendariosPorMes.forEach(monthEntry => {
-                monthEntry.dias.forEach(day => {
-                    // Asumiendo que 'dias' en calendariosPorMes no tiene 'name' de empleado directamente
-                    // Si 'dias' tiene la estructura antigua de 'calendar', esto necesita ajuste
-                    // La nueva estructura de 'dias' es [{ date: "YYYY-MM-DD", status: "Oficina" }]
-                    // La lista de empleados se gestiona por separado.
-                    // No necesitamos esto aquí, los empleados ya están en presencialidadState.empleados
-                });
-            });
             // Asegurar que presencialidadState.empleados esté siempre ordenado
             presencialidadState.empleados.sort((a,b) => a.localeCompare(b));
 
@@ -339,7 +329,7 @@
             currentAdminDisplayMonth = new Date();
             if (presencialidadState.calendariosPorMes.length > 0) {
                 const lastMonthEntry = presencialidadState.calendariosPorMes[presencialidadState.calendariosPorMes.length - 1];
-                const lastMonthDate = new Date(lastMonthEntry.mesAnio);
+                const lastMonthDate = new Date(lastMonthEntry.mesAnio + '-01T00:00:00'); // Asegurar fecha válida
                 if (lastMonthDate.getFullYear() > currentAdminDisplayMonth.getFullYear() || 
                    (lastMonthDate.getFullYear() === currentAdminDisplayMonth.getFullYear() && lastMonthDate.getMonth() > currentAdminDisplayMonth.getMonth())) {
                     currentAdminDisplayMonth = lastMonthDate;
@@ -375,48 +365,18 @@
             const monthKey = `${displayMonth.getFullYear()}-${(displayMonth.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthData = data.calendariosPorMes.find(m => m.mesAnio === monthKey);
 
-            if (!monthData || !monthData.dias || monthData.dias.length === 0) {
+            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) { // Comprobar que 'dias' es un array
                 container.innerHTML = `<p style="text-align: center;">No hay información de presencialidad disponible para ${monthName}.</p>`;
                 return;
             }
 
             // Agrupar el calendario por fecha, FILTRANDO SOLO DÍAS HÁBILES
             const datesMap = new Map();
-            monthData.dias.forEach(dayInfo => {
-                const dayDate = new Date(dayInfo.date + 'T00:00:00'); 
-                if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) { // Lunes=1 a Viernes=5
-                    if (!datesMap.has(dayInfo.date)) {
-                        datesMap.set(dayInfo.date, []);
-                    }
-                    // Necesitamos saber qué empleado tiene qué estado para un día específico
-                    // La estructura de 'dias' es { date: "...", status: "..." }
-                    // No tenemos el empleado directamente en 'dias'.
-                    // Esto significa que 'monthData.dias' debe ser un array de objetos con { date, employeeName, status }
-                    // O debemos reconstruir el schedule por empleado para este mes.
-                    // Vamos a asumir que 'monthData.dias' es un array plano de { date, status } para CADA empleado.
-                    // Esto requiere un cambio en generateCurrentAndNextMonthCalendar para cómo guarda los días.
-
-                    // REVISIÓN: La estructura de `dias` en `calendariosPorMes` debe ser un array de objetos
-                    // donde cada objeto representa la asignación de un *empleado* para un *día*.
-                    // Por ejemplo: [{ date: "YYYY-MM-DD", employee: "Nombre", status: "Oficina" }]
-                    // O, como lo teníamos antes, un array de empleados, y cada empleado tiene su schedule.
-                    // La estructura inicial de `presencialidad.json` era:
-                    // "calendar": [{ "name": "Empleado", "schedule": [{ "date": "...", "status": "..." }] }]
-                    // Vamos a mantener esta estructura dentro de `dias` para cada mes.
-                    // Entonces, `monthData.dias` será como el antiguo `calendar`.
-
-                    // Re-agrupar por fecha asumiendo la estructura:
-                    // monthData.dias = [{ name: "Empleado", schedule: [{ date: "...", status: "..." }] }]
-                    // Esto es lo que se pasa a `renderPublicCalendar` y `renderCalendarTable`
-                }
-            });
-
-            // Reconstruir datesMap correctamente
             monthData.dias.forEach(employeeEntry => { // employeeEntry = { name: "...", schedule: [...] }
-                if (employeeEntry.schedule) {
+                if (Array.isArray(employeeEntry.schedule)) { // Comprobar que 'schedule' es un array
                     employeeEntry.schedule.forEach(dayInfo => {
-                        const dayDate = new Date(dayInfo.date + 'T00:00:00');
-                        if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) {
+                        const dayDate = new Date(dayInfo.date + 'T00:00:00'); 
+                        if (dayDate.getDay() >= 1 && dayDate.getDay() <= 5) { // Lunes=1 a Viernes=5
                             if (!datesMap.has(dayInfo.date)) {
                                 datesMap.set(dayInfo.date, []);
                             }
@@ -426,7 +386,7 @@
                 }
             });
 
-
+            // Convertir el mapa a un array y ordenar por fecha
             const sortedDates = Array.from(datesMap.keys()).sort();
 
             if (sortedDates.length === 0) {
@@ -530,7 +490,7 @@
             const monthKey = `${displayMonth.getFullYear()}-${(displayMonth.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthData = presencialidadState.calendariosPorMes.find(m => m.mesAnio === monthKey);
 
-            if (!monthData || !monthData.dias || monthData.dias.length === 0) {
+            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) { // Comprobar que 'dias' es un array
                 tbody.innerHTML = `<tr><td colspan="1">No hay datos de calendario para ${displayMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}. Genera el calendario.</td></tr>`;
                 return;
             }
@@ -538,7 +498,7 @@
             // Obtener todas las fechas únicas del mes a mostrar, filtrando solo días hábiles
             const allDates = new Set();
             monthData.dias.forEach(employeeEntry => { // employeeEntry = { name: "...", schedule: [...] }
-                if (employeeEntry.schedule) {
+                if (Array.isArray(employeeEntry.schedule)) { // Comprobar que 'schedule' es un array
                     employeeEntry.schedule.forEach(dayInfo => {
                         const dayDate = new Date(dayInfo.date + 'T00:00:00'); 
                         if (dayDate.getMonth() === displayMonth.getMonth() && dayDate.getFullYear() === displayMonth.getFullYear() &&
@@ -558,6 +518,7 @@
 
             // Rellenar encabezado de fechas
             sortedDates.forEach(date => {
+                // Mostrar el día de la semana y la fecha para mayor claridad en el admin
                 headerRow.innerHTML += `<th>${new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })}</th>`;
             });
 
@@ -567,7 +528,7 @@
                 // Busca la entrada del empleado para el MES ACTUALMENTE SELECCIONADO
                 let employeeCalendarForMonth = monthData.dias.find(e => e.name === employeeName);
                 
-                // Si el empleado no tiene una entrada en el calendario de este mes, créala
+                // Si el empleado no tiene una entrada en 'calendar' para este mes, créala
                 if (!employeeCalendarForMonth) {
                     employeeCalendarForMonth = { name: employeeName, schedule: [] };
                     monthData.dias.push(employeeCalendarForMonth);
@@ -738,7 +699,7 @@
             const monthKey = `${displayMonth.getFullYear()}-${(displayMonth.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthData = data.calendariosPorMes.find(m => m.mesAnio === monthKey);
 
-            if (!monthData || !monthData.dias || monthData.dias.length === 0) {
+            if (!monthData || !Array.isArray(monthData.dias) || monthData.dias.length === 0) {
                 alert(`No hay datos en el calendario para ${displayMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} para exportar.`);
                 return;
             }
@@ -746,7 +707,7 @@
             // Obtener todas las fechas únicas y ordenarlas, filtrando solo días hábiles del mes actual
             const allDates = new Set();
             monthData.dias.forEach(employeeEntry => {
-                if (employeeEntry.schedule) {
+                if (Array.isArray(employeeEntry.schedule)) {
                     employeeEntry.schedule.forEach(dayInfo => {
                         const dayDate = new Date(dayInfo.date + 'T00:00:00'); 
                         if (dayDate.getMonth() === displayMonth.getMonth() && dayDate.getFullYear() === displayMonth.getFullYear() &&
@@ -770,11 +731,13 @@
                 const row = [new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: '2-digit' })]; 
                 const employeeStatusMap = new Map();
                 monthData.dias.forEach(employeeEntry => {
-                    employeeEntry.schedule.forEach(dayInfo => {
-                        if (dayInfo.date === date) {
-                            employeeStatusMap.set(employeeEntry.name, dayInfo.status);
-                        }
-                    });
+                    if (Array.isArray(employeeEntry.schedule)) {
+                        employeeEntry.schedule.forEach(dayInfo => {
+                            if (dayInfo.date === date) {
+                                employeeStatusMap.set(employeeEntry.name, dayInfo.status);
+                            }
+                        });
+                    }
                 });
 
                 data.empleados.forEach(empName => {
