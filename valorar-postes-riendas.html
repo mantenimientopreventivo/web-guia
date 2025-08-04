@@ -6,63 +6,20 @@
     <title>Valorar postes, riendas y varios - Guía</title>
     <style>
         /* Estilos Generales y Fondo */
-        body, html { 
-            margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-            font-size: 13px; /* Tamaño de fuente base reducido */
-        }
-        body {
-            background-image: url('movistar.png'); background-size: contain;
-            background-position: center; background-repeat: no-repeat;
-            background-color: #0099e4; background-attachment: fixed;
-        }
-        .main-container {
-            max-width: 900px; 
-            margin: 10px auto; /* Menos margen */
-            padding: 15px; /* Menos padding */
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            color: white;
-        }
-        .back-button {
-            display: inline-block; padding: 5px 12px; margin-bottom: 10px;
-            background-color: #00A9E0; color: white; text-decoration: none;
-            border-radius: 6px; font-weight: bold; transition: background-color 0.3s;
-        }
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13px; }
+        body { background-image: url('movistar.png'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #0099e4; background-attachment: fixed; }
+        .main-container { max-width: 900px; margin: 10px auto; padding: 15px; background-color: rgba(0, 0, 0, 0.8); border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); color: white; }
+        .back-button { display: inline-block; padding: 5px 12px; margin-bottom: 10px; background-color: #00A9E0; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: background-color 0.3s; }
         .back-button:hover { background-color: #0078a8; }
-        
-        h1 {
-            text-align: center; color: #00A9E0; margin-top: 0;
-            margin-bottom: 15px; font-size: 1.6em; /* Título más pequeño */
-            text-transform: uppercase;
-        }
-
-        /* Estilos para la calculadora */
-        .calculator-table {
-            width: 100%; border-collapse: collapse; 
-            font-size: 0.95em; /* Fuente de tabla ajustada */
-        }
-        .calculator-table th, .calculator-table td {
-            border: 1px solid #777; 
-            padding: 5px; /* Celdas más ajustadas */
-            text-align: center;
-        }
+        h1 { text-align: center; color: #00A9E0; margin: 0 0 15px; font-size: 1.6em; text-transform: uppercase; }
+        .calculator-table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+        .calculator-table th, .calculator-table td { border: 1px solid #777; padding: 5px; text-align: center; }
         .calculator-table th { background-color: #003755; }
-        .calculator-table td.item-name {
-            text-align: left;
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        .calculator-table input[type="number"] {
-            width: 80%; padding: 4px; /* Inputs más pequeños */
-            font-size: 1em; text-align: center;
-            border: 1px solid #ccc; border-radius: 4px;
-        }
+        .calculator-table td.item-name { text-align: left; background-color: rgba(255,255,255,0.05); }
+        .calculator-table input[type="number"], .calculator-table select { width: 90%; padding: 4px; font-size: 1em; border: 1px solid #ccc; border-radius: 4px; }
         .total-row { background-color: #333; font-weight: bold; font-size: 1.1em; }
         .clear-button-container { text-align: right; margin-top: 10px; }
-        .clear-button {
-            background-color: #6c757d; color: white; border: none;
-            padding: 6px 15px; font-size: 0.9em; font-weight: bold;
-            border-radius: 5px; cursor: pointer; transition: background-color 0.3s;
-        }
+        .clear-button { background-color: #6c757d; color: white; border: none; padding: 6px 15px; font-size: 0.9em; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
         .clear-button:hover { background-color: #5a6268; }
     </style>
 </head>
@@ -70,7 +27,6 @@
     <div class="main-container">
         <a href="index.html" class="back-button">‹ Volver al Índice</a>
         <h1>Valorar postes, riendas y varios</h1>
-        
         <table class="calculator-table">
             <thead>
                 <tr>
@@ -79,7 +35,6 @@
                     <th style="width: 40%;">Denominacion</th>
                     <th>Baremo</th>
                     <th>Ingrese Cantidad</th>
-                    <!-- TÍTULO DE COLUMNA ACTUALIZADO -->
                     <th>H.B</th>
                 </tr>
             </thead>
@@ -87,7 +42,7 @@
                 <tr>
                     <td>82</td>
                     <td>103</td>
-                    <td class="item-name">Aplomar o corregir emplazamiento de poste sin basamento</td>
+                    <td class="item-name">Aplomar o corregir emplazamiento de poste sin basamento <a href="82-103.jpg" target="_blank" style="color: #00A9E0; text-decoration: none; font-weight: bold;">+info</a></td>
                     <td id="baremo-1" data-baremo="2">2</td>
                     <td><input type="number" id="cantidad-1" oninput="calculateRow(1)"></td>
                     <td id="hb-1">0.00</td>
@@ -95,7 +50,7 @@
                 <tr>
                     <td>82</td>
                     <td>204</td>
-                    <td class="item-name">Desmontar poste sin basamento o sin eliminar basamento</td>
+                    <td class="item-name">Desmontar poste sin basamento o sin eliminar basamento <a href="82-204.jpg" target="_blank" style="color: #00A9E0; text-decoration: none; font-weight: bold;">+info</a></td>
                     <td id="baremo-2" data-baremo="4.6">4,6</td>
                     <td><input type="number" id="cantidad-2" oninput="calculateRow(2)"></td>
                     <td id="hb-2">0.00</td>
@@ -103,7 +58,7 @@
                 <tr>
                     <td>82</td>
                     <td>210</td>
-                    <td class="item-name">Cambio de poste de línea o apoyo</td>
+                    <td class="item-name">Cambio de poste de línea o apoyo <a href="82-210.jpg" target="_blank" style="color: #00A9E0; text-decoration: none; font-weight: bold;">+info</a></td>
                     <td id="baremo-3" data-baremo="15">15</td>
                     <td><input type="number" id="cantidad-3" oninput="calculateRow(3)"></td>
                     <td id="hb-3">0.00</td>
@@ -112,7 +67,12 @@
                     <td>82</td>
                     <td>110</td>
                     <td class="item-name">Colocar conjunto de peldaño y estribos en poste existente</td>
-                    <td id="baremo-4" data-baremo="3">3</td>
+                    <td id="baremo-4" data-baremo="1.5">
+                        <select id="option-4" onchange="updateOption(4)">
+                            <option value="1.5" selected>Postes con RED o solo APOYO: ½ estribado</option>
+                            <option value="3">Postes con CTO o HUB: estribado completo</option>
+                        </select>
+                    </td>
                     <td><input type="number" id="cantidad-4" oninput="calculateRow(4)"></td>
                     <td id="hb-4">0.00</td>
                 </tr>
@@ -127,7 +87,7 @@
                 <tr>
                     <td>82</td>
                     <td>6</td>
-                    <td class="item-name">Instalar riostra con tirante (rienda)</td>
+                    <td class="item-name">Instalar riostra con tirante (rienda) <a href="82-6.jpg" target="_blank" style="color: #00A9E0; text-decoration: none; font-weight: bold;">+info</a></td>
                     <td id="baremo-6" data-baremo="7.5">7,5</td>
                     <td><input type="number" id="cantidad-6" oninput="calculateRow(6)"></td>
                     <td id="hb-6">0.00</td>
@@ -135,26 +95,36 @@
                 <tr>
                     <td>84</td>
                     <td>360</td>
-                    <td class="item-name">Tendido de cable telefónico en todo tipo de Infraestructura aérea o canalizadMa</td>
+                    <td class="item-name">Tendido de cable telefónico en todo tipo de Infraestructura aérea o canalizada</td>
                     <td id="baremo-7" data-baremo="0.12">0,12</td>
                     <td><input type="number" id="cantidad-7" oninput="calculateRow(7)"></td>
                     <td id="hb-7">0.00</td>
                 </tr>
+                <tr>
+                    <td>84</td>
+                    <td>232</td>
+                    <td class="item-name">Desmontar Acometida</td>
+                    <td id="baremo-8" data-baremo="0.20">0,20</td>
+                    <td><input type="number" id="cantidad-8" oninput="calculateRow(8)"></td>
+                    <td id="hb-8">0.00</td>
+                </tr>
             </tbody>
             <tfoot>
-                <tr class="total-row">
-                    <td colspan="5">TOTAL</td>
-                    <td id="total-hb">0.00</td>
-                </tr>
+                <tr class="total-row"><td colspan="5">TOTAL</td><td id="total-hb">0.00</td></tr>
             </tfoot>
         </table>
-
         <div class="clear-button-container">
             <button class="clear-button" onclick="clearCalculator()">Limpiar</button>
         </div>
     </div>
-
     <script>
+    function updateOption(rowNum) {
+        const select = document.getElementById(`option-${rowNum}`);
+        const value = parseFloat(select.value);
+        const cell = document.getElementById(`baremo-${rowNum}`);
+        cell.dataset.baremo = value;
+        calculateRow(rowNum);
+    }
     function calculateRow(rowNum) {
         const baremo = parseFloat(document.getElementById(`baremo-${rowNum}`).dataset.baremo);
         const cantidad = parseFloat(document.getElementById(`cantidad-${rowNum}`).value) || 0;
@@ -162,20 +132,16 @@
         document.getElementById(`hb-${rowNum}`).innerText = hb.toFixed(2);
         updateTotal();
     }
-
     function updateTotal() {
         let total = 0;
-        for (let i = 1; i <= 7; i++) {
-            total += parseFloat(document.getElementById(`hb-${i}`).innerText) || 0;
-        }
+        document.querySelectorAll('[id^="hb-"]').forEach(cell => total += parseFloat(cell.innerText) || 0);
         document.getElementById('total-hb').innerText = total.toFixed(2);
     }
-
     function clearCalculator() {
-        for (let i = 1; i <= 7; i++) {
-            document.getElementById(`cantidad-${i}`).value = '';
-            calculateRow(i);
-        }
+        document.querySelectorAll('input[type="number"]').forEach(i => i.value = '');
+        document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+        document.querySelectorAll('[id^="hb-"]').forEach(cell => cell.innerText = '0.00');
+        updateTotal();
     }
     </script>
 </body>
