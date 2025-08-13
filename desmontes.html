@@ -1,140 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Desmontes - Guía de Mantenimiento</title>
-    <style>
-        /* Estilos (sin cambios) */
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13px; }
-        body {
-            background-image: url('movistar.png'); background-size: contain;
-            background-position: center; background-repeat: no-repeat;
-            background-color: #0099e4; background-attachment: fixed;
-        }
-        .main-container {
-            max-width: 900px; margin: 15px auto; padding: 15px;
-            background-color: rgba(0, 0, 0, 0.75);
-            border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            color: white;
-        }
-        .back-button {
-            display: inline-block; padding: 5px 12px; margin-bottom: 10px;
-            background-color: #00A9E0; color: white; text-decoration: none;
-            border-radius: 6px; font-weight: bold; transition: background-color 0.3s;
-        }
-        .back-button:hover { background-color: #0078a8; }
-        h1 {
-            text-align: center; color: #00A9E0; margin-top: 0;
-            margin-bottom: 15px; font-size: 1.5em; text-transform: uppercase;
-        }
-        .calculator-table {
-            width: 100%; border-collapse: collapse; font-size: 1em;
-        }
-        .calculator-table th, .calculator-table td {
-            border: 1px solid #555; padding: 6px; text-align: center;
-        }
-        .calculator-table th { background-color: #003755; }
-        .calculator-table td.item-name {
-            background-color: #4A4A4A; font-weight: bold; text-align: left;
-        }
-        .calculator-table input[type="number"] {
-            width: 85%; padding: 4px; font-size: 1em; text-align: center;
-            border: 1px solid #ccc; border-radius: 4px;
-        }
-        .total-row { background-color: #333; font-weight: bold; font-size: 1.1em; }
-        .clear-button-container { text-align: right; margin-top: 10px; }
-        .clear-button {
-            background-color: #6c757d; color: white; border: none;
-            padding: 6px 15px; font-size: 0.9em; font-weight: bold;
-            border-radius: 5px; cursor: pointer; transition: background-color 0.3s;
-        }
-        .clear-button:hover { background-color: #5a6268; }
-        .hidden-col { display: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Desmontes - Guía de Mantenimiento</title>
+  <style>
+    /* Estilos base existentes */
+    body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13px; }
+    body {
+      background-image: url('movistar.png'); background-size: contain;
+      background-position: center; background-repeat: no-repeat;
+      background-color: #0099e4; background-attachment: fixed;
+    }
+    .main-container {
+      max-width: 900px; margin: 15px auto; padding: 15px;
+      background-color: rgba(0, 0, 0, 0.75);
+      border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      color: white;
+    }
+    .back-button {
+      display: inline-block; padding: 5px 12px; margin-bottom: 10px;
+      background-color: #00A9E0; color: white; text-decoration: none;
+      border-radius: 6px; font-weight: bold; transition: background-color 0.3s;
+    }
+    .back-button:hover { background-color: #0078a8; }
+
+    /* NUEVO: toolbar y botón a la calculadora */
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .open-calc-button{
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 6px; font-weight: bold;
+      color:#ffffff; background:#2563eb; text-decoration: none;
+      box-shadow: 0 3px 12px rgba(37,99,235,.35);
+      transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease;
+    }
+    .open-calc-button:hover{ background:#1d4ed8; transform: translateY(-1px); box-shadow:0 6px 18px rgba(29,78,216,.45); }
+
+    h1 {
+      text-align: center; color: #00A9E0; margin-top: 0;
+      margin-bottom: 15px; font-size: 1.5em; text-transform: uppercase;
+    }
+    .calculator-table { width: 100%; border-collapse: collapse; font-size: 1em; }
+    .calculator-table th, .calculator-table td { border: 1px solid #555; padding: 6px; text-align: center; }
+    .calculator-table th { background-color: #003755; }
+    .calculator-table td.item-name { background-color: #4A4A4A; font-weight: bold; text-align: left; }
+    .calculator-table input[type="number"] {
+      width: 85%; padding: 4px; font-size: 1em; text-align: center;
+      border: 1px solid #ccc; border-radius: 4px;
+    }
+    .total-row { background-color: #333; font-weight: bold; font-size: 1.1em; }
+    .clear-button-container { text-align: right; margin-top: 10px; }
+    .clear-button {
+      background-color: #6c757d; color: white; border: none;
+      padding: 6px 15px; font-size: 0.9em; font-weight: bold;
+      border-radius: 5px; cursor: pointer; transition: background-color 0.3s;
+    }
+    .clear-button:hover { background-color: #5a6268; }
+    .hidden-col { display: none; }
+  </style>
 </head>
 <body>
-    <div class="main-container">
-        <a href="index.html" class="back-button">‹ Volver al Índice</a>
-        <h1>Calculadora de Desmontes</h1>
-        
-        <table class="calculator-table">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th class="hidden-col">Coeficiente</th>
-                    <th>Ingrese Cantidad</th>
-                    <th>HS.L</th>
-                    <th>Hs.Lc</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td class="item-name">CABLES</td><td id="coef-1" data-coef="0.045" class="hidden-col">0,045</td><td><input type="number" id="cantidad-1" oninput="calculateRow(1)"></td><td id="subtotal-1">0.00</td><td></td></tr>
-                <tr><td class="item-name">SUSPENSOR</td><td id="coef-2" data-coef="0.045" class="hidden-col">0,045</td><td><input type="number" id="cantidad-2" oninput="calculateRow(2)"></td><td id="subtotal-2">0.00</td><td></td></tr>
-                <tr><td class="item-name">DEVANADO</td><td id="coef-3" data-coef="0.045" class="hidden-col">0,045</td><td><input type="number" id="cantidad-3" oninput="calculateRow(3)"></td><td id="subtotal-3">0.00</td><td></td></tr>
-                <tr><td class="item-name">ACOMETIDAS</td><td id="coef-4" data-coef="0.2" class="hidden-col">0,2</td><td><input type="number" id="cantidad-4" oninput="calculateRow(4)"></td><td id="subtotal-4">0.00</td><td></td></tr>
-                <tr><td class="item-name">ELEM SEG</td><td id="coef-5" data-coef="0.2333" class="hidden-col">0,7/3</td><td><input type="number" id="cantidad-5" oninput="calculateRow(5)"></td><td id="subtotal-5">0.00</td><td></td></tr>
-                <tr><td class="item-name">CAJAS</td><td id="coef-6" data-coef="0.83" class="hidden-col">0,83</td><td><input type="number" id="cantidad-6" oninput="calculateRow(6)"></td><td id="subtotal-6">0.00</td><td></td></tr>
-                <tr><td class="item-name">PROTEC. POS.</td><td id="coef-7" data-coef="0.5" class="hidden-col">0,5</td><td><input type="number" id="cantidad-7" oninput="calculateRow(7)"></td><td id="subtotal-7">0.00</td><td></td></tr>
-                <tr><td class="item-name">ARMARIO (CANT)</td><td id="coef-8" data-coef="1.9" class="hidden-col">1,9</td><td><input type="number" id="cantidad-8" oninput="calculateRow(8)"></td><td id="subtotal-8">0.00</td><td id="hslc-8">0.00</td></tr>
-                <tr><td class="item-name">CRUCE ELECTRICO (CANT)</td><td id="coef-9" data-coef="2" class="hidden-col">2</td><td><input type="number" id="cantidad-9" oninput="calculateRow(9)"></td><td id="subtotal-9">0.00</td><td></td></tr>
-            </tbody>
-            <tfoot>
-                <!-- ========= ESTRUCTURA DE TOTALES MODIFICADA ========= -->
-                <tr class="total-row">
-                    <td colspan="2">TOTAL</td> <!-- Colspan de 2 para alinear con "Item" y "Cantidad" -->
-                    <td id="total-hsl">0.00</td>
-                    <td id="total-hslc">0.00</td>
-                </tr>
-                <!-- ======================================================= -->
-            </tfoot>
-        </table>
+  <div class="main-container">
 
-        <div class="clear-button-container">
-            <button class="clear-button" onclick="clearCalculator()">Limpiar</button>
-        </div>
+    <!-- Toolbar con los botones -->
+    <div class="toolbar">
+      <a href="index.html" class="back-button">‹ Volver al Índice</a>
+
+      <!-- NUEVO: botón que abre la calculadora en una pestaña nueva -->
+      <a href="calculadora-momento-cero.html"
+         class="open-calc-button"
+         target="_blank" rel="noopener">
+        🧮 Calculadora Momento Cero
+      </a>
     </div>
 
-    <script>
-    function calculateRow(rowNum) {
-        const coef = parseFloat(document.getElementById(`coef-${rowNum}`).dataset.coef);
-        const cantidad = parseFloat(document.getElementById(`cantidad-${rowNum}`).value) || 0;
-        const subtotal = cantidad * coef;
-        document.getElementById(`subtotal-${rowNum}`).innerText = subtotal.toFixed(2);
-        
-        if (rowNum === 8) {
-            const hslc = cantidad * 4.7;
-            document.getElementById('hslc-8').innerText = hslc.toFixed(2);
-        }
+    <!-- (contenido existente) -->
+    <table class="calculator-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="hidden-col">Coeficiente</th>
+          <th>Ingrese Cantidad</th>
+          <th>HS.L</th>
+          <th>Hs.Lc</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="item-name">CABLES</td><td id="coef-1" data-coef="0.045" class="hidden-col">0,045</td><td><input type="number" id="cantidad-1" oninput="calculateRow(1)"></td><td id="subtotal-1">0.00</td><td></td></tr>
+        <tr><td class="item-name">SUSPENSOR</td><td id="coef-2" data-coef="0.045" class="hidden-col">0,045</td><td><input type="number" id="cantidad-2" oninput="calculateRow(2)"></td><td id="subtotal-2">0.00</td><td></td></tr>
+        <tr><td class="item-name">DEVANADO</td><td id="coef-3" data-coef="0.045" class="hidden-col">0,045</td><td><input type="number" id="cantidad-3" oninput="calculateRow(3)"></td><td id="subtotal-3">0.00</td><td></td></tr>
+        <tr><td class="item-name">ACOMETIDAS</td><td id="coef-4" data-coef="0.2" class="hidden-col">0,2</td><td><input type="number" id="cantidad-4" oninput="calculateRow(4)"></td><td id="subtotal-4">0.00</td><td></td></tr>
+        <tr><td class="item-name">ELEM SEG</td><td id="coef-5" data-coef="0.2333" class="hidden-col">0,7/3</td><td><input type="number" id="cantidad-5" oninput="calculateRow(5)"></td><td id="subtotal-5">0.00</td><td></td></tr>
+        <tr><td class="item-name">CAJAS</td><td id="coef-6" data-coef="0.83" class="hidden-col">0,83</td><td><input type="number" id="cantidad-6" oninput="calculateRow(6)"></td><td id="subtotal-6">0.00</td><td></td></tr>
+        <tr><td class="item-name">PROTEC. POS.</td><td id="coef-7" data-coef="0.5" class="hidden-col">0,5</td><td><input type="number" id="cantidad-7" oninput="calculateRow(7)"></td><td id="subtotal-7">0.00</td><td></td></tr>
+        <tr><td class="item-name">ARMARIO (CANT)</td><td id="coef-8" data-coef="1.9" class="hidden-col">1,9</td><td><input type="number" id="cantidad-8" oninput="calculateRow(8)"></td><td id="subtotal-8">0.00</td><td id="hslc-8">0.00</td></tr>
+        <tr><td class="item-name">CRUCE ELECTRICO (CANT)</td><td id="coef-9" data-coef="2" class="hidden-col">2</td><td><input type="number" id="cantidad-9" oninput="calculateRow(9)"></td><td id="subtotal-9">0.00</td><td></td></tr>
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="2">TOTAL</td>
+          <td id="total-hsl">0.00</td>
+          <td id="total-hslc">0.00</td>
+        </tr>
+      </tfoot>
+    </table>
 
-        updateTotals(); // Cambiado de updateTotal a updateTotals (plural)
+    <div class="clear-button-container">
+      <button class="clear-button" onclick="clearCalculator()">Limpiar</button>
+    </div>
+  </div>
+
+  <script>
+    function calculateRow(rowNum) {
+      const coef = parseFloat(document.getElementById(`coef-${rowNum}`).dataset.coef);
+      const cantidad = parseFloat(document.getElementById(`cantidad-${rowNum}`).value) || 0;
+      const subtotal = cantidad * coef;
+      document.getElementById(`subtotal-${rowNum}`).innerText = subtotal.toFixed(2);
+
+      if (rowNum === 8) {
+        const hslc = cantidad * 4.7;
+        document.getElementById('hslc-8').innerText = hslc.toFixed(2);
+      }
+      updateTotals();
     }
 
-    // --- FUNCIÓN DE TOTALES MODIFICADA ---
     function updateTotals() {
-        let totalHSL = 0;
-        
-        // Sumar todos los valores de la columna HS.L
-        for (let i = 1; i <= 9; i++) {
-            totalHSL += parseFloat(document.getElementById(`subtotal-${i}`).innerText) || 0;
-        }
-
-        // El total de Hs.Lc es simplemente el valor de la única celda que lo tiene
-        let totalHSLC = parseFloat(document.getElementById('hslc-8').innerText) || 0;
-
-        // Actualizar el DOM con los nuevos totales
-        document.getElementById('total-hsl').innerText = totalHSL.toFixed(2);
-        document.getElementById('total-hslc').innerText = totalHSLC.toFixed(2);
+      let totalHSL = 0;
+      for (let i = 1; i <= 9; i++) {
+        totalHSL += parseFloat(document.getElementById(`subtotal-${i}`).innerText) || 0;
+      }
+      let totalHSLC = parseFloat(document.getElementById('hslc-8').innerText) || 0;
+      document.getElementById('total-hsl').innerText = totalHSL.toFixed(2);
+      document.getElementById('total-hslc').innerText = totalHSLC.toFixed(2);
     }
 
     function clearCalculator() {
-        for (let i = 1; i <= 9; i++) {
-            document.getElementById(`cantidad-${i}`).value = '';
-            // No es necesario limpiar la celda hslc-8 aquí,
-            // porque calculateRow(i) la pondrá a 0 cuando i sea 8.
-            calculateRow(i);
-        }
+      for (let i = 1; i <= 9; i++) {
+        document.getElementById(`cantidad-${i}`).value = '';
+        calculateRow(i);
+      }
     }
-    </script>
+  </script>
 </body>
 </html>
