@@ -8,312 +8,91 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{ 
-      --blue1:#00a7e0; /* celeste movistar */
-      --blue2:#0077c8; /* azul medio */
-      --blue3:#0057b8; /* azul profundo */
-      --panel:#ffffff;
-      --muted:#334155;
-      --text:#0f172a;
-      --line:#cfe3ff;
-    }
+    :root{ --blue1:#00a7e0; --blue2:#0077c8; --blue3:#0057b8; --panel:#ffffff; --muted:#334155; --text:#0f172a; --line:#cfe3ff; }
     *{ box-sizing:border-box; }
     html,body{ height:100%; margin:0; }
-    body{ font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-          background:linear-gradient(180deg,var(--blue1) 0%, var(--blue2) 52%, var(--blue3) 100%);
-          color:var(--text); }
+    body{ font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:linear-gradient(180deg,var(--blue1) 0%, var(--blue2) 52%, var(--blue3) 100%); color:var(--text); }
     .wrap{ max-width:1100px; margin:40px auto; padding:0 24px 36px; }
-    .title{ font-size:32px; font-weight:800; letter-spacing:.2px; color:#eaf6ff; text-shadow:0 3px 10px rgba(0,0,0,.25); }
+    .title{ font-size:32px; font-weight:800; color:#eaf6ff; text-shadow:0 3px 10px rgba(0,0,0,.25); }
     .grid{ display:grid; grid-template-columns: repeat(12,1fr); gap:18px; }
-
-    /* Cards estilo "píldora" claras sobre fondo azul */
-    .card{ 
-      background:linear-gradient(180deg,#f3f9ff 0%, #e3f1ff 100%);
-      border:1px solid rgba(255,255,255,.7);
-      border-radius:22px;
-      padding:18px;
-      box-shadow:0 12px 28px rgba(0,60,130,.20), inset 0 1px 0 rgba(255,255,255,.6);
-    }
+    .card{ background:linear-gradient(180deg,#f3f9ff 0%, #e3f1ff 100%); border:1px solid rgba(255,255,255,.7); border-radius:22px; padding:18px; }
     .card h3{ margin:0 0 10px; font-size:16px; font-weight:800; color:#0b1324; }
-
-    label{ display:block; font-size:13px; color:#1f2a3a; margin-bottom:6px; }
-    input[type=number]{ width:100%; padding:10px 12px; border-radius:12px; border:1px solid #b6d7ff; background:#ffffff; color:#0b1324; outline:none; transition:border .15s ease, box-shadow .15s ease; }
-    input[type=number]:focus{ border-color:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.18); }
-
+    label{ display:block; font-size:13px; margin-bottom:6px; }
+    input[type=number]{ width:100%; padding:10px 12px; border-radius:12px; border:1px solid #b6d7ff; background:#ffffff; color:#0b1324; }
     .row{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-    .btns{ display:flex; gap:12px; align-items:center; }
-
-    button{ appearance:none; border:none; padding:10px 16px; border-radius:14px; font-weight:800; cursor:pointer; }
-    .primary{ background:linear-gradient(180deg,#3b82f6,#2563eb); color:#f8fafc; box-shadow:0 8px 18px rgba(37,99,235,.35); }
-    .primary:hover{ transform:translateY(-1px); box-shadow:0 12px 26px rgba(37,99,235,.45); }
+    .btns{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    button{ border:none; padding:10px 16px; border-radius:14px; font-weight:800; cursor:pointer; }
+    .primary{ background:linear-gradient(180deg,#3b82f6,#2563eb); color:#f8fafc; }
     .ghost{ background:transparent; border:1px solid rgba(255,255,255,.75); color:#eaf6ff; }
-
-    table{ width:100%; border-collapse:separate; border-spacing:0; margin-top:10px; overflow:hidden; border-radius:14px; }
+    .success{ background:linear-gradient(180deg,#16a34a,#15803d); color:#f8fafc; }
+    table{ width:100%; border-collapse:separate; border-spacing:0; margin-top:10px; border-radius:14px; }
     th, td{ padding:12px 14px; text-align:left; border-bottom:1px solid var(--line); font-size:14px; }
-    th{ color:#0b1324; font-weight:800; background:#e8f3ff; position:sticky; top:0; }
+    th{ background:#e8f3ff; font-weight:800; }
     tfoot th{ background:#eaf4ff; }
     .right{ text-align:right; }
-
-    .kpi{ display:flex; gap:12px; flex-wrap:wrap; }
-    .kpi .pill{ background:#e0f0ff; border:1px solid #b9dcff; border-radius:999px; padding:10px 14px; font-weight:800; color:#0f172a; box-shadow:0 4px 10px rgba(0,60,130,.12); }
+    @page { size: A4; margin: 14mm; }
+    @media print { body{ background:#ffffff; } .btns{ display:none !important; } }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="title">Calculadora – Momento Cero</div>
-    
-
-    <!-- Entradas -->
     <div class="grid" style="margin-top:18px;">
       <div class="card" style="grid-column: span 5;">
         <h3>Devanado</h3>
         <div class="row">
-          <div>
-            <label>Devanado 1/4 (tramos de 50 m)</label>
-            <input id="dev14" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>Devanado 1/2 (tramos de 50 m)</label>
-            <input id="dev12" type="number" step="1" min="0" value="0" />
-          </div>
+          <div><label>Devanado 1/4</label><input id="dev14" type="number" value="0" /></div>
+          <div><label>Devanado 1/2</label><input id="dev12" type="number" value="0" /></div>
         </div>
         <div class="row">
-          <div>
-            <label>Devanado Total (tramos de 50 m)</label>
-            <input id="devTotal" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>Tensor (tramos de 50 m)</label>
-            <input id="tensor" type="number" step="1" min="0" value="0" />
-          </div>
+          <div><label>Devanado Total</label><input id="devTotal" type="number" value="0" /></div>
+          <div><label>Tensor</label><input id="tensor" type="number" value="0" /></div>
         </div>
       </div>
-
       <div class="card" style="grid-column: span 7;">
-        <h3>Cables – Tramos de 50 m</h3>
+        <h3>Cables</h3>
         <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap:10px;">
-          <div>
-            <label>1 cable</label>
-            <input id="cab1" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>2 cables</label>
-            <input id="cab2" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>3 cables</label>
-            <input id="cab3" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>4 cables</label>
-            <input id="cab4" type="number" step="1" min="0" value="0" />
-          </div>
+          <div><label>1 cable</label><input id="cab1" type="number" value="0" /></div>
+          <div><label>2 cables</label><input id="cab2" type="number" value="0" /></div>
+          <div><label>3 cables</label><input id="cab3" type="number" value="0" /></div>
+          <div><label>4 cables</label><input id="cab4" type="number" value="0" /></div>
         </div>
       </div>
-
       <div class="card" style="grid-column: span 12;">
-        <h3>Unidades (cantidades)</h3>
+        <h3>Unidades</h3>
         <div class="grid" style="grid-template-columns: repeat(6, 1fr); gap:10px;">
-          <div>
-            <label>ACOMETIDAS (cantidad)</label>
-            <input id="acometidas" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>CAJAS (cant)</label>
-            <input id="cajas" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>ELEM. SEG. (CANT)</label>
-            <input id="elemSeg" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>PROTEC. SUB. (CANT)</label>
-            <input id="protecSub" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>CRUCE ELÉCTRICO (CANT)</label>
-            <input id="cruceElec" type="number" step="1" min="0" value="0" />
-          </div>
-          <div>
-            <label>ARMARIO (CANT)</label>
-            <input id="armario" type="number" step="1" min="0" value="0" />
-          </div>
+          <div><label>ACOMETIDAS</label><input id="acometidas" type="number" value="0" /></div>
+          <div><label>CAJAS</label><input id="cajas" type="number" value="0" /></div>
+          <div><label>ELEM. SEG.</label><input id="elemSeg" type="number" value="0" /></div>
+          <div><label>PROTEC. SUB.</label><input id="protecSub" type="number" value="0" /></div>
+          <div><label>CRUCE ELÉCTRICO</label><input id="cruceElec" type="number" value="0" /></div>
+          <div><label>ARMARIO</label><input id="armario" type="number" value="0" /></div>
         </div>
       </div>
     </div>
-
     <div class="btns" style="margin-top:12px;">
       <button class="primary" onclick="calcular()">Calcular</button>
       <button class="ghost" onclick="limpiar()">Limpiar</button>
+      <button id="btnPdf" class="success" onclick="exportarPDF()" disabled>Exportar PDF</button>
     </div>
-
-    <!-- KPIs intermedios -->
     <div id="kpis" class="kpi" style="margin-top:14px; display:none;"></div>
-
-    <!-- Tabla de resultados (Replica de cabecera: ELEMENTO | unidad | MOMENTO 0 | VALORAR | Hs.L | Hs.Lc) -->
     <div class="card" style="margin-top:14px;">
       <h3>Cuadro de cálculos</h3>
-      
       <table id="tabla">
-        <thead>
-          <tr>
-            <th>ELEMENTO</th>
-            <th>Unidad</th>
-            <th class="right">MOMENTO 0</th>
-            <th class="right">VALORAR</th>
-            <th class="right">Hs.L</th>
-            <th class="right">Hs.Lc</th>
-          </tr>
-        </thead>
+        <thead><tr><th>ELEMENTO</th><th>Unidad</th><th class="right">MOMENTO 0</th><th class="right">VALORAR</th><th class="right">Hs.L</th><th class="right">Hs.Lc</th></tr></thead>
         <tbody id="tbody"></tbody>
-        <tfoot>
-          <tr>
-            <th colspan="4" class="right">Totales</th>
-            <th class="right" id="hsLTotal">0</th>
-            <th class="right" id="hsLcTotal">0</th>
-          </tr>
-        </tfoot>
+        <tfoot><tr><th colspan="4" class="right">Totales</th><th class="right" id="hsLTotal">0</th><th class="right" id="hsLcTotal">0</th></tr></tfoot>
       </table>
     </div>
   </div>
-
   <script>
-    // ---- Baremos desde hoja HB (columna C) ----
     const HB = { C1:0.045, C2:0.200, C3:0.830, C4:0.700, C5:1.900, C6:0.500, C7:2.000 };
-
-    // Utilidades
-    const num = (id) => Math.max(0, Number(document.getElementById(id).value || 0));
-    const fmt = (v) => (isNaN(v)? '0' : new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(v));
-    const round2 = (v) => Math.round((v + Number.EPSILON) * 100) / 100;
-
-    function limpiar(){
-      ['dev14','dev12','devTotal','tensor','cab1','cab2','cab3','cab4','acometidas','cajas','elemSeg','protecSub','cruceElec','armario']
-        .forEach(id => document.getElementById(id).value = 0);
-      document.getElementById('tbody').innerHTML = '';
-      document.getElementById('kpis').style.display = 'none';
-      document.getElementById('hsLTotal').textContent = '0';
-      document.getElementById('hsLcTotal').textContent = '0';
-    }
-
-    function calcular(){
-      // --- Entradas ---
-      const dev14 = num('dev14');
-      const dev12 = num('dev12');
-      const devT  = num('devTotal');
-      const tens  = num('tensor');
-      const c1    = num('cab1');
-      const c2    = num('cab2');
-      const c3    = num('cab3');
-      const c4    = num('cab4');
-      const acom  = num('acometidas');
-      const cajas = num('cajas');
-      const eseg  = num('elemSeg');
-      const psub  = num('protecSub');
-      const cruce = num('cruceElec');
-      const arma  = num('armario');
-
-      // --- Derivados según Excel ---
-      // H102 = (L99 + M99 + N99 + O99)
-      const cantTramos = c1 + c2 + c3 + c4;
-      // I102 = (H99/4 + I99/2 + J99) * 50
-      const mtsDevan   = (dev14/4 + dev12/2 + devT) * 50;
-      // J102 = K99 * 50
-      const mtsTensor  = tens * 50;
-      // K102 = (L99 + 2*M99 + 3*N99 + 4*O99) * 50
-      const mtsCobre   = (c1 + 2*c2 + 3*c3 + 4*c4) * 50;
-
-      // Tabla superior (replica de filas 3..11)
-      // Cada fila: { elemento, unidad, momento0, valorar, hsL, hsLc }
-      const filas = [];
-
-      // Fila 3: CABLES  (C3=K102, D3=H102*50, E3=D3*HB!C1)
-      const cables_m0 = mtsCobre;
-      const cables_val = cantTramos * 50;
-      const cables_hl = cables_val * HB.C1;
-      filas.push({ elemento:'CABLES', unidad:'mts', m0:cables_m0, val:cables_val, hl:cables_hl, hlc:'' });
-
-      // Fila 4: SUSPENSOR (usa mts tensor)
-      const susp_m0 = mtsTensor;
-      const susp_val = mtsTensor;
-      const susp_hl = susp_val * HB.C1;
-      filas.push({ elemento:'SUSPENSOR', unidad:'mts', m0:susp_m0, val:susp_val, hl:susp_hl, hlc:'' });
-
-      // Fila 5: DEVANADO
-      const dev_m0 = mtsDevan;
-      const dev_val = mtsDevan;
-      const dev_hl = dev_val * HB.C1;
-      filas.push({ elemento:'DEVANADO', unidad:'mts', m0:dev_m0, val:dev_val, hl:dev_hl, hlc:'' });
-
-      // Fila 6: ACOMETIDAS (C6=D6=P99, E6=D6*HB!C2)
-      const acom_m0 = acom;
-      const acom_val = acom;
-      const acom_hl = acom_val * HB.C2;
-      filas.push({ elemento:'ACOMETIDAS', unidad:'cant', m0:acom_m0, val:acom_val, hl:acom_hl, hlc:'' });
-
-      // Fila 7: ELEM SEG (E7=D7*HB!C4/3)
-      const eseg_m0 = eseg;
-      const eseg_val = eseg;
-      const eseg_hl = eseg_val * (HB.C4/3);
-      filas.push({ elemento:'ELEM SEG', unidad:'cant', m0:eseg_m0, val:eseg_val, hl:eseg_hl, hlc:'' });
-
-      // Fila 8: CAJAS (E8=D8*HB!C3)
-      const cajas_m0 = cajas;
-      const cajas_val = cajas;
-      const cajas_hl = cajas_val * HB.C3;
-      filas.push({ elemento:'CAJAS', unidad:'cant', m0:cajas_m0, val:cajas_val, hl:cajas_hl, hlc:'' });
-
-      // Fila 9: PROTEC. POS./SUB. (E9=D9*HB!C6)
-      const psub_m0 = psub;
-      const psub_val = psub;
-      const psub_hl = psub_val * HB.C6;
-      filas.push({ elemento:'PROTEC. POS.', unidad:'cant', m0:psub_m0, val:psub_val, hl:psub_hl, hlc:'' });
-
-      // Fila 10: ARMARIO (E10=D10*HB!C5, F10=IF(D10<>0, 2.2+2.5, ""))
-      const arma_m0 = arma;
-      const arma_val = arma;
-      const arma_hl = arma_val * HB.C5;
-      const arma_hlc = arma_val !== 0 ? 2.2 + 2.5 : '';
-      filas.push({ elemento:'ARMARIO (CANT)', unidad:'cant', m0:arma_m0, val:arma_val, hl:arma_hl, hlc:arma_hlc });
-
-      // Fila 11: CRUCE ELÉCTRICO (E11=D11*HB!C7)
-      const cruce_m0 = cruce;
-      const cruce_val = cruce;
-      const cruce_hl = cruce_val * HB.C7;
-      filas.push({ elemento:'CRUCE ELÉCTRICO (CANT)', unidad:'cant', m0:cruce_m0, val:cruce_val, hl:cruce_hl, hlc:'' });
-
-      // Render KPIs (CANT TRAMOS, MTS DEVAN, MTS TENSOR, MTS COBRE)
-      const kpi = document.getElementById('kpis');
-      kpi.innerHTML = `
-        <div class="pill">CANT TRAMOS: ${fmt(cantTramos)}</div>
-        <div class="pill">MTS DEVAN: ${fmt(round2(mtsDevan))}</div>
-        <div class="pill">MTS TENSOR: ${fmt(round2(mtsTensor))}</div>
-        <div class="pill">MTS COBRE: ${fmt(round2(mtsCobre))}</div>
-      `;
-      kpi.style.display = 'flex';
-
-      // Render tabla
-      const tbody = document.getElementById('tbody');
-      tbody.innerHTML = '';
-      let totalHL = 0, totalHLc = 0;
-      filas.forEach(f => {
-        const tr = document.createElement('tr');
-        const hl = round2(f.hl);
-        const hlc = (f.hlc === '' ? '' : round2(f.hlc));
-        totalHL += (isNaN(hl) ? 0 : hl);
-        totalHLc += (hlc === '' || isNaN(hlc) ? 0 : hlc);
-        tr.innerHTML = `
-          <td>${f.elemento}</td>
-          <td>${f.unidad}</td>
-          <td class="right">${fmt(round2(f.m0))}</td>
-          <td class="right">${fmt(round2(f.val))}</td>
-          <td class="right">${fmt(hl)}</td>
-          <td class="right">${hlc === '' ? '' : fmt(hlc)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('hsLTotal').textContent = fmt(round2(totalHL));
-      document.getElementById('hsLcTotal').textContent = fmt(round2(totalHLc));
-    }
+    const num = id => Math.max(0, Number(document.getElementById(id).value || 0));
+    const fmt = v => (isNaN(v)? '0' : new Intl.NumberFormat('es-AR').format(v));
+    const round2 = v => Math.round((v + Number.EPSILON) * 100) / 100;
+    function limpiar(){ ['dev14','dev12','devTotal','tensor','cab1','cab2','cab3','cab4','acometidas','cajas','elemSeg','protecSub','cruceElec','armario'].forEach(id => document.getElementById(id).value = 0); document.getElementById('tbody').innerHTML = ''; document.getElementById('kpis').style.display = 'none'; document.getElementById('hsLTotal').textContent = '0'; document.getElementById('hsLcTotal').textContent = '0'; document.getElementById('btnPdf').disabled = true; }
+    function calcular(){ const dev14=num('dev14'), dev12=num('dev12'), devT=num('devTotal'), tens=num('tensor'); const c1=num('cab1'), c2=num('cab2'), c3=num('cab3'), c4=num('cab4'); const acom=num('acometidas'), cajas=num('cajas'), eseg=num('elemSeg'), psub=num('protecSub'), cruce=num('cruceElec'), arma=num('armario'); const cantTramos=c1+c2+c3+c4; const mtsDevan=(dev14/4+dev12/2+devT)*50; const mtsTensor=tens*50; const mtsCobre=(c1+2*c2+3*c3+4*c4)*50; const filas=[]; filas.push({ elemento:'CABLES', unidad:'mts', m0:mtsCobre, val:cantTramos*50, hl:cantTramos*50*HB.C1, hlc:'' }); filas.push({ elemento:'SUSPENSOR', unidad:'mts', m0:mtsTensor, val:mtsTensor, hl:mtsTensor*HB.C1, hlc:'' }); filas.push({ elemento:'DEVANADO', unidad:'mts', m0:mtsDevan, val:mtsDevan, hl:mtsDevan*HB.C1, hlc:'' }); filas.push({ elemento:'ACOMETIDAS', unidad:'cant', m0:acom, val:acom, hl:acom*HB.C2, hlc:'' }); filas.push({ elemento:'ELEM SEG', unidad:'cant', m0:eseg, val:eseg, hl:eseg*(HB.C4/3), hlc:'' }); filas.push({ elemento:'CAJAS', unidad:'cant', m0:cajas, val:cajas, hl:cajas*HB.C3, hlc:'' }); filas.push({ elemento:'PROTEC. POS.', unidad:'cant', m0:psub, val:psub, hl:psub*HB.C6, hlc:'' }); filas.push({ elemento:'ARMARIO', unidad:'cant', m0:arma, val:arma, hl:arma*HB.C5, hlc:arma!==0?4.7:'' }); filas.push({ elemento:'CRUCE ELÉCTRICO', unidad:'cant', m0:cruce, val:cruce, hl:cruce*HB.C7, hlc:'' }); document.getElementById('kpis').innerHTML=`<div>CANT TRAMOS: ${fmt(cantTramos)}</div><div>MTS DEVAN: ${fmt(round2(mtsDevan))}</div><div>MTS TENSOR: ${fmt(round2(mtsTensor))}</div><div>MTS COBRE: ${fmt(round2(mtsCobre))}</div>`; document.getElementById('kpis').style.display='flex'; const tbody=document.getElementById('tbody'); tbody.innerHTML=''; let totalHL=0,totalHLc=0; filas.forEach(f=>{ const hl=round2(f.hl), hlc=(f.hlc===''?'':round2(f.hlc)); totalHL+=(isNaN(hl)?0:hl); totalHLc+=(hlc===''||isNaN(hlc)?0:hlc); tbody.innerHTML+=`<tr><td>${f.elemento}</td><td>${f.unidad}</td><td class="right">${fmt(round2(f.m0))}</td><td class="right">${fmt(round2(f.val))}</td><td class="right">${fmt(hl)}</td><td class="right">${hlc===''?'':fmt(hlc)}</td></tr>`; }); document.getElementById('hsLTotal').textContent=fmt(round2(totalHL)); document.getElementById('hsLcTotal').textContent=fmt(round2(totalHLc)); document.getElementById('btnPdf').disabled=false; }
+    function exportarPDF(){ window.print(); }
   </script>
 </body>
 </html>
