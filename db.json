@@ -73,7 +73,8 @@
     "2025-08-04",
     "2025-08-11",
     "2025-08-18",
-    "2025-08-25"
+    "2025-08-25",
+    "2025-09-01"
   ],
   "planificacionSemanas": [
     {
@@ -293,6 +294,32 @@
         "gestion de saneamientos",
         "vistos buenos",
         "carga de planos y datos de red a desmontes"
+      ],
+      "tareasNoAsignadas": [
+        "operativo zonda"
+      ]
+    },
+    {
+      "ines raposo": [
+        "postes pendientes de valorar",
+        "valorar desmontes con momento cero",
+        "seguimiento de desvios"
+      ],
+      "nicolas ponce": [
+        "planes de estabilidad",
+        "valorar sigest de emergencias",
+        "crear sigest de desmontes",
+        "verificar sigest devueltos"
+      ],
+      "gabriela torres": [
+        "segurizaciones CR (sigest y valorar)",
+        "sigest y valoracion de camaras rotas",
+        "atencion de mails y derivacion segun el caso"
+      ],
+      "dante espejo": [
+        "gestion de saneamientos",
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
       ],
       "tareasNoAsignadas": [
         "operativo zonda"
