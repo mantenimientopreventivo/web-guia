@@ -59,20 +59,13 @@
             <tbody id="public-tbody"></tbody>
         </table>
         <div class="shortcuts-panel">
-    <a href="https://app.powerbi.com/groups/me/reports/a521a691-ed7d-48db-a891-361729bd7833/ReportSectionbdcdc9a9138c0a320819?experience=power-bi" class="shortcut-button" target="_blank" rel="noopener noreferrer">
-        POSTES PENDIENTES
-        <span class="subtitle">Filtrar por H (sin emergencias & desvíos) + AI (solo vacías)</span>
-    </a>
-    <a href="https://app.powerbi.com/groups/me/reports/a521a691-ed7d-48db-a891-361729bd7833/ReportSectiond77c31df2b15d7c287b3?experience=power-bi" class="shortcut-button" target="_blank" rel="noopener noreferrer">
-        segurizaciones pendientes
-    </a>
-    <a href="https://telefonicacorp-my.sharepoint.com/:x:/r/personal/ernesto_casati_telefonica_com/Documents/PLANILLA%20DE%20DESMONTE.xlsx?d=w90e21dc265f44545a0b85c2bc5e47168&csf=1&web=1&e=RWNAPU" class="shortcut-button" target="_blank" rel="noopener noreferrer">
-        planilla de momento 0
-    </a>
-    <a href="https://app.powerbi.com/groups/me/reports/a521a691-ed7d-48db-a891-361729bd7833/87670009211005d1e0de?experience=power-bi" class="shortcut-button" target="_blank" rel="noopener noreferrer">
-        planes de estabilidad y confiabilizacion
-    </a>
-</div>
+            <a href="https://telefonicacorp-my.sharepoint.com/:x:/r/personal/ernesto_casati_telefonica_com/Documents/PLANILLA%20DE%20DESMONTE.xlsx?d=w90e21dc265f44545a0b85c2bc5e47168&csf=1&web=1&e=RWNAPU" class="shortcut-button" target="_blank" rel="noopener noreferrer">
+                planilla de momento 0
+            </a>
+            <a href="https://app.powerbi.com/groups/me/reports/fbe10942-7a59-4d85-bfa0-f0049fbe5ed6/ReportSection5dda238f65a951c5aa04?experience=power-bi" class="shortcut-button" target="_blank" rel="noopener noreferrer">
+                acceso a tablero gestion mantenimiento cuyo
+            </a>
+        </div>
     </div>
 
     <div id="admin-view" class="main-container" style="display: none;">
@@ -104,8 +97,8 @@
     let appState = {};
     const defaultState = {
         empleados: ["ines raposo", "nicolas ponce", "gabriela torres", "dante espejo"],
-        tareas: ["atencion de mails y derivacion segun el caso","carga de planos y datos de red a desmontes","crear sigest de desmontes","gestion de saneamientos","planes de estabilidad","postes pendientes de valorar","seguimiento de desvios","segurizaciones CR (sigest y valorar)","sigest y valoracion de camaras rotas","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos","operativo zonda"],
-        perfiles: {"ines raposo":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","seguimiento de desvios","segurizaciones CR (sigest y valorar)","sigest y valoracion de camaras rotas","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],"nicolas ponce":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","segurizaciones CR (sigest y valorar)","sigest y valoracion de camaras rotas","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],"gabriela torres":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","segurizaciones CR (sigest y valorar)","vistos buenos","verificar sigest devueltos"],"dante espejo":["carga de planos y datos de red a desmontes","gestion de saneamientos","planes de estabilidad","vistos buenos"]},
+        tareas: ["atencion de mails y derivacion segun el caso","carga de planos y datos de red a desmontes","crear sigest de desmontes","gestion de saneamientos","planes de estabilidad","postes pendientes de valorar","seguimiento de desvios","(segurizaciones CR / CR rotas) sigest y valoracion","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],
+        perfiles: {"ines raposo":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","seguimiento de desvios","(segurizaciones CR / CR rotas) sigest y valoracion","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],"nicolas ponce":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","(segurizaciones CR / CR rotas) sigest y valoracion","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],"gabriela torres":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","(segurizaciones CR / CR rotas) sigest y valoracion","vistos buenos","verificar sigest devueltos"],"dante espejo":["carga de planos y datos de red a desmontes","gestion de saneamientos","planes de estabilidad","vistos buenos"]},
         coloresFila: {}, weekStartDates: [], planificacionSemanas: []
     };
 
