@@ -21,6 +21,28 @@
       "material": "Concreto",
       "sigest": "59880385",
       "origen": "retesar"
+    },
+    {
+      "id": 1758540864085,
+      "fecha": "2025-09-19",
+      "tipoMovimiento": "Consumo",
+      "cantidad": 1,
+      "ancho": 40,
+      "alto": 110,
+      "material": "Concreto",
+      "sigest": "59871855",
+      "origen": "retesar"
+    },
+    {
+      "id": 1758540897653,
+      "fecha": "2025-09-19",
+      "tipoMovimiento": "Consumo",
+      "cantidad": 1,
+      "ancho": 40,
+      "alto": 110,
+      "material": "Concreto",
+      "sigest": "59871765",
+      "origen": "retesar"
     }
   ]
 }
