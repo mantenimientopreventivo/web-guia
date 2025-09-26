@@ -417,7 +417,6 @@
       "ines raposo": [
         "crear sigest de desmontes",
         "seguimiento de desvios",
-        "vistos buenos",
         "valorar sigest de emergencias"
       ],
       "nicolas ponce": [
@@ -433,7 +432,8 @@
       "dante espejo": [
         "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
-        "planes de estabilidad"
+        "planes de estabilidad",
+        "vistos buenos"
       ],
       "tareasNoAsignadas": [
         "operativo zonda"
