@@ -496,19 +496,19 @@
         "gestion de siniestros cu y fo"
       ],
       "nicolas ponce": [
-        "postes pendientes de valorar",
+        "carga de planos y datos de red a desmontes",
         "crear sigest de desmontes",
-        "planes de estabilidad",
         "segurizaciones CR (sigest y valorar)"
       ],
       "gabriela torres": [
         "cargar dpl",
         "verificar sigest devueltos",
-        "valorar desmontes con momento cero"
+        "valorar desmontes con momento cero",
+        "postes pendientes de valorar"
       ],
       "dante espejo": [
         "vistos buenos",
-        "carga de planos y datos de red a desmontes",
+        "planes de estabilidad",
         "gestion de saneamientos"
       ],
       "tareasNoAsignadas": [
