@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Actividades — Admin (v13)</title>
+  <style>
+    body{margin:0;font-family:Segoe UI,Arial;background:#f5f7fb;color:#111}
+    .wrap{max-width:1100px;margin:24px auto;background:#fff;padding:20px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+    h1{margin:0 0 12px 0;font-size:22px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 18px}
+    .btn{background:#1f2937;color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
+    .btn.primary{background:#22c55e;color:#052e16}
+    .btn.alt{background:#00A9E0}
+    .btn.danger{background:#e11d48}
+    .btn.xs{padding:6px 10px;border-radius:8px;font-size:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #e5e7eb;padding:10px;font-size:14px;text-align:center}
+    thead th{background:#00A9E0;color:#fff}
+    .employee{font-weight:600;text-align:left}
+    .hint{font-size:12px;color:#555;margin:6px 0 0}
+    .week{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+    .pill{font-size:12px;background:#eef;padding:4px 8px;border-radius:999px}
+    .chip{display:inline-block;margin:2px 3px;padding:4px 8px;border-radius:999px;border:1px solid #e5e7eb;cursor:pointer;font-size:12px;background:#fff}
+    .chip.sel{outline:2px solid #00A9E0}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000}
+    .modal .card{width:96vw;height:92vh;margin:2vh auto;background:#fff;color:#111;border-radius:12px;padding:16px;display:flex;flex-direction:column}
+    .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;overflow:auto}
+    .list{border:1px solid #e5e7eb;border-radius:10px;padding:8px;max-height:40vh;overflow:auto}
+    .row{display:flex;gap:8px;margin-top:8px}
+    input[type="text"]{flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:8px}
+    .mx{max-height:calc(92vh - 220px);overflow:auto;border:1px solid #e5e7eb;border-radius:10px;margin-top:8px}
+    .small{font-size:12px;color:#555}
+    td[contenteditable="true"]{background:#faf9e8}
+    .dropzone{min-height:38px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Generador de Actividades — Admin</h1>
+    <div class="actions">
+      <button class="btn primary" id="btn-gen">Generar Próxima Semana</button>
+      <button class="btn alt" id="btn-perfiles">Editar Perfiles y Gestión</button>
+      <button class="btn" id="btn-publico">Generar y Descargar actividades-diarias.html</button>
+      <button class="btn" id="btn-backup">Descargar db.json (Respaldo)</button>
+      <button class="btn" id="btn-cargar">Cargar db.json (Respaldo)</button>
+      <input type="file" id="file-db" accept=".json,application/json" style="display:none">
+      <span class="pill" id="estado">• listo</span>
+    </div>
+
+    <div id="weeks"></div>
+    <p class="hint">Los cambios se guardan automáticamente en tu navegador.</p>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2 style="margin:0">Perfiles y Gestión</h2>
+        <button class="btn" id="btn-cerrar">Cerrar</button>
+      </div>
+      <div class="cols" style="margin-top:10px">
+        <div>
+          <h3>Empleados</h3>
+          <div class="list" id="empleados"></div>
+          <div class="row"><input id="nuevo-empleado" placeholder="Nuevo empleado" /><button class="btn" id="add-emp">Agregar</button></div>
+          <h3 style="margin-top:12px">Tareas</h3>
+          <div class="list" id="tareas"></div>
+          <div class="row"><input id="nueva-tarea" placeholder="Nueva tarea" /><button class="btn" id="add-task">Agregar</button></div>
+        </div>
+        <div>
+          <h3>Matriz de habilidades</h3>
+          <div class="mx" id="matriz"></div>
+          <p class="small">Tildá qué tareas puede hacer cada empleado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'weeklyPlannerData';
+  const defaultState = {
+    schemaVersion: 1,
+    empleados:["ines raposo","nicolas ponce","gabriela torres","dante espejo"],
+    tareas:["atencion de mails y derivacion segun el caso","carga de planos y datos de red a desmontes","crear sigest de desmontes","gestion de saneamientos","planes de estabilidad","postes pendientes de valorar","seguimiento de desvios","(segurizaciones CR / CR rotas) sigest y valoracion","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],
+    perfiles:{
+      "ines raposo":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","seguimiento de desvios","(segurizaciones CR / CR rotas) sigest y valoracion","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],
+      "nicolas ponce":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","(segurizaciones CR / CR rotas) sigest y valoracion","valorar desmontes con momento cero","valorar sigest de emergencias","vistos buenos","verificar sigest devueltos"],
+      "gabriela torres":["atencion de mails y derivacion segun el caso","crear sigest de desmontes","postes pendientes de valorar","(segurizaciones CR / CR rotas) sigest y valoracion","vistos buenos","verificar sigest devueltos"],
+      "dante espejo":["carga de planos y datos de red a desmontes","gestion de saneamientos","planes de estabilidad","vistos buenos"]
+    },
+    weekStartDates:[],
+    planificacionSemanas:[]
+  };
+  let state = null;
+  const $ = (sel)=> document.querySelector(sel);
+  const setEstado = (m)=> $("#estado").textContent = "• " + m;
+
+  const load = ()=> {
+    try{
+      const x = localStorage.getItem(STORAGE_KEY);
+      return x ? JSON.parse(x) : structuredClone(defaultState);
+    }catch(e){ return structuredClone(defaultState); }
+  };
+  const save = ()=> localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+  function validateIncoming(obj){
+    const required = ["empleados","tareas","perfiles","weekStartDates","planificacionSemanas"];
+    for(const k of required){ if(!(k in obj)) return {ok:false,msg:`Falta la clave '${k}'`}; }
+    if(!Array.isArray(obj.empleados)) return {ok:false,msg:"'empleados' debe ser un array"};
+    if(!Array.isArray(obj.tareas)) return {ok:false,msg:"'tareas' debe ser un array"};
+    if(typeof obj.perfiles!=="object"||obj.perfiles===null||Array.isArray(obj.perfiles)) return {ok:false,msg:"'perfiles' debe ser un objeto"};
+    if(!Array.isArray(obj.weekStartDates)) return {ok:false,msg:"'weekStartDates' debe ser un array"};
+    if(!Array.isArray(obj.planificacionSemanas)) return {ok:false,msg:"'planificacionSemanas' debe ser un array"};
+    if("schemaVersion" in obj && typeof obj.schemaVersion!=="number") return {ok:false,msg:"'schemaVersion' debe ser numérico"};
+    return {ok:true};
+  }
+
+  function updateFromTables(){
+    const tables = document.querySelectorAll('#weeks table');
+    const newWeeks = [];
+    tables.forEach((tb, idx)=>{
+      const asg = {};
+      tb.querySelectorAll('tbody tr').forEach(tr=>{
+        const emp = tr.cells[0].textContent.trim();
+        const tasks = [];
+        for(let i=1;i<tr.cells.length;i++){
+          const t = tr.cells[i].textContent.trim();
+          if(t) tasks.push(t);
+        }
+        asg[emp] = tasks;
+      });
+      const prev = state.planificacionSemanas[idx] || {};
+      if(Array.isArray(prev.tareasNoAsignadas)) asg.tareasNoAsignadas = prev.tareasNoAsignadas;
+      newWeeks.push(asg);
+    });
+    state.planificacionSemanas = newWeeks;
+    save();
+  }
+
+  // Generar N semanas
+  function generarProximaSemana(){
+    const qtyStr = prompt("¿Cuántas semanas nuevas querés generar? Ingresá un entero ≥ 1.", "1");
+    if(qtyStr === null) return;
+    const qty = parseInt(qtyStr, 10);
+    if(!Number.isFinite(qty) || qty < 1){ alert("Valor inválido"); return; }
+
+    updateFromTables();
+
+    const generarUna = ()=>{
+      const anterior = state.planificacionSemanas.length ? state.planificacionSemanas[state.planificacionSemanas.length-1] : {};
+      const hechas = new Set(Object.values(anterior).flat());
+      const mazo = state.tareas.filter(t=>!hechas.has(t)).sort(()=>Math.random()-0.5)
+                    .concat(state.tareas.filter(t=>hechas.has(t)).sort(()=>Math.random()-0.5));
+      const asg = {}; const cont={};
+      state.empleados.forEach(e=>{ asg[e]=[]; cont[e]=0; });
+      const unassigned = new Set(mazo);
+      mazo.forEach(t=>{
+        const cand = state.empleados.filter(e=>(state.perfiles[e]||[]).includes(t)).sort((a,b)=>cont[a]-cont[b]);
+        if(cand.length){ const e=cand[0]; asg[e].push(t); cont[e]++; unassigned.delete(t); }
+      });
+      asg.tareasNoAsignadas = [...unassigned];
+
+      let nextStart;
+      if(state.weekStartDates.length){
+        nextStart = new Date(state.weekStartDates.at(-1)+"T00:00:00"); nextStart.setDate(nextStart.getDate()+7);
+      }else{
+        const today = new Date(); const d=today.getDay(); const diff=today.getDate()-d+(d===0?-6:1);
+        nextStart = new Date(today.setDate(diff)); nextStart.setHours(0,0,0,0);
+      }
+      state.planificacionSemanas.push(asg);
+      state.weekStartDates.push(nextStart.toISOString().slice(0,10));
+    };
+
+    for(let i=0;i<qty;i++) generarUna();
+
+    save(); renderWeeks(); setEstado(`se generó${qty>1?'n':''} ${qty} semana${qty>1?'s':''}`);
+  }
+
+  // Eliminar semana
+  window.eliminarSemana = (idx)=>{
+    if(!confirm(`¿Eliminar la semana ${idx+1}?`)) return;
+    updateFromTables();
+    state.planificacionSemanas.splice(idx,1);
+    state.weekStartDates.splice(idx,1);
+    save(); renderWeeks(); setEstado("semana eliminada");
+  };
+
+  // Mover + DnD
+  const moveMode = {active:false, week:null, selected:[]};
+  window.toggleMoveMode = (idx)=>{
+    if(moveMode.active && moveMode.week===idx){ moveMode.active=false; moveMode.week=null; moveMode.selected=[]; renderWeeks(); setEstado("modo mover desactivado"); }
+    else{ moveMode.active=true; moveMode.week=idx; moveMode.selected=[]; renderWeeks(); setEstado(`modo mover activado en semana ${idx+1}`); }
+  };
+  const chipKey = (w,e,p,t)=> `${w}|${e}|${p}|${t}`;
+  window.toggleSelectChip = (el)=>{
+    const week = parseInt(el.dataset.week,10);
+    const emp  = el.dataset.emp;
+    const pos  = parseInt(el.dataset.pos,10);
+    const text = el.dataset.text;
+    const key  = chipKey(week,emp,pos,text);
+    const i = moveMode.selected.findIndex(x=>x.key===key);
+    if(i>-1){ moveMode.selected.splice(i,1); el.classList.remove('sel'); }
+    else{ moveMode.selected.push({week,emp,pos,text,key}); el.classList.add('sel'); }
+  };
+  window.moverSeleccionA = (empDestino)=>{
+    if(!moveMode.active) return;
+    if(moveMode.selected.length===0){ alert("No hay tareas seleccionadas"); return; }
+    const week = moveMode.week;
+    const sel = [...moveMode.selected].sort((a,b)=>b.pos-a.pos);
+    sel.forEach(it=>{
+      if(it.week!==week) return;
+      const arr = state.planificacionSemanas[week][it.emp] || [];
+      if(arr[it.pos]===it.text) arr.splice(it.pos,1);
+      else{ const p=arr.indexOf(it.text); if(p>-1) arr.splice(p,1); }
+    });
+    const dest = state.planificacionSemanas[week][empDestino] ||= [];
+    sel.reverse().forEach(it=> dest.push(it.text));
+    moveMode.selected=[]; save(); renderWeeks(); setEstado(`tareas movidas a ${empDestino}`);
+  };
+  window.onChipDragStart = (ev)=>{
+    const el = ev.target.closest('.chip'); if(!el) return;
+    const payload = {week:+el.dataset.week, emp:el.dataset.emp, pos:+el.dataset.pos, text:el.dataset.text};
+    ev.dataTransfer.setData('application/json', JSON.stringify(payload));
+    ev.dataTransfer.effectAllowed='move';
+  };
+  window.onDropZoneOver = (ev)=>{ if(moveMode.active) ev.preventDefault(); };
+  window.onDropZone = (ev)=>{
+    ev.preventDefault(); if(!moveMode.active) return;
+    try{
+      const data = JSON.parse(ev.dataTransfer.getData('application/json'));
+      const week = +ev.currentTarget.dataset.week;
+      const empDestino = ev.currentTarget.dataset.emp;
+      if(week!==moveMode.week){ alert("Solo se puede mover dentro de la misma semana"); return; }
+      const arr = state.planificacionSemanas[data.week][data.emp] || [];
+      if(arr[data.pos]===data.text) arr.splice(data.pos,1);
+      else{ const p=arr.indexOf(data.text); if(p>-1) arr.splice(p,1); }
+      const dest = state.planificacionSemanas[week][empDestino] ||= [];
+      dest.push(data.text);
+      save(); renderWeeks(); setEstado(`tarea movida por arrastre a ${empDestino}`);
+    }catch(e){ console.error(e); }
+  };
+
+  // Render semanas
+  function renderWeeks(){
+    const cont = $("#weeks"); cont.innerHTML="";
+    if(!state.planificacionSemanas.length){ cont.innerHTML='<p>No hay planificación. Usá "Generar Próxima Semana".</p>'; return; }
+    state.planificacionSemanas.forEach((asg, idx)=>{
+      const start = new Date(state.weekStartDates[idx]+"T00:00:00").toLocaleDateString("es-AR");
+      const filtered = Object.fromEntries(Object.entries(asg).filter(([k])=>k!=="tareasNoAsignadas"));
+      let maxCols = 4; Object.values(filtered).forEach(v=>{ if(Array.isArray(v)) maxCols=Math.max(maxCols,v.length); });
+      let html = `
+        <div class="week">
+          <div class="toolbar" style="display:flex;gap:8px;align-items:center">
+            <h3 style="margin:0">Semana ${idx+1} (Inicia ${start})</h3>
+            <button class="btn danger xs" onclick="eliminarSemana(${idx})">Eliminar</button>
+            <button class="btn xs" onclick="toggleMoveMode(${idx})">${(moveMode.active && moveMode.week===idx)?'Salir mover':'Mover tareas'}</button>
+          </div>
+        </div>
+        <table data-week-index="${idx}">
+          <thead><tr><th>Empleado</th>${'<th>Tarea</th>'.repeat(maxCols)}</tr></thead>
+          <tbody>
+      `;
+      if(moveMode.active && moveMode.week===idx){
+        html += `<tr><td colspan="${maxCols+1}" style="text-align:left">
+          <div style="margin:8px 0;display:flex;flex-wrap:wrap;gap:6px">
+            Mover selección a:
+            ${state.empleados.map(e=>`<button class="btn xs" onclick="moverSeleccionA('${e.replace(/'/g,"&#39;")}')">${e}</button>`).join(" ")}
+          </div>
+        </td></tr>`;
+      }
+      state.empleados.forEach(emp=>{
+        const tasks = asg[emp] || [];
+        html += `<tr><td class="employee">${emp}</td>`;
+        if(moveMode.active && moveMode.week===idx){
+          const chips = tasks.map((t,i)=>
+            `<span class="chip" draggable="true" ondragstart="onChipDragStart(event)" onclick="toggleSelectChip(this)"
+                    data-week="${idx}" data-emp="${emp}" data-pos="${i}" data-text="${t.replace(/"/g,'&quot;')}">${t}</span>`
+          ).join("");
+          html += `<td colspan="${maxCols}" class="dropzone" data-week="${idx}" data-emp="${emp}" ondragover="onDropZoneOver(event)" ondrop="onDropZone(event)" style="text-align:left">${chips}</td>`;
+        }else{
+          for(let i=0;i<maxCols;i++){ html += `<td contenteditable="true" onblur="updateFromTables()">${tasks[i]||""}</td>`; }
+        }
+        html += `</tr>`;
+      });
+      html += `</tbody></table>`;
+      cont.insertAdjacentHTML("beforeend", html);
+    });
+  }
+
+  // Selección de semanas y generación del público (SIN número de semana)
+  function parseWeekSelection(input, total){
+    if(input===null) return null;
+    const s = input.trim().toLowerCase();
+    if(s==="" || s==="todas" || s==="todo") return Array.from({length:total},(_,i)=>i);
+    const out = new Set();
+    for(const part of s.split(",")){
+      const p = part.trim();
+      if(!p) continue;
+      if(p.includes("-")){
+        const [a,b] = p.split("-").map(x=>parseInt(x,10));
+        if(Number.isFinite(a) && Number.isFinite(b)){
+          const start = Math.min(a,b)-1, end = Math.max(a,b)-1;
+          for(let i=start;i<=end;i++){ if(i>=0 && i<total) out.add(i); }
+        }
+      }else{
+        const n = parseInt(p,10);
+        if(Number.isFinite(n)){ const idx = n-1; if(idx>=0 && idx<total) out.add(idx); }
+      }
+    }
+    return Array.from(out).sort((a,b)=>a-b);
+  }
+
+  function generarYDescargarPublico(){
+    updateFromTables(); save();
+    const total = state.planificacionSemanas.length;
+    if(!total){ alert("No hay semanas generadas"); return; }
+
+    const sel = parseWeekSelection(
+      prompt(`¿Qué semanas querés incluir? Ejemplos: "todas", "1,3,5", "2-4", "1,3-4". Hay ${total} semana(s).`,"todas"),
+      total
+    );
+    if(sel===null) return; // cancelado
+    if(!sel.length){ alert("Selección vacía"); return; }
+
+    let sections = "";
+    sel.forEach((idx)=>{
+      const asg = state.planificacionSemanas[idx];
+      const startISO = state.weekStartDates[idx] || new Date().toISOString().slice(0,10);
+      const filtered = Object.fromEntries(Object.entries(asg).filter(([k])=>k!=="tareasNoAsignadas"));
+      let max = 4; Object.values(filtered).forEach(v=>{ if(Array.isArray(v)) max=Math.max(max,v.length); });
+      let rows = "";
+      state.empleados.forEach(emp=>{
+        const tasks = asg[emp] || [];
+        rows += `<tr><td class="employee">${emp}</td>`;
+        for(let i=0;i<max;i++){ rows += `<td>${tasks[i]||""}</td>`; }
+        rows += `</tr>`;
+      });
+      // >>> Encabezado sin número de semana <<<
+      sections += `<section style="margin:18px 0">
+        <h2 style="margin:0 0 10px 0;font-size:18px">Inicio ${new Date(startISO+"T00:00:00").toLocaleDateString("es-AR")}</h2>
+        <table><thead><tr><th>Empleado</th>${'<th>Tarea</th>'.repeat(max)}</tr></thead><tbody>${rows}</tbody></table>
+      </section>`;
+    });
+
+    const btns = `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <a class="back" href="index.html">‹ Volver al Índice</a>
+      <a href="https://tmovilesar-my.sharepoint.com/:x:/r/personal/laureano_rodrigo_tmoviles_com_ar/_layouts/15/doc2.aspx?sourcedoc=%7B5BB31A18-8518-4134-9921-51A82CC212C9%7D&file=PLANILLA%20DE%20DESMONTE%20(Cuyo%20y%20Patagonia)%20(tmoviles).xlsx&action=default&mobileredirect=true&wdMsFormsCorrelationId=dc801aaa-f27b-4863-aa0c-547a65c44d04&wdtf=%20Microsoft.Office.Excel.FMsFormsMetadataInWorkbookMetadata%3Atrue" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 12px;background:#3498db;color:#fff;text-decoration:none;border-radius:8px;font-weight:600">PLANILLA DE MOMENTO 0</a>
+      <a href="https://app.powerbi.com/groups/me/reports/fbe10942-7a59-4d85-bfa0-f0049fbe5ed6/ReportSection5dda238f65a951c5aa04?experience=power-bi" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 12px;background:#3498db;color:#fff;text-decoration:none;border-radius:8px;font-weight:600">ACCESO A TABLERO GESTION MANTENIMIENTO CUYO</a>
+    </div>`;
+
+    const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Actividades diarias</title><style>body,html{margin:0;padding:0;font-family:Segoe UI,Arial;background:#f5f7fb;color:#111}.wrap{max-width:1100px;margin:24px auto;background:#fff;padding:20px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.08)}h1{margin:0 0 8px 0;font-size:22px}.back{display:inline-block;padding:8px 12px;background:#00A9E0;color:#fff;text-decoration:none;border-radius:8px;font-weight:600}table{width:100%;border-collapse:collapse}th,td{border:1px solid #e5e7eb;padding:10px;font-size:14px;text-align:center}thead th{background:#00A9E0;color:#fff}.employee{font-weight:600;text-align:left}</style></head><body><div class="wrap">${btns}<h1 style="margin-top:12px">Planificador de Actividades Semanales</h1>${sections}</div></body></html>`;
+    const blob = new Blob([html], {type:"text/html"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href=url; a.download="actividades-diarias.html";
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    setEstado("actividades-diarias.html generado");
+  }
+
+  // Gestión
+  function renderGestion(){
+    const empDiv = $("#empleados"); empDiv.innerHTML="";
+    state.empleados.forEach(e=>{
+      const line = document.createElement("div");
+      line.style.cssText="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee";
+      line.innerHTML = `<span>${e}</span>`;
+      const b = document.createElement("button"); b.className="btn"; b.textContent="Eliminar";
+      b.onclick=()=>{ if(!confirm(`Eliminar ${e}?`)) return; state.empleados=state.empleados.filter(x=>x!==e); delete state.perfiles[e]; state.planificacionSemanas.forEach(s=>{ if(s) delete s[e]; }); save(); renderGestion(); renderWeeks(); };
+      line.appendChild(b); empDiv.appendChild(line);
+    });
+    const tarDiv = $("#tareas"); tarDiv.innerHTML="";
+    state.tareas.forEach(t=>{
+      const line=document.createElement("div");
+      line.style.cssText="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee";
+      line.innerHTML = `<span>${t}</span>`;
+      const b=document.createElement("button"); b.className="btn"; b.textContent="Eliminar";
+      b.onclick=()=>{ if(!confirm(`Eliminar tarea "${t}"?`)) return; state.tareas=state.tareas.filter(x=>x!==t); for(const e in state.perfiles){ state.perfiles[e]=(state.perfiles[e]||[]).filter(x=>x!==t); } state.planificacionSemanas.forEach(s=>{ if(s){ for(const e in s){ if(Array.isArray(s[e])) s[e]=s[e].filter(x=>x!==t); } if(Array.isArray(s.tareasNoAsignadas)) s.tareasNoAsignadas=s.tareasNoAsignadas.filter(x=>x!==t); } }); save(); renderGestion(); renderWeeks(); };
+      line.appendChild(b); tarDiv.appendChild(line);
+    });
+    const mx=$("#matriz");
+    let h = `<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid #eee">Tarea</th>`;
+    state.empleados.forEach(e=>h+=`<th style="padding:8px;border-bottom:1px solid #eee">${e}</th>`);
+    h += `</tr></thead><tbody>`;
+    state.tareas.forEach(t=>{
+      h += `<tr><td style="padding:8px;border-bottom:1px solid #eee">${t}</td>`;
+      state.empleados.forEach(e=>{
+        const checked = (state.perfiles[e]||[]).includes(t) ? "checked":"";
+        h += `<td style="text-align:center;padding:6px;border-bottom:1px solid #eee"><input type="checkbox" ${checked} data-e="${e}" data-t="${t}"></td>`;
+      });
+      h += `</tr>`;
+    });
+    h += `</tbody></table>`;
+    mx.innerHTML=h;
+    mx.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+      cb.addEventListener("change", ()=>{
+        const emp = cb.dataset.e; const tar = cb.dataset.t;
+        if(!state.perfiles[emp]) state.perfiles[emp]=[];
+        const i = state.perfiles[emp].indexOf(tar);
+        if(cb.checked && i===-1) state.perfiles[emp].push(tar);
+        if(!cb.checked && i>-1) state.perfiles[emp].splice(i,1);
+        save();
+      });
+    });
+  }
+
+  // Init
+  function init(){
+    state = load();
+    renderWeeks();
+    $("#btn-gen").onclick = generarProximaSemana;
+    $("#btn-perfiles").onclick = ()=>{ $("#modal").style.display="block"; renderGestion(); };
+    $("#btn-cerrar").onclick   = ()=>{ $("#modal").style.display="none"; };
+    $("#add-emp").onclick = ()=>{
+      const i = $("#nuevo-empleado"); const n = i.value.trim().toLowerCase(); if(!n) return;
+      if(state.empleados.includes(n)){ alert("Ya existe"); return; }
+      state.empleados.push(n); state.perfiles[n]=[]; i.value=""; save(); renderGestion(); renderWeeks();
+    };
+    $("#add-task").onclick = ()=>{
+      const i = $("#nueva-tarea"); const n = i.value.trim().toLowerCase(); if(!n) return;
+      if(state.tareas.includes(n)){ alert("Ya existe"); return; }
+      state.tareas.push(n); i.value=""; save(); renderGestion();
+    };
+    $("#btn-publico").onclick = generarYDescargarPublico;
+    $("#btn-backup").onclick  = ()=>{ if(typeof state.schemaVersion!=="number") state.schemaVersion=1; const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='db.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); setEstado("db.json descargado"); };
+    $("#btn-cargar").onclick  = ()=> $("#file-db").click();
+    $("#file-db").addEventListener("change",(e)=>{
+      const f = e.target.files && e.target.files[0]; if(!f) return;
+      const r = new FileReader();
+      r.onload = ()=>{
+        try{
+          const incoming = JSON.parse(r.result);
+          const check = validateIncoming(incoming); if(!check.ok){ alert("Error al validar: "+check.msg); return; }
+          if(typeof incoming.schemaVersion!=="number") incoming.schemaVersion=1;
+          state = incoming; save(); renderWeeks(); setEstado(`db.json cargado (schema v${incoming.schemaVersion})`);
+        }catch(err){ console.error(err); alert("Error al cargar el archivo JSON"); }
+      };
+      r.readAsText(f); e.target.value="";
+    });
+  }
+  document.addEventListener("DOMContentLoaded", init);
+  window.updateFromTables = updateFromTables;
+})();
+</script>
+</body>
+</html>
