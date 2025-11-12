@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Campos SIGEST vs celdas</title>
+  <style>
+    :root{ --bg:#dbeafe; --card:#cfe4ff; --border:#64a3fb; --text:#1e3a8a; --head:#93c5fd; }
+    *{box-sizing:border-box}
+    body{ font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); margin:0; }
+    header{ background:var(--head); color:var(--text); padding:16px; text-align:center; font-size:22px; font-weight:bold; border-bottom:2px solid var(--border); }
+    main{ max-width:960px; padding:20px 16px 40px; margin:0 auto; }
+    .card{ background:var(--card); border:2px solid var(--border); border-radius:14px; box-shadow:0 2px 6px rgba(0,0,0,.12); padding:18px; }
+    h2{ margin:0 0 12px; font-size:22px; color:#1e40af; text-align:center; }
+    table{ width:100%; border-collapse:collapse; font-size:14px; background:#eaf3ff; }
+    th,td{ border:1px solid var(--border); padding:6px 8px; text-align:center; }
+    th{ background:var(--head); font-weight:bold; }
+    .back{ display:inline-block; margin:12px 0 0; padding:8px 14px; border-radius:10px; background:#2563eb; color:#fff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <header>Campos del SIGEST vs celdas del formulario</header>
+  <main>
+    <div class="card">
+      <h2>Correspondencia de columnas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Título SIGEST</th>
+            <th>Título de la planilla</th>
+            <th>Columna</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>central</td><td>central</td><td>E</td></tr>
+          <tr><td>calle acceso principal</td><td>Nombre de Calle</td><td>X</td></tr>
+          <tr><td>numeración</td><td>Fachada DESDE</td><td>Y</td></tr>
+          <tr><td>ID form. Relevo</td><td>REGISTRO CENTRALIZ</td><td>T</td></tr>
+          <tr><td>Denominación Edificio</td><td>NOMBRE EDIFICIO</td><td>B</td></tr>
+          <tr><td>Pisos</td><td>Cantidad de Plantas</td><td>AC</td></tr>
+          <tr><td>Viviendas</td><td>Cantidad Viviendas</td><td>AE</td></tr>
+        </tbody>
+      </table>
+      <a class="back" href="edificios_v6.html">Volver</a>
+    </div>
+  </main>
+</body>
+</html>
