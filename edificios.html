@@ -5,66 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Edificios</title>
   <style>
-    body{
-      font-family:Arial,Helvetica,sans-serif;
-      background:#dbeafe;
-      color:#1e3a8a;
-      margin:0;
-      padding:0;
-    }
-    header{
-      background:#93c5fd;
-      color:#1e3a8a;
-      padding:20px;
-      text-align:center;
-      font-size:22px;
-      font-weight:bold;
-      border-bottom:2px solid #60a5fa;
-    }
-    main{
-      max-width:900px;
-      margin:40px auto;
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-      align-items:center;
-    }
-    .card{
-      background:#bfdbfe;
-      border:2px solid #60a5fa;
-      border-radius:12px;
-      padding:20px;
-      width:80%;
-      text-align:center;
-      box-shadow:0 2px 5px rgba(0,0,0,0.1);
-    }
-    .card h2{
-      margin-top:0;
-      font-size:20px;
-      color:#1e40af;
-    }
-    .btn{
-      display:inline-block;
-      background:#2563eb;
-      color:white;
-      text-decoration:none;
-      padding:10px 20px;
-      border-radius:8px;
-      font-size:15px;
-    }
-    .btn:hover{ background:#1d4ed8; }
+    :root{ --bg:#dbeafe; --card:#cfe4ff; --border:#64a3fb; --accent:#2563eb; --accent-h:#1d4ed8; --text:#1e3a8a; --head:#93c5fd; }
+    *{box-sizing:border-box}
+    body{ font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); margin:0; }
+    header{ background:var(--head); color:var(--text); padding:16px; text-align:center; font-size:22px; font-weight:bold; border-bottom:2px solid var(--border); }
+    main{ max-width:1100px; padding:20px 16px 40px; margin:0 auto; display:flex; flex-direction:column; gap:18px; }
+    .row{ display:flex; gap:16px; flex-wrap:wrap; }
+    .card{ background:var(--card); border:2px solid var(--border); border-radius:14px; box-shadow:0 2px 6px rgba(0,0,0,.12); padding:18px; flex:1 1 320px; text-align:center; }
+    .card h2{ margin:0 0 10px; font-size:20px; color:#1e40af; }
+    .btn{ display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:10px 20px; border-radius:10px; font-size:16px; }
+    .btn:hover{ background:var(--accent-h); }
   </style>
 </head>
 <body>
   <header>Edificios</header>
   <main>
-    <div class="card">
-      <h2>Planilla SIGEST de Edificios</h2>
-      <a class="btn" href="https://tmovilesar-my.sharepoint.com/:x:/g/personal/ruben_toscani_tmoviles_com_ar/EYHdFEBqO01AohqaqHeyVp4BCXB-U4dNyaLj0PcUYwnxWg?e=wj81wA" target="_blank" rel="noopener">Abrir enlace</a>
-    </div>
-    <div class="card">
-      <h2>Tablero de Edificios</h2>
-      <a class="btn" href="https://app.powerbi.com/groups/me/reports/ceaf5438-9b48-43e4-9e0d-d345b9d92a4b/f177255873efa7172aea?ctid=17d02e16-8b83-4168-ba0d-c61ac0d093a6&experience=power-bi" target="_blank" rel="noopener">Abrir enlace</a>
+    <div class="row">
+      <div class="card">
+        <h2>Planilla SIGEST de Edificios</h2>
+        <a class="btn" href="https://tmovilesar-my.sharepoint.com/:x:/g/personal/ruben_toscani_tmoviles_com_ar/EYHdFEBqO01AohqaqHeyVp4BCXB-U4dNyaLj0PcUYwnxWg?e=wj81wA" target="_blank" rel="noopener">Abrir enlace</a>
+      </div>
+      <div class="card">
+        <h2>Tablero de Edificios</h2>
+        <a class="btn" href="https://app.powerbi.com/groups/me/reports/ceaf5438-9b48-43e4-9e0d-d345b9d92a4b/f177255873efa7172aea?ctid=17d02e16-8b83-4168-ba0d-c61ac0d093a6&experience=power-bi" target="_blank" rel="noopener">Abrir enlace</a>
+      </div>
+      <div class="card">
+        <h2>Campos del SIGEST vs celdas formulario</h2>
+        <a class="btn" href="campos-sigest.html">Abrir página</a>
+      </div>
+      <div class="card">
+        <h2>Instructivo carga SIGEST Edificios</h2>
+        <a class="btn" href="Edificios_Carga de formulario y sigest.pdf" target="_blank" rel="noopener">Abrir PDF</a>
+      </div>
     </div>
   </main>
 </body>
