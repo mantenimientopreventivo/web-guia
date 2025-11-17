@@ -1,2 +1,176 @@
-429: Too Many Requests
-For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service).
+{
+  "empleados": [
+    "ines raposo",
+    "nicolas ponce",
+    "gabriela torres",
+    "dante espejo"
+  ],
+  "tareas": [
+    "atencion de mails y derivacion segun el caso",
+    "carga de planos y datos de red a desmontes",
+    "crear sigest de desmontes",
+    "gestion de saneamientos",
+    "planes de estabilidad",
+    "postes pendientes de valorar",
+    "seguimiento de desvios",
+    "(segurizaciones CR / CR rotas) sigest y valoracion",
+    "valorar desmontes con momento cero",
+    "valorar sigest de emergencias",
+    "vistos buenos",
+    "verificar sigest devueltos",
+    "ampliaciones de ftth",
+    "dpl y cerrar sigest",
+    "sigest edificios"
+  ],
+  "perfiles": {
+    "ines raposo": [
+      "atencion de mails y derivacion segun el caso",
+      "crear sigest de desmontes",
+      "postes pendientes de valorar",
+      "seguimiento de desvios",
+      "(segurizaciones CR / CR rotas) sigest y valoracion",
+      "valorar desmontes con momento cero",
+      "valorar sigest de emergencias",
+      "vistos buenos",
+      "verificar sigest devueltos",
+      "sigest edificios"
+    ],
+    "nicolas ponce": [
+      "atencion de mails y derivacion segun el caso",
+      "crear sigest de desmontes",
+      "postes pendientes de valorar",
+      "(segurizaciones CR / CR rotas) sigest y valoracion",
+      "valorar desmontes con momento cero",
+      "valorar sigest de emergencias",
+      "vistos buenos",
+      "verificar sigest devueltos",
+      "planes de estabilidad",
+      "ampliaciones de ftth",
+      "sigest edificios"
+    ],
+    "gabriela torres": [
+      "atencion de mails y derivacion segun el caso",
+      "crear sigest de desmontes",
+      "postes pendientes de valorar",
+      "(segurizaciones CR / CR rotas) sigest y valoracion",
+      "vistos buenos",
+      "verificar sigest devueltos",
+      "dpl y cerrar sigest",
+      "sigest edificios"
+    ],
+    "dante espejo": [
+      "carga de planos y datos de red a desmontes",
+      "gestion de saneamientos",
+      "planes de estabilidad",
+      "vistos buenos",
+      "sigest edificios"
+    ]
+  },
+  "coloresFila": {},
+  "weekStartDates": [
+    "2025-10-27",
+    "2025-11-03",
+    "2025-11-10",
+    "2025-11-17"
+  ],
+  "planificacionSemanas": [
+    {
+      "ines raposo": [
+        "atencion de mails y derivacion segun el caso",
+        "valorar desmontes con momento cero",
+        "valorar sigest de emergencias",
+        "seguimiento de desvios"
+      ],
+      "nicolas ponce": [
+        "planes de estabilidad",
+        "postes pendientes de valorar",
+        "verificar sigest devueltos",
+        "(segurizaciones CR / CR rotas) sigest y valoracion"
+      ],
+      "gabriela torres": [
+        "vistos buenos",
+        "crear sigest de desmontes"
+      ],
+      "dante espejo": [
+        "carga de planos y datos de red a desmontes",
+        "gestion de saneamientos"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "seguimiento de desvios",
+        "(segurizaciones CR / CR rotas) sigest y valoracion",
+        "valorar sigest de emergencias"
+      ],
+      "nicolas ponce": [
+        "ampliaciones de ftth",
+        "valorar desmontes con momento cero",
+        "crear sigest de desmontes",
+        "verificar sigest devueltos"
+      ],
+      "gabriela torres": [
+        "postes pendientes de valorar",
+        "atencion de mails y derivacion segun el caso",
+        "dpl / cerrar sigest"
+      ],
+      "dante espejo": [
+        "gestion de saneamientos",
+        "planes de estabilidad",
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "valorar desmontes con momento cero",
+        "seguimiento de desvios",
+        "valorar sigest de emergencias",
+        "atencion de mails y derivacion segun el caso"
+      ],
+      "nicolas ponce": [
+        "postes pendientes de valorar",
+        "ampliaciones de ftth",
+        "crear sigest de desmontes",
+        "(segurizaciones CR / CR rotas) sigest y valoracion"
+      ],
+      "gabriela torres": [
+        "VACACIONES"
+      ],
+      "dante espejo": [
+        "planes de estabilidad",
+        "gestion de saneamientos",
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "sigest edificios",
+        "valorar desmontes con momento cero",
+        "valorar sigest de emergencias",
+        "seguimiento de desvios"
+      ],
+      "nicolas ponce": [
+        "verificar sigest devueltos",
+        "crear sigest de desmontes",
+        "atencion de mails y derivacion segun el caso",
+        "postes pendientes de valorar",
+        "(segurizaciones CR / CR rotas) sigest y valoracion"
+      ],
+      "gabriela torres": [
+        "VACACIONES"
+      ],
+      "dante espejo": [
+        "planes de estabilidad",
+        "gestion de saneamientos",
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
+      ],
+      "tareasNoAsignadas": []
+    }
+  ],
+  "schemaVersion": 1
+}
