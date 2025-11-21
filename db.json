@@ -71,7 +71,8 @@
     "2025-10-27",
     "2025-11-03",
     "2025-11-10",
-    "2025-11-17"
+    "2025-11-17",
+    "2025-11-24"
   ],
   "planificacionSemanas": [
     {
@@ -168,6 +169,30 @@
         "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
         "vistos buenos"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "(segurizaciones CR / CR rotas) sigest y valoracion",
+        "crear sigest de desmontes",
+        "seguimiento de desvios",
+        "valorar sigest de emergencias"
+      ],
+      "nicolas ponce": [
+        "VACACIONES"
+      ],
+      "gabriela torres": [
+        "dpl y cerrar sigest",
+        "postes pendientes de valorar",
+        "atencion de mails y derivacion segun el caso",
+        "valorar desmontes con momento cero"
+      ],
+      "dante espejo": [
+        "vistos buenos",
+        "carga de planos y datos de red a desmontes",
+        "gestion de saneamientos",
+        "sigest edificios"
       ],
       "tareasNoAsignadas": []
     }
