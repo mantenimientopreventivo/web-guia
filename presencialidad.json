@@ -2341,6 +2341,968 @@
           ]
         }
       ]
+    },
+    {
+      "mesAnio": "2025-12",
+      "fechasGeneradas": "2025-12-02",
+      "dias": [
+        {
+          "name": "Dante Espejo",
+          "schedule": [
+            {
+              "date": "2025-12-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-03",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-04",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-10",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-11",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-17",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-18",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-24",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-25",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-30",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-31",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Gabriela Torres",
+          "schedule": [
+            {
+              "date": "2025-12-01",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-03",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-04",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-10",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-11",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-15",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-17",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-18",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-22",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-24",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-25",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-30",
+              "status": "Vacaciones"
+            },
+            {
+              "date": "2025-12-31",
+              "status": "Vacaciones"
+            }
+          ]
+        },
+        {
+          "name": "Ines Raposo",
+          "schedule": [
+            {
+              "date": "2025-12-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-02",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-03",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-04",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-09",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-10",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-11",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-16",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-17",
+              "status": "Oficina"
+            },
+            {
+              "date": "2025-12-18",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-23",
+              "status": "Vacaciones"
+            },
+            {
+              "date": "2025-12-24",
+              "status": "Vacaciones"
+            },
+            {
+              "date": "2025-12-25",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-30",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-31",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Nicolas Alurralde",
+          "schedule": [
+            {
+              "date": "2025-12-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-03",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-04",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-10",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-11",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-17",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-18",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-24",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-25",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-30",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-31",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Nicolas Ponce",
+          "schedule": [
+            {
+              "date": "2025-12-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-03",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-04",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-10",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-11",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-17",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-18",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-24",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-25",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-30",
+              "status": "Remoto"
+            },
+            {
+              "date": "2025-12-31",
+              "status": "Remoto"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mesAnio": "2026-01",
+      "fechasGeneradas": "2025-12-02",
+      "dias": [
+        {
+          "name": "Dante Espejo",
+          "schedule": [
+            {
+              "date": "2026-01-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-06",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-07",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-13",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-14",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-20",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-21",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-27",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-28",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-30",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Gabriela Torres",
+          "schedule": [
+            {
+              "date": "2026-01-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-06",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-07",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-13",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-14",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-20",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-21",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-27",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-28",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-30",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Ines Raposo",
+          "schedule": [
+            {
+              "date": "2026-01-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-06",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-07",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-13",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-14",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-20",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-21",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-27",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-28",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-30",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Nicolas Alurralde",
+          "schedule": [
+            {
+              "date": "2026-01-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-06",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-07",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-13",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-14",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-20",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-21",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-27",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-28",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-30",
+              "status": "Remoto"
+            }
+          ]
+        },
+        {
+          "name": "Nicolas Ponce",
+          "schedule": [
+            {
+              "date": "2026-01-01",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-02",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-05",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-06",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-07",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-08",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-09",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-12",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-13",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-14",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-15",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-16",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-19",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-20",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-21",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-22",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-23",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-26",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-27",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-28",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-29",
+              "status": "Remoto"
+            },
+            {
+              "date": "2026-01-30",
+              "status": "Remoto"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
