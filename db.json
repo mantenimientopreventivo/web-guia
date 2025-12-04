@@ -15,12 +15,11 @@
     "seguimiento de desvios",
     "(segurizaciones CR / CR rotas) sigest y valoracion",
     "valorar desmontes con momento cero",
-    "valorar sigest de emergencias",
     "vistos buenos",
-    "verificar sigest devueltos",
     "ampliaciones de ftth",
     "dpl y cerrar sigest",
-    "sigest edificios"
+    "sigest edificios",
+    "sigest de emergencias y devueltos"
   ],
   "perfiles": {
     "ines raposo": [
@@ -30,10 +29,9 @@
       "seguimiento de desvios",
       "(segurizaciones CR / CR rotas) sigest y valoracion",
       "valorar desmontes con momento cero",
-      "valorar sigest de emergencias",
       "vistos buenos",
-      "verificar sigest devueltos",
-      "sigest edificios"
+      "sigest edificios",
+      "sigest de emergencias y devueltos"
     ],
     "nicolas ponce": [
       "atencion de mails y derivacion segun el caso",
@@ -41,12 +39,11 @@
       "postes pendientes de valorar",
       "(segurizaciones CR / CR rotas) sigest y valoracion",
       "valorar desmontes con momento cero",
-      "valorar sigest de emergencias",
       "vistos buenos",
-      "verificar sigest devueltos",
       "planes de estabilidad",
       "ampliaciones de ftth",
-      "sigest edificios"
+      "sigest edificios",
+      "sigest de emergencias y devueltos"
     ],
     "gabriela torres": [
       "atencion de mails y derivacion segun el caso",
@@ -54,9 +51,9 @@
       "postes pendientes de valorar",
       "(segurizaciones CR / CR rotas) sigest y valoracion",
       "vistos buenos",
-      "verificar sigest devueltos",
       "dpl y cerrar sigest",
-      "sigest edificios"
+      "sigest edificios",
+      "sigest de emergencias y devueltos"
     ],
     "dante espejo": [
       "carga de planos y datos de red a desmontes",
@@ -68,134 +65,108 @@
   },
   "coloresFila": {},
   "weekStartDates": [
-    "2025-10-27",
-    "2025-11-03",
-    "2025-11-10",
-    "2025-11-17",
-    "2025-11-24"
+    "2025-12-01",
+    "2025-12-08",
+    "2025-12-15",
+    "2025-12-22"
   ],
   "planificacionSemanas": [
     {
       "ines raposo": [
-        "atencion de mails y derivacion segun el caso",
-        "valorar desmontes con momento cero",
-        "valorar sigest de emergencias",
-        "seguimiento de desvios"
-      ],
-      "nicolas ponce": [
-        "planes de estabilidad",
+        "sigest de emergencias y devueltos",
         "postes pendientes de valorar",
-        "verificar sigest devueltos",
-        "(segurizaciones CR / CR rotas) sigest y valoracion"
-      ],
-      "gabriela torres": [
-        "vistos buenos",
-        "crear sigest de desmontes"
-      ],
-      "dante espejo": [
-        "carga de planos y datos de red a desmontes",
-        "gestion de saneamientos"
-      ],
-      "tareasNoAsignadas": []
-    },
-    {
-      "ines raposo": [
         "seguimiento de desvios",
-        "(segurizaciones CR / CR rotas) sigest y valoracion",
-        "valorar sigest de emergencias"
-      ],
-      "nicolas ponce": [
-        "ampliaciones de ftth",
-        "valorar desmontes con momento cero",
-        "crear sigest de desmontes",
-        "verificar sigest devueltos"
-      ],
-      "gabriela torres": [
-        "postes pendientes de valorar",
-        "atencion de mails y derivacion segun el caso",
-        "dpl / cerrar sigest"
-      ],
-      "dante espejo": [
-        "gestion de saneamientos",
-        "planes de estabilidad",
-        "carga de planos y datos de red a desmontes",
-        "vistos buenos"
-      ],
-      "tareasNoAsignadas": []
-    },
-    {
-      "ines raposo": [
-        "valorar desmontes con momento cero",
-        "seguimiento de desvios",
-        "valorar sigest de emergencias",
-        "atencion de mails y derivacion segun el caso"
-      ],
-      "nicolas ponce": [
-        "postes pendientes de valorar",
-        "ampliaciones de ftth",
-        "crear sigest de desmontes",
-        "(segurizaciones CR / CR rotas) sigest y valoracion"
-      ],
-      "gabriela torres": [
-        "VACACIONES"
-      ],
-      "dante espejo": [
-        "planes de estabilidad",
-        "gestion de saneamientos",
-        "carga de planos y datos de red a desmontes",
-        "vistos buenos"
-      ],
-      "tareasNoAsignadas": []
-    },
-    {
-      "ines raposo": [
-        "sigest edificios",
-        "valorar desmontes con momento cero",
-        "valorar sigest de emergencias",
-        "seguimiento de desvios"
-      ],
-      "nicolas ponce": [
-        "verificar sigest devueltos",
-        "crear sigest de desmontes",
-        "atencion de mails y derivacion segun el caso",
-        "postes pendientes de valorar",
-        "(segurizaciones CR / CR rotas) sigest y valoracion"
-      ],
-      "gabriela torres": [
-        "VACACIONES"
-      ],
-      "dante espejo": [
-        "planes de estabilidad",
-        "gestion de saneamientos",
-        "carga de planos y datos de red a desmontes",
-        "vistos buenos"
-      ],
-      "tareasNoAsignadas": []
-    },
-    {
-      "ines raposo": [
-        "(segurizaciones CR / CR rotas) sigest y valoracion",
-        "crear sigest de desmontes",
-        "seguimiento de desvios",
-        "valorar sigest de emergencias"
-      ],
-      "nicolas ponce": [
-        "VACACIONES"
-      ],
-      "gabriela torres": [
-        "dpl y cerrar sigest",
-        "postes pendientes de valorar",
-        "atencion de mails y derivacion segun el caso",
         "valorar desmontes con momento cero"
       ],
+      "nicolas ponce": [
+        "VACACIONES"
+      ],
+      "gabriela torres": [
+        "atencion de mails y derivacion segun el caso",
+        "dpl y cerrar sigest",
+        "crear sigest de desmontes",
+        "(segurizaciones CR / CR rotas) sigest y valoracion"
+      ],
       "dante espejo": [
-        "vistos buenos",
         "carga de planos y datos de red a desmontes",
         "gestion de saneamientos",
+        "vistos buenos",
         "sigest edificios"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "sigest de emergencias y devueltos",
+        "seguimiento de desvios",
+        "atencion de mails y derivacion segun el caso",
+        "sigest edificios"
+      ],
+      "nicolas ponce": [
+        "VACACIONES"
+      ],
+      "gabriela torres": [
+        "(segurizaciones CR / CR rotas) sigest y valoracionvalorar desmontes con momento cero",
+        "postes pendientes de valorar",
+        "crear sigest de desmontes",
+        "dpl y cerrar sigest"
+      ],
+      "dante espejo": [
+        "sigest edificios",
+        "gestion de saneamientos",
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "valorar desmontes con momento cero",
+        "seguimiento de desvios",
+        "crear sigest de desmontes",
+        "postes pendientes de valorar"
+      ],
+      "nicolas ponce": [
+        "planes de estabilidad",
+        "sigest edificios",
+        "atencion de mails y derivacion segun el caso",
+        "carga de planos y datos de red a desmontes"
+      ],
+      "gabriela torres": [
+        "(segurizaciones CR / CR rotas) sigest y valoracion",
+        "dpl y cerrar sigest",
+        "vistos buenos",
+        "sigest de emergencias y devueltos"
+      ],
+      "dante espejo": [
+        "VACACIONES"
+      ],
+      "tareasNoAsignadas": []
+    },
+    {
+      "ines raposo": [
+        "sigest de emergencias y devueltos",
+        "valorar desmontes con momento cero",
+        "seguimiento de desvios",
+        "sigest edificios"
+      ],
+      "nicolas ponce": [
+        "crear sigest de desmontes",
+        "postes pendientes de valorar",
+        "carga de planos y datos de red a desmontes",
+        "vistos buenos"
+      ],
+      "gabriela torres": [
+        "(segurizaciones CR / CR rotas) sigest y valoracion",
+        "dpl y cerrar sigest",
+        "atencion de mails y derivacion segun el caso"
+      ],
+      "dante espejo": [
+        "VACACIONES"
       ],
       "tareasNoAsignadas": []
     }
   ],
-  "schemaVersion": 1
+  "schemaVersion": 1,
+  "bannerMessage": "#Vistos buenos de patagonia#: deben agregar  DESDE EL MÓDULO DE USUARIOS DE SIGEST. AL MISMO ACCEDE DESDE EL MENÚ QUE SE ENCUENTRA ARRIBA Y A LA IZQUIERDA DE LA PANTALLA DEL SISTEMA. LUEGO SELECCIONE LA SOLAPA CENTRALES PARA ASIGNARSE LAS QUE NECESITE-centrales para agregar: VIEDMA-\nPATAGONES-\nRAWSON-CHB\n-SAN ANTONIO OESTE-\nAÑELO-\nLAS COLORADAS-\nNEUQUEN\n-ROLDAN-\nDINA HUAPI-\nING HUERGO\n-TEHUELCHE-\nCOLONIA VALENTINA-\nBARRIO PUEYRREDON-\nLOS COLONOS (solo hacer V buenos de estas centrales  NO dar Vistos buenos a desmontes)------------------ en mis vacaciones copiar  este link para el tablero de mantenimiento  https://app.powerbi.com/links/ILAh1Kj5sF?ctid=17d02e16-8b83-4168-ba0d-c61ac0d093a6&pbi_source=linkShare"
 }
