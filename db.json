@@ -62,38 +62,16 @@
   },
   "coloresFila": {},
   "weekStartDates": [
-    "2025-12-22",
     "2025-12-29"
   ],
   "planificacionSemanas": [
     {
       "ines raposo": [
-        "atencion de mails y derivacion segun el caso",
-        "seguimiento de desvios",
-        "vistos bueno cuyo/patagonia"
-      ],
-      "nicolas ponce": [
-        "sigest edificios",
-        "postes pendientes de valorar",
-        "carga de planos y datos de red a desmontes"
-      ],
-      "gabriela torres": [
-        "dpl y cerrar sigest",
-        "(segurizaciones CR / CR rotas) sigest y valoracion",
-        "crear sigest de desmontes / valorar desmontes con momento cero",
-        "sigest de emergencias y devueltos"
-      ],
-      "dante espejo": [
-        "VACACIONES"
-      ],
-      "tareasNoAsignadas": []
-    },
-    {
-      "ines raposo": [
         "crear sigest de desmontes /  valorar desmontes con momento cero",
         "atencion de mails y derivacion segun el caso",
         "vistos bueno cuyo/patagonia",
-        "seguimiento de desvios"
+        "seguimiento de desvios",
+        "sigest edificios"
       ],
       "nicolas ponce": [
         "vacaciones"
@@ -102,7 +80,8 @@
         "postes pendientes de valorar",
         "dpl y cerrar sigest",
         "sigest de emergencias y devueltos",
-        "(segurizaciones CR / CR rotas) sigest y valoracion"
+        "(segurizaciones CR / CR rotas) sigest y valoracion",
+        "sigest edificios"
       ],
       "dante espejo": [
         "planes de estabilidad",
@@ -114,5 +93,5 @@
     }
   ],
   "schemaVersion": 1,
-  "bannerMessage": "#Vistos buenos de patagonia#: deben agregar  DESDE EL MÓDULO DE USUARIOS DE SIGEST. AL MISMO ACCEDE DESDE EL MENÚ QUE SE ENCUENTRA ARRIBA Y A LA IZQUIERDA DE LA PANTALLA DEL SISTEMA. LUEGO SELECCIONE LA SOLAPA CENTRALES PARA ASIGNARSE LAS QUE NECESITE-centrales para agregar:AÑELO - BARILOCHE - BARRIO PUEYRREDON - CDRO RIVADAVIA - CHB - COLONIA VALENTINA - DINA HUAPI - ING HUERGO - LAS COLORADAS - LOS COLONOS - NEUQUEN - PATAGONES - PLAYA UNION - RAWSON - RIO GALLEGOS - ROLDAN - SAN ANTONIO OESTE - TEHUELCHE - VIEDMA (solo hacer V buenos de estas centrales  NO dar Vistos buenos a desmontes)------------------ en mis vacaciones copiar  este link para el tablero de mantenimiento  https://app.powerbi.com/links/ILAh1Kj5sF?ctid=17d02e16-8b83-4168-ba0d-c61ac0d093a6&pbi_source=linkShare"
+  "bannerMessage": "Nuevo Boton !!!   \"centrales Visto bueno patagonia\" se encuentra el listado de las centrales que haremso vistos buenos"
 }
