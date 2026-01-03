@@ -3,7 +3,8 @@
     "ines raposo",
     "nicolas ponce",
     "gabriela torres",
-    "dante espejo"
+    "dante espejo",
+    "nicolas alurralde"
   ],
   "tareas": [
     "atencion de mails y derivacion segun el caso",
@@ -18,7 +19,8 @@
     "sigest edificios",
     "sigest de emergencias y devueltos",
     "crear sigest de desmontes /  valorar desmontes con momento cero",
-    "vistos bueno cuyo/patagonia"
+    "vistos bueno cuyo/patagonia",
+    "permisos  edificios"
   ],
   "perfiles": {
     "ines raposo": [
@@ -58,6 +60,9 @@
       "planes de estabilidad",
       "sigest edificios",
       "vistos bueno cuyo/patagonia"
+    ],
+    "nicolas alurralde": [
+      "permisos  edificios"
     ]
   },
   "coloresFila": {},
@@ -67,27 +72,28 @@
   "planificacionSemanas": [
     {
       "ines raposo": [
-        "crear sigest de desmontes /  valorar desmontes con momento cero",
-        "atencion de mails y derivacion segun el caso",
         "vistos bueno cuyo/patagonia",
         "seguimiento de desvios",
-        "sigest edificios"
+        "sigest edificios",
+        "postes pendientes de valorar"
       ],
       "nicolas ponce": [
-        "vacaciones"
+        "crear sigest de desmontes /  valorar desmontes con momento cero",
+        "ampliaciones de ftth",
+        "planes de estabilidad",
+        "sigest de emergencias y devueltos"
       ],
       "gabriela torres": [
-        "postes pendientes de valorar",
-        "dpl y cerrar sigest",
-        "sigest de emergencias y devueltos",
+        "atencion de mails y derivacion segun el caso",
         "(segurizaciones CR / CR rotas) sigest y valoracion",
-        "sigest edificios"
+        "dpl y cerrar sigest"
       ],
       "dante espejo": [
-        "planes de estabilidad",
-        "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
-        "sigest edificios"
+        "gestion de saneamientos"
+      ],
+      "nicolas alurralde": [
+        "permisos  edificios"
       ],
       "tareasNoAsignadas": []
     }
