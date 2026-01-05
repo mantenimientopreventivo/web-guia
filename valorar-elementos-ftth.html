@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Valorar elementos de FTTH</title>
+<title>Valorar elementos de FTTH - Corregido</title>
 <style>
   :root {
     --brand:#00A9E0;
@@ -15,7 +15,6 @@
   }
   html, body { margin:0; padding:0; font-family:Segoe UI, Arial, Helvetica, sans-serif; font-size:13px; }
   body {
-    background-image:url('movistar.png');
     background-size:contain;
     background-position:center;
     background-repeat:no-repeat;
@@ -60,9 +59,7 @@
     <h1>Valorar elementos de FTTH</h1>
 
     <div class="controls">
-
       <a href="casos.png" target="_blank" class="btn" style="background:#00A9E0;color:#fff;text-decoration:none;font-weight:700;">Diagramas</a>
-
       <div class="hint">Orden: <strong>Grupo → Código → Descripción</strong>. Edite Cantidad para calcular H.B.</div>
       <button class="btn btn-clear" id="btnClear">Limpiar cantidades</button>
     </div>
@@ -79,14 +76,13 @@
         </tr>
       </thead>
       <tbody id="tbody">
-        <!-- 85-025 -->
         <tr data-group="85" data-code="025">
           <td>85</td>
           <td>025</td>
           <td class="right" data-baremo="0.09">0,090</td>
           <td class="item">
             Instalar cable de fibra óptica en canalización / conducto enterrado / autosoportado aéreo / grapeado
-            <div class="muted small">(Si se debe agregar ganancia considerar 25 m por vano)</div> <a href="info-85-025.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a>
+            <div class="muted small">(Si se debe agregar ganancia considerar 25 m por vano)</div>
           </td>
           <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
@@ -95,92 +91,84 @@
         <tr data-group="85" data-code="502">
           <td>85</td>
           <td>502</td>
-          <td class="right" data-baremo="2.5">2,5</td>
-          <td class="item">Preparar extremo cable de F.O.<div class="muted small">Si es corte se preparan 2 extremos. Si se cambia el tramo son 4.</div> <a href="info-85-502.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: extremos" /></td>
+          <td class="right" data-baremo="2.5">2,500</td>
+          <td class="item">Preparar extremo cable de F.O.<div class="muted small">Si es corte se preparan 2 extremos. Si se cambia el tramo son 4.</div></td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="85" data-code="521">
           <td>85</td>
           <td>521</td>
           <td class="right" data-baremo="5.0">5,000</td>
-          <td class="item">Manipular elemento de F.O. (emp., term., asoc.)<div class="muted small">Si es corte es 1 tarea. Si se cambia un tramo son 2 tareas.</div> <a href="info-85-521.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: tareas" /></td>
+          <td class="item">Manipular elemento de F.O. (emp., term., asoc.)<div class="muted small">Si es corte es 1 tarea. Si se cambia un tramo son 2 tareas.</div></td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="85" data-code="561">
           <td>85</td>
           <td>561</td>
-          <td class="right" data-baremo="0.4">0,4</td>
-          <td class="item">Empalmar F.O. monomodo (fusión o conector mecánico)<div class="muted small">Si es corte: cantidad de empalmes = capacidad del cable (8/16/32/64/128...). Si se reemplaza un tramo: capacidad × 2.</div> <a href="info-85-561.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: empalmes" /></td>
+          <td class="right" data-baremo="0.4">0,400</td>
+          <td class="item">Empalmar F.O. monomodo (fusión o conector mecánico)<div class="muted small">Si es corte: capacidad del cable (8/16/...). Si se reemplaza: capacidad × 2.</div></td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="85" data-code="564">
           <td>85</td>
           <td>564</td>
           <td class="right" data-baremo="7.0">7,000</td>
-          <td class="item">Instalar elemento de empalme de fibra óptica (empalme de cubiertas)<div class="muted small">Misma HB para todos los empalmes, incluso 128.</div> <a href="info-85-564.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: elementos" /></td>
+          <td class="item">Instalar elemento de empalme de fibra óptica (empalme de cubiertas)</td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="90" data-code="006">
           <td>90</td>
           <td>006</td>
           <td class="right" data-baremo="5.0">5,000</td>
-          <td class="item">Atención de incidencias / urgencias (emergencia)<div class="muted small">Se aplica cuando la urgencia se atiende dentro de 24 h.</div> <a href="info-90-006.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: emergencias" /></td>
+          <td class="item">Atención de incidencias / urgencias (emergencia)<div class="muted small">Se aplica si se atiende dentro de 24 h.</div></td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="85" data-code="027">
-  <td>85</td>
-  <td>027</td>
-  <td class="right" data-baremo="23.0">23,000</td>
-  <td class="item">Instalar DROP o Reasignar DROP / Acometida de FO<div class="muted small">23 HB por cada DROP.</div></td>
-  <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: acometidas" /></td>
-  <td class="hb">0.00</td>
-</tr>
-    
+          <td>85</td>
+          <td>027</td>
+          <td class="right" data-baremo="2.3">2,300</td>
+          <td class="item">Instalar DROP o Reasignar DROP / Acometida de FO<div class="muted small">2,3 HB por cada DROP.</div></td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
+          <td class="hb">0.00</td>
+        </tr>
 
         <tr data-group="85" data-code="562">
           <td>85</td>
           <td>562</td>
-          <td class="right" data-baremo="4.5">4,5</td>
-          <td class="item">Instalar CTO o CTO_HUB o terminal de FO en poste, fachada o edificio<div class="muted small">Incluye un preparado de extremo, una fusión y prueba lógica.</div> <a href="info-85-562.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: CTO" /></td>
+          <td class="right" data-baremo="4.5">4,500</td>
+          <td class="item">Instalar CTO o CTO_HUB o terminal de FO en poste, fachada o edificio</td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="85" data-code="101">
           <td>85</td>
           <td>101</td>
-          <td class="right" data-baremo="0.04">0,04</td>
-          <td class="item">Recuperar cable de F.O.<div class="muted small">HB por metro.</div> <a href="info-85-101.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: metros" /></td>
+          <td class="right" data-baremo="0.04">0,040</td>
+          <td class="item">Recuperar cable de F.O.<div class="muted small">HB por metro.</div></td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    
 
         <tr data-group="85" data-code="507">
           <td>85</td>
           <td>507</td>
           <td class="right" data-baremo="2.0">2,000</td>
-          <td class="item">Instalar splitter preconectorizado 1:8 <a href="info-85-507.html" target="_blank" rel="noopener" style="color:#00A9E0;font-weight:700;text-decoration:none;">+info</a></td>
-          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" title="Unidades: splitters" /></td>
+          <td class="item">Instalar splitter preconectorizado 1:8</td>
+          <td><input type="number" min="0" step="1" inputmode="numeric" class="qty" /></td>
           <td class="hb">0.00</td>
         </tr>
-    </tbody>
+      </tbody>
       <tfoot>
         <tr class="total-row">
           <td colspan="5" class="right">Total H.B</td>
@@ -188,13 +176,11 @@
         </tr>
       </tfoot>
     </table>
-
-    <p class="muted">Sugerencia: si necesita sumar ganancia por vanos, incremente los metros en "Cantidad" según 25 m x vano.</p>
   </div>
 
 <script>
 (function(){
-  const fmt = (n)=> (isFinite(n)? n.toFixed(2): '0.00');
+  const fmt = (n)=> (isFinite(n)? n.toFixed(2).replace('.',','): '0,00');
 
   function calcRow(tr){
     const baremo = parseFloat(tr.querySelector('[data-baremo]').dataset.baremo);
@@ -214,27 +200,19 @@
     document.getElementById('totalHB').textContent = fmt(total);
   }
 
-  function recalcAll(){
-    document.querySelectorAll('#tbody tr').forEach(calcRow);
-    calcTotal();
-  }
-
-  // Hook inputs
   document.querySelectorAll('.qty').forEach(inp=>{
     inp.addEventListener('input', ()=>{ 
-      const tr = inp.closest('tr'); 
-      calcRow(tr); 
+      calcRow(inp.closest('tr')); 
       calcTotal(); 
     });
   });
 
-  // Clear button
   document.getElementById('btnClear').addEventListener('click', ()=>{
     document.querySelectorAll('.qty').forEach(i=> i.value = '');
-    recalcAll();
+    document.querySelectorAll('.hb').forEach(h=> h.textContent = '0,00');
+    document.getElementById('totalHB').textContent = '0,00';
   });
 
-  // Ensure order Group → Code on load (ready for when we add more rows)
   function sortRows(){
     const tbody = document.getElementById('tbody');
     const rows = Array.from(tbody.querySelectorAll('tr'));
@@ -242,15 +220,12 @@
       const ga = parseInt(a.dataset.group,10);
       const gb = parseInt(b.dataset.group,10);
       if (ga !== gb) return ga - gb;
-      const ca = (a.dataset.code || '').padStart(3,'0');
-      const cb = (b.dataset.code || '').padStart(3,'0');
-      return ca.localeCompare(cb);
+      return a.dataset.code.localeCompare(b.dataset.code);
     });
     rows.forEach(r=> tbody.appendChild(r));
   }
 
   sortRows();
-  recalcAll();
 })();
 </script>
 </body>
