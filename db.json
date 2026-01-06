@@ -77,20 +77,20 @@
         "(segurizaciones CR / CR rotas) sigest y valoracion"
       ],
       "nicolas ponce": [
-        "planes de estabilidad",
         "atencion de mails y derivacion segun el caso",
         "ampliaciones de ftth",
-        "sigest de emergencias y devueltos"
+        "sigest edificios"
       ],
       "gabriela torres": [
-        "vistos bueno cuyo/patagonia",
         "crear sigest de desmontes /  valorar desmontes con momento cero",
-        "dpl y cerrar sigest"
+        "dpl y cerrar sigest",
+        "sigest de emergencias y devueltos"
       ],
       "dante espejo": [
         "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
-        "sigest edificios"
+        "planes de estabilidad",
+        "vistos bueno cuyo/patagonia"
       ],
       "nicolas alurralde": [
         "permisos  edificios"
