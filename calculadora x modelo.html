@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Conexión de edificios MOP modelos baremados</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 10px; font-size: 11px; color: #1a1a1a; background-color: #f8f9fa; }
+        .container { max-width: 100%; background: #fff; padding: 15px; border: 1px solid #666; border-radius: 4px; }
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 3px solid #003366; padding-bottom: 10px; gap: 10px; }
+        .tabla-precios { border-collapse: collapse; }
+        .tabla-precios td { border: 1px solid #000; padding: 3px 10px; font-weight: bold; background: #eceff1; }
+        .tabla-precios input { width: 65px; border: none; background: transparent; text-align: right; font-weight: bold; color: #d32f2f; font-size: 12px; }
+        .selector-box { text-align: center; flex-grow: 1; }
+        select.model-picker { padding: 8px 15px; font-weight: bold; border: 2px solid #003366; color: #003366; border-radius: 4px; background: #fff; cursor: pointer; font-size: 11px; }
+        .btn-group { display: flex; gap: 8px; }
+        .btn { padding: 10px 18px; cursor: pointer; font-weight: bold; text-transform: uppercase; border-radius: 3px; border: none; font-size: 11px; color: white; transition: 0.2s; }
+        .btn-pdf { background: #b71c1c; }
+        .btn-clear { background: #546e7a; }
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        table.main-table { width: 100%; border-collapse: collapse; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        table.main-table th { background: #003366; color: white; padding: 10px; border: 1px solid #000; font-size: 10px; text-transform: uppercase; }
+        table.main-table td { border: 1px solid #bbb; padding: 6px; text-align: center; }
+        .col-denominacion { text-align: left !important; width: 35%; font-size: 9.5px; line-height: 1.2; }
+        .readonly { background: #f1f3f4; color: #444; }
+        .editable-cm { background: #fff9c4; border: 2px solid #fbc02d !important; width: 70px; text-align: center; font-weight: bold; color: #000; font-size: 12px; border-radius: 2px; }
+        .col-money { background: #e8f5e9; font-weight: bold; color: #1b5e20; width: 130px; text-align: right !important; padding-right: 15px !important; }
+        .footer-total { margin-top: 20px; background: #003366; color: white; padding: 18px; display: flex; justify-content: space-between; font-size: 1.7em; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <table class="tabla-precios">
+            <tr><td>VALOR N</td><td><input type="number" id="vN" value="20122" oninput="recalcular()"></td></tr>
+            <tr><td>VALOR L</td><td><input type="number" id="vL" value="18197" oninput="recalcular()"></td></tr>
+        </table>
+
+        <div class="selector-box">
+            <h2 style="margin:0 0 12px 0; font-size: 1.5em; color: #003366;">Conexión de edificios MOP modelos baremados</h2>
+            <select id="modelSelect" class="model-picker" onchange="cambiarModelo()">
+                <option value="gen">GENERICO</option>
+                <option value="m1">Modelo 1 BALANCEADO</option>
+                <option value="m2">Modelo 2 BALANCEADO</option>
+            </select>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-clear" onclick="limpiarCantidades()">Limpiar</button>
+            <button class="btn btn-pdf" onclick="descargarPDF()">Exportar PDF</button>
+        </div>
+    </div>
+
+    <table class="main-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Gr</th>
+                <th>Código</th>
+                <th class="col-denominacion">Denominación de Tarea</th>
+                <th>Ud. Medida</th>
+                <th>M.O.</th>
+                <th>H.B. (Baremo)</th>
+                <th>Cant. Ejecutada</th>
+                <th>Total H.B.</th>
+                <th>Subtotal ($)</th>
+            </tr>
+        </thead>
+        <tbody id="tableContent"></tbody>
+    </table>
+
+    <div class="footer-total">
+        <span>TOTAL LIQUIDACIÓN:</span>
+        <span id="finalSum">$ 0.00</span>
+    </div>
+</div>
+
+<script>
+const db = {
+    "gen": [
+        {gr:85, cod:15, den:"Instalación de bandeja portacable metálica", ud:"M", mo:"L", hb:0.58, cm:0},
+        {gr:85, cod:25, den:"Instalar cable de fibra óptica en canalización / conducto enterrado / autosoportado aéreo...", ud:"Metros", mo:"L", hb:0.09, cm:0},
+        {gr:85, cod:26, den:"Instalar cable de fibra óptica en fachada / interior de edificio...", ud:"M", mo:"L", hb:0.19, cm:0},
+        {gr:85, cod:27, den:"Instalar DROP o Reasignar DROP / Acometida de FO", ud:"Uno", mo:"L", hb:2.3, cm:0},
+        {gr:85, cod:502, den:"Preparar extremo cable de F.O.", ud:"Uno", mo:"N", hb:2.5, cm:0},
+        {gr:85, cod:507, den:"Instalar splitter preconectorizado 1:8", ud:"Una", mo:"N", hb:2, cm:0},
+        {gr:85, cod:512, den:"Instalar bandeja de empalme y repartición", ud:"Uno", mo:"N", hb:0.3, cm:0},
+        {gr:85, cod:521, den:"Manipular elemento de F.O. (emp., term., asoc.)", ud:"Uno", mo:"N", hb:5, cm:0},
+        {gr:85, cod:561, den:"Empalmar F.O. monomodo", ud:"Cada una", mo:"N", hb:0.4, cm:0},
+        {gr:85, cod:562, den:"Instalar CTO o CTO_HUB o terminal de FO...", ud:"Una", mo:"N", hb:4.5, cm:0}
+    ],
+    "m1": [
+        {gr:85, cod:521, den:"Manipular elemento de F.O.", ud:"Uno", mo:"N", hb:5.0, cm:1},
+        {gr:85, cod:502, den:"Preparar extremo cable de F.O.", ud:"Uno", mo:"N", hb:2.5, cm:1},
+        {gr:85, cod:561, den:"Empalmar F.O. monomodo", ud:"Cada una", mo:"N", hb:0.4, cm:4},
+        {gr:85, cod:25, den:"Instalar cable de fibra óptica...", ud:"Metros", mo:"L", hb:0.09, cm:50},
+        {gr:85, cod:512, den:"Instalar bandeja de empalme y repartición", ud:"Uno", mo:"N", hb:0.3, cm:1},
+        {gr:85, cod:561, den:"Empalmar F.O. monomodo (Ref 3)", ud:"Cada una", mo:"N", hb:0.4, cm:4},
+        {gr:85, cod:25, den:"Instalar cable de fibra óptica (Ref 4)", ud:"Metros", mo:"L", hb:0.09, cm:40},
+        {gr:85, cod:562, den:"Instalar CTO o CTO_HUB en edificio", ud:"Una", mo:"N", hb:4.5, cm:4}
+    ],
+    "m2": [
+        {gr:85, cod:521, den:"Manipular elemento de F.O.", ud:"Uno", mo:"N", hb:5.0, cm:1},
+        {gr:85, cod:502, den:"Preparar extremo cable de F.O.", ud:"Uno", mo:"N", hb:2.5, cm:1},
+        {gr:85, cod:561, den:"Empalmar F.O. monomodo", ud:"Cada una", mo:"N", hb:0.4, cm:1},
+        {gr:85, cod:25, den:"Instalar cable de fibra óptica...", ud:"Metros", mo:"L", hb:0.09, cm:50},
+        {gr:85, cod:562, den:"Instalar CTO o CTO_HUB...", ud:"Una", mo:"N", hb:4.5, cm:1},
+        {gr:85, cod:14, den:"Instalar DROP o Reasignar DROP", ud:"Cada uno", mo:"L", hb:2.3, cm:5},
+        {gr:85, cod:"562-1", den:"Instalar CTO (Preconectorizada)", ud:"Cada una", mo:"N", hb:2.025, cm:5}
+    ]
+};
+
+function cambiarModelo() {
+    const mod = document.getElementById("modelSelect").value;
+    const tbody = document.getElementById("tableContent");
+    tbody.innerHTML = "";
+    db[mod].forEach((r, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="readonly">${index + 1}</td>
+            <td class="readonly">${r.gr}</td>
+            <td class="readonly">${r.cod}</td>
+            <td class="col-denominacion">${r.den}</td>
+            <td class="readonly">${r.ud}</td>
+            <td class="readonly">${r.mo}</td>
+            <td class="readonly">${r.hb}</td>
+            <td><input type="number" step="0.001" class="editable-cm" value="${r.cm}" oninput="recalcular()" data-mo="${r.mo}" data-hb="${r.hb}" data-original="${r.cm}"></td>
+            <td class="readonly val-total-hb">0</td>
+            <td class="col-money">$ 0.00</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    recalcular();
+}
+
+function recalcular() {
+    const n = parseFloat(document.getElementById("vN").value) || 0;
+    const l = parseFloat(document.getElementById("vL").value) || 0;
+    let totalTotal = 0;
+    document.querySelectorAll("#tableContent tr").forEach(fila => {
+        const inputCm = fila.querySelector(".editable-cm");
+        const hb = parseFloat(inputCm.dataset.hb);
+        const cm = parseFloat(inputCm.value) || 0;
+        const p = (inputCm.dataset.mo === "N") ? n : l;
+        const totHB = hb * cm;
+        const subtotal = totHB * p;
+        fila.querySelector(".val-total-hb").innerText = totHB.toFixed(3);
+        fila.querySelector(".col-money").innerText = "$" + subtotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+        totalTotal += subtotal;
+    });
+    document.getElementById("finalSum").innerText = "$" + totalTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+}
+
+function limpiarCantidades() {
+    if(confirm("¿Desea restablecer las cantidades de este modelo?")) {
+        document.querySelectorAll(".editable-cm").forEach(input => {
+            input.value = input.dataset.original;
+        });
+        recalcular();
+    }
+}
+
+function descargarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('l', 'mm', 'a4');
+    const modelText = document.getElementById("modelSelect").options[document.getElementById("modelSelect").selectedIndex].text;
+    
+    doc.setFontSize(18);
+    doc.setTextColor(0, 51, 102);
+    doc.text("Modelo Baremado", 14, 15); // Título actualizado
+    
+    doc.setFontSize(11);
+    doc.setTextColor(60, 60, 60);
+    doc.text(`TIPO: ${modelText}`, 14, 23);
+    doc.text(`VALORES: N = $${document.getElementById("vN").value} | L = $${document.getElementById("vL").value}`, 14, 29);
+
+    const rows = [];
+    document.querySelectorAll("#tableContent tr").forEach(tr => {
+        const tds = tr.querySelectorAll("td");
+        rows.push([tds[0].innerText, tds[1].innerText, tds[2].innerText, tds[3].innerText, tds[4].innerText, tds[5].innerText, tds[6].innerText, tr.querySelector(".editable-cm").value, tds[8].innerText, tds[9].innerText]);
+    });
+
+    doc.autoTable({
+        startY: 35,
+        head: [['Item', 'Gr', 'Cod', 'Tarea', 'Ud', 'MO', 'H.B.', 'Cant', 'Tot HB', 'Subtotal']],
+        body: rows,
+        theme: 'grid',
+        headStyles: { fillColor: [0, 51, 102], fontSize: 8 },
+        styles: { fontSize: 7 }
+    });
+    
+    doc.setFontSize(14);
+    doc.text(`TOTAL LIQUIDADO: ${document.getElementById("finalSum").innerText}`, 14, doc.lastAutoTable.finalY + 12);
+    doc.save(`Modelo_Baremado_${modelText.replace(/\s+/g, '_')}.pdf`);
+}
+
+window.onload = cambiarModelo;
+</script>
+</body>
+</html>
