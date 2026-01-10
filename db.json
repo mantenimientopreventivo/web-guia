@@ -67,29 +67,28 @@
   },
   "coloresFila": {},
   "weekStartDates": [
-    "2026-01-05"
+    "2026-01-12"
   ],
   "planificacionSemanas": [
     {
       "ines raposo": [
-        "postes pendientes de valorar",
         "seguimiento de desvios",
-        "(segurizaciones CR / CR rotas) sigest y valoracion"
+        "crear sigest de desmontes /  valorar desmontes con momento cero",
+        "postes pendientes de valorar"
       ],
       "nicolas ponce": [
-        "atencion de mails y derivacion segun el caso",
-        "ampliaciones de ftth",
+        "sigest de emergencias y devueltos",
+        "planes de estabilidad",
         "sigest edificios"
       ],
       "gabriela torres": [
-        "crear sigest de desmontes /  valorar desmontes con momento cero",
+        "(segurizaciones CR / CR rotas) sigest y valoracion",
         "dpl y cerrar sigest",
-        "sigest de emergencias y devueltos"
+        "atencion de mails y derivacion segun el caso"
       ],
       "dante espejo": [
-        "gestion de saneamientos",
         "carga de planos y datos de red a desmontes",
-        "planes de estabilidad",
+        "gestion de saneamientos",
         "vistos bueno cuyo/patagonia"
       ],
       "nicolas alurralde": [
