@@ -65,6 +65,17 @@
       "material": "Concreto",
       "sigest": "510108845",
       "origen": "retesar"
+    },
+    {
+      "id": 1768232720520,
+      "fecha": "2026-01-08",
+      "tipoMovimiento": "Consumo",
+      "cantidad": 1,
+      "ancho": 40,
+      "alto": 110,
+      "material": "Concreto",
+      "sigest": "510232555",
+      "origen": "retesar"
     }
   ]
 }
