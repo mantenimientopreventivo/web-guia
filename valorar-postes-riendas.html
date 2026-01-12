@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valorar postes, riendas y varios - Guía</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         /* Estilos Generales y Fondo */
         body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 13px; }
@@ -18,16 +22,28 @@
         .calculator-table td.item-name { text-align: left; background-color: rgba(255,255,255,0.05); }
         .calculator-table input[type="number"], .calculator-table select { width: 90%; padding: 4px; font-size: 1em; border: 1px solid #ccc; border-radius: 4px; }
         .total-row { background-color: #333; font-weight: bold; font-size: 1.1em; }
-        .clear-button-container { text-align: right; margin-top: 10px; }
-        .clear-button { background-color: #6c757d; color: white; border: none; padding: 6px 15px; font-size: 0.9em; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        
+        .clear-button-container { 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 10px; /* Espacio entre botones */
+            margin-top: 10px; 
+        }
+        
+        .clear-button { background-color: #6c757d; color: white; border: none; padding: 8px 15px; font-size: 0.9em; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
         .clear-button:hover { background-color: #5a6268; }
+
+        /* Estilo nuevo botón PDF */
+        .pdf-button { background-color: #dc3545; color: white; border: none; padding: 8px 15px; font-size: 0.9em; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .pdf-button:hover { background-color: #bb2d3b; }
+
     </style>
 </head>
 <body>
     <div class="main-container">
         <a href="index.html" class="back-button">‹ Volver al Índice</a>
         <h1>Valorar postes, riendas y varios</h1>
-        <table class="calculator-table">
+        <table class="calculator-table" id="tabla-datos">
             <thead>
                 <tr>
                     <th>Grupo</th>
@@ -39,7 +55,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Grupo 82 -->
                 <tr>
                     <td>82</td>
                     <td>6</td>
@@ -101,7 +116,6 @@
                     <td><input type="number" id="cantidad-7" oninput="calculateRow(7)"></td>
                     <td id="hb-7">0.00</td>
                 </tr>
-                <!-- Grupo 84 -->
                 <tr>
                     <td>84</td>
                     <td>232</td>
@@ -123,10 +137,15 @@
                 <tr class="total-row"><td colspan="5">TOTAL</td><td id="total-hb">0.00</td></tr>
             </tfoot>
         </table>
+        
         <div class="clear-button-container">
+            <button class="pdf-button" onclick="generatePDF()">
+                <i class="fa-solid fa-file-pdf"></i> Generar PDF
+            </button>
             <button class="clear-button" onclick="clearCalculator()">Limpiar</button>
         </div>
     </div>
+
     <script>
     function updateOption(rowNum) {
         const select = document.getElementById(`option-${rowNum}`);
@@ -152,6 +171,98 @@
         document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
         document.querySelectorAll('[id^="hb-"]').forEach(cell => cell.innerText = '0.00');
         updateTotal();
+    }
+
+    // --- NUEVA FUNCIÓN PARA GENERAR PDF ---
+    async function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // 1. Título del Documento
+        doc.setFontSize(16);
+        doc.setTextColor(0, 169, 224); // Azul Movistar/Telefonica
+        doc.text("Reporte de Valoración - Postes y Riendas", 14, 20);
+        
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        const fecha = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+        doc.text("Fecha: " + fecha, 14, 28);
+
+        // 2. Preparar los datos de la tabla
+        let rows = [];
+        let totalGeneral = document.getElementById('total-hb').innerText;
+
+        // Recorremos las filas (hardcoded 9 filas en este ejemplo, o usar selector)
+        // Usamos un selector dinámico para barrer todas las filas que tengan input
+        const inputs = document.querySelectorAll('input[type="number"]');
+        
+        inputs.forEach((input, index) => {
+            let cantidad = input.value;
+            // IMPORTANTE: Solo agregamos al PDF si la cantidad es mayor a 0
+            if (cantidad && parseFloat(cantidad) > 0) {
+                let rowNum = index + 1; // Asumiendo orden secuencial
+                
+                // Obtener datos de la fila
+                let tr = input.closest('tr');
+                let tds = tr.querySelectorAll('td');
+                
+                let grupo = tds[0].innerText;
+                let tarea = tds[1].innerText;
+                
+                // Lógica para obtener la descripción limpia (sin el texto +info)
+                let descripcionCell = tds[2];
+                let descripcion = "";
+                
+                // Si hay un select, tomamos el texto de la opción seleccionada
+                let select = descripcionCell.querySelector('select');
+                if (select) {
+                     descripcion = select.options[select.selectedIndex].text;
+                } else {
+                    // Si no, tomamos el texto y quitamos el "+info" si existe
+                    descripcion = descripcionCell.innerText.replace('+info', '').trim();
+                }
+
+                let baremo = document.getElementById(`baremo-${rowNum}`).innerText; // Ojo: puede variar si se actualizó
+                let hb = document.getElementById(`hb-${rowNum}`).innerText;
+
+                rows.push([grupo, tarea, descripcion, baremo, cantidad, hb]);
+            }
+        });
+
+        // Si no hay tareas, avisar
+        if (rows.length === 0) {
+            alert("No hay tareas valoradas para generar el PDF.");
+            return;
+        }
+
+        // Agregar fila de total al final
+        rows.push(['', '', '', '', 'TOTAL', totalGeneral]);
+
+        // 3. Generar la tabla en el PDF
+        doc.autoTable({
+            head: [['Grupo', 'Tarea', 'Denominación', 'Baremo', 'Cant.', 'H.B.']],
+            body: rows,
+            startY: 35,
+            theme: 'grid',
+            headStyles: { fillColor: [0, 55, 85] }, // Azul oscuro headers
+            footStyles: { fillColor: [51, 51, 51] },
+            columnStyles: {
+                0: { cellWidth: 15 },
+                1: { cellWidth: 15 },
+                4: { cellWidth: 15, halign: 'center' },
+                5: { cellWidth: 20, halign: 'right', fontStyle: 'bold' }
+            },
+            didParseCell: function (data) {
+                // Negrita para la fila de TOTAL
+                if (data.row.index === rows.length - 1) {
+                    data.cell.styles.fontStyle = 'bold';
+                    data.cell.styles.fillColor = [220, 220, 220];
+                }
+            }
+        });
+
+        // 4. Descargar
+        doc.save('Reporte_Valoracion_Postes.pdf');
     }
     </script>
 </body>
